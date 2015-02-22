@@ -7,6 +7,6 @@ namespace oEngine.Common
 {
     public static class Consts
     {
-
+        public const int MAX_SOUNDS = 16;
     }
 }
