@@ -49,6 +49,7 @@
     <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -59,8 +60,25 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Common\Consts.cs" />
+    <Compile Include="Common\Enums.cs" />
+    <Compile Include="Common\Extensions.cs" />
+    <Compile Include="Common\MathExtension.cs" />
+    <Compile Include="Common\Serializer.cs" />
+    <Compile Include="Entities\Camera.cs" />
+    <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\Layer.cs" />
+    <Compile Include="Entities\Tile.cs" />
+    <Compile Include="Entities\Tilemap.cs" />
+    <Compile Include="Entities\Tileset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\oGame\oGameContent\Content.contentproj">
+      <Project>{9D28C6A8-A4F6-4B4D-A2FC-3EC15FE7479E}</Project>
+      <Name>Content</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
