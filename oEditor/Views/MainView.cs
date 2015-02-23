@@ -14,7 +14,7 @@ namespace oEditor.Views
 {
     public partial class MainView : Form, IMainView
     {
-        public DockWindowCancelEventHandler DockWindowClosing;
+        public event DockWindowCancelEventHandler DockWindowClosing;
 
         public MainView()
         {
@@ -25,27 +25,7 @@ namespace oEditor.Views
             radDock.DockWindowClosing += (sender, e) =>
             {
                 if (DockWindowClosing != null)
-                    DockWindowClosing(sender, e);
-
-                e.Cancel = false;
-
-                if (e.NewWindow is DocumentWindow)
-                { 
-                    DialogResult result = MessageBox.Show("Do you want to save your changes?", "Save changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
-
-                    switch (result)
-                    {
-                        case System.Windows.Forms.DialogResult.Yes:
-
-                            break;
-                        case System.Windows.Forms.DialogResult.No:
-
-                            break;
-                        case System.Windows.Forms.DialogResult.Cancel:
-                            e.Cancel = true;
-                            break;
-                    }
-                }
+                    DockWindowClosing(sender, e);             
             };
         }
 
@@ -64,9 +44,9 @@ namespace oEditor.Views
             }
         }
 
-        public void AddSceneView(SceneView sceneView)
+        public void AddSceneView(DockWindow dockWindow)
         {
-            radDock.AddDocument(sceneView, Telerik.WinControls.UI.Docking.DockPosition.Fill);            
+            radDock.AddDocument(dockWindow, Telerik.WinControls.UI.Docking.DockPosition.Fill);            
         }
     }
 }

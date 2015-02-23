@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using oEditor.Views;
+using oEditor.Presenters;
 
 namespace oEditor
 {
@@ -17,7 +18,13 @@ namespace oEditor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainView());
+
+            // Change to interface
+            IMainView view = new MainView();
+
+            MainPresenter main = new MainPresenter(view);
+
+            Application.Run((MainView)view);
         }
     }
 }
