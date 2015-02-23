@@ -17,6 +17,7 @@ namespace oGame
 
         private Camera camera;
 
+        // Constructor must have base
         public SampleScreen()
             :base()
         {
@@ -108,6 +109,9 @@ namespace oGame
 
             ScreenFactory.SpriteBatch.End();
 
+            // This will tell the screen to fade in/out
+            if (TransitionPosition > 0)
+                ScreenFactory.FadeBackBufferToBlack(255 - TransitionAlpha);
             
         }
     }
