@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using oEngine.Factories;
 using oEngine.Common;
+using oEngine.Screens;
 
 namespace oGame
 {
@@ -23,6 +24,11 @@ namespace oGame
         private SpriteBatch spriteBatch;
 
         private ScreenFactory screenFactory;
+
+        // Get fps
+        private TimeSpan elapsedTime = TimeSpan.Zero;
+        private int frameRate = 0;
+        private int frameCounter = 0;
 
         public oGame()
         {
@@ -53,6 +59,37 @@ namespace oGame
             {
                 Logger.Log("oGame", "LoadContent", exception);
             }
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            elapsedTime += gameTime.ElapsedGameTime;
+
+            if (elapsedTime > TimeSpan.FromSeconds(1))
+            {
+                elapsedTime -= TimeSpan.FromSeconds(1);
+                frameRate = frameCounter;
+                frameCounter = 0;
+            }
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            base.Draw(gameTime);
+
+            frameCounter++;
+
+            string fps = string.Format("FPS: {0}", frameRate);
+
+            spriteBatch.Begin();
+
+            spriteBatch.DrawString(screenFactory.Font, fps, new Vector2(screenFactory.TitleSafeArea.X, screenFactory.TitleSafeArea.Y), Color.White);
+
+            spriteBatch.End();
         }
     }
 }
