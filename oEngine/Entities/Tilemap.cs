@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using oEngine.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace oEngine.Entities
     [DataContract]
     public class Tilemap : IEntity
     {
+        [DataMember(Name="Initialized")]
         private bool isInitialized;
 
         [DataMember(Name="Tilesets")]
@@ -97,6 +99,7 @@ namespace oEngine.Entities
             layer.Name = name;
             layer.Description = description;
             layer.IsVisble = true;
+            layer.Alpha = 1.0f;
 
             layers.Add(layer);           
         }
@@ -121,10 +124,15 @@ namespace oEngine.Entities
             if (!isInitialized)
                 throw new Exception("Tilemap must be initialized first before adding tileset");
 
+            if (tilesets.Any(set => set.Name == name))
+                throw new Exception("Tileset with that name already exists");
+
             Tileset tileset = new Tileset();
             tileset.Initialize(texture);
             tileset.Name = name;
             tileset.Description = description;
+
+          
 
             tilesets.Add(tileset);            
         }
@@ -189,15 +197,39 @@ namespace oEngine.Entities
             }
         }
 
-        public void Update(GameTime gameTime)
-        {
-            
-        }
-
         public void Draw(SpriteBatch spriteBatch)
         {
             if (spriteBatch == null || !isInitialized)
                 return;
+
+            for (int z = 0; z < layers.Count; z++)
+            {
+                for (int x = Width - 1; x >= 0; x--)
+                {
+                    for (int y = 0; y < Height; y++)
+                    {
+                        Tile tile = layers[z].Columns[x].Rows[y];
+
+                        if(!string.IsNullOrEmpty(tile.TilesetName))
+                        {                            
+                            if(tile.TilesetIndex >= 0)
+                            {
+                                Tileset tileset = tilesets.FirstOrDefault(set => set.Name == tile.TilesetName);
+       
+                                if(tileset != null)
+                                {
+                                    Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight);
+                                    // TODO: Apply height decimal places to the alignment of Y axis
+                                    spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
+                                        tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * layers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // TODO: Implement merged layers and if we want the old method of top tiles per cell
         }        
     }
 }

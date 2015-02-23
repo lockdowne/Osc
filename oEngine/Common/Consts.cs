@@ -8,5 +8,6 @@ namespace oEngine.Common
     public static class Consts
     {
         public const int MAX_SOUNDS = 16;
+        public const int LOG_WIDTH = 32;
     }
 }

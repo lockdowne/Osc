@@ -35,6 +35,12 @@ namespace oEngine.Entities
         public int TilesetIndex { get; set; }
 
         /// <summary>
+        /// Gets or sets the height of tile represented in tilemap 
+        /// Does not represent height in pixels
+        /// </summary>
+        public float Height { get; set; }
+
+        /// <summary>
         /// Base tile type
         /// </summary>
         public Enums.TileTypes TileType { get; set; }

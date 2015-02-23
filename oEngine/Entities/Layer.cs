@@ -32,9 +32,14 @@ namespace oEngine.Entities
         public string Description { get; set; }
 
         /// <summary>
-        /// Get or set the tiles inside layer
+        /// Gets or sets the tiles inside layer
         /// </summary>
         public List<Column> Columns = new List<Column>();
+
+        /// <summary>
+        /// Gets or sets the opacity of layer
+        /// </summary>
+        public float Alpha { get; set; }
 
         /// <summary>
         /// Gets or sets the visibilty state of the layer
