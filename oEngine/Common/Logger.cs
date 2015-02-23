@@ -10,7 +10,29 @@ namespace oEngine.Common
     {
         public static void Log(string classes, string method, Exception exception = null, string description = "")
         {
-            Log(classes, method, exception, description);
+            DateTime dateTime = DateTime.Now;
+            StringBuilder builder = new StringBuilder();
+
+            string status = exception == null ? "OK" : exception.ToString();
+
+            builder.AppendLine(LineBreak());
+            builder.AppendLine(dateTime.ToString());
+            builder.AppendLine("Location: " + classes + "." + method);
+            if (!string.IsNullOrEmpty(description))
+                builder.AppendLine("Description: " + description);
+            builder.AppendLine("Status: " + status);
+
+            try
+            {
+                if (!Directory.Exists(Consts.OSC_DIRECTORY))
+                    Directory.CreateDirectory(Consts.OSC_DIRECTORY);
+
+                File.AppendAllText(Consts.OSC_FILE, builder.ToString());
+            }
+            catch(Exception e)
+            {
+
+            }
         }
 
         public static void Log(string classes, string method, string description = "", Exception exception = null)
@@ -27,7 +49,17 @@ namespace oEngine.Common
                 builder.AppendLine("Description: " + description);
             builder.AppendLine("Status: " + status);
 
-            File.AppendAllText(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Osc\Log.txt", builder.ToString());
+            try
+            {
+                if (!Directory.Exists(Consts.OSC_DIRECTORY))
+                    Directory.CreateDirectory(Consts.OSC_DIRECTORY);
+
+                File.AppendAllText(Consts.OSC_FILE, builder.ToString());
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         private static string LineBreak()

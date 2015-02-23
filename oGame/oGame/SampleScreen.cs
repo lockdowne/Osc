@@ -83,7 +83,7 @@ namespace oGame
             if(input.LeftDown)
             {
                 // While mouse left is held down move camera to that position
-                camera.UpdatePosition(input.Position);
+                camera.UpdatePosition(input.Position, new Vector2(-1000, -1000), new Vector2(1000, 1000));
             }
         }
 

@@ -14,12 +14,12 @@ namespace oEngine.Common
     public static class Serializer
     {
         /// <summary>
-        /// Serializes entity and writes xml to path
+        /// Serializes object and writes xml to path
         /// </summary>
-        /// <typeparam name="T">IEntity type</typeparam>
-        /// <param name="obj">The entity object</param>
+        /// <typeparam name="T">Object type</typeparam>
+        /// <param name="obj">The object object</param>
         /// <param name="path">The location of xml file</param>
-        public static void Serialize<T>(T obj, string path) where T : IEntity
+        public static void Serialize<T>(T obj, string path)
         {
             DataContractSerializer xml = new DataContractSerializer(typeof(T));
 
@@ -33,12 +33,12 @@ namespace oEngine.Common
         }
 
         /// <summary>
-        /// Deserialize xml file at path into entity
+        /// Deserialize xml file at path into object
         /// </summary>
-        /// <typeparam name="T">IEntity type</typeparam>
+        /// <typeparam name="T">Object type</typeparam>
         /// <param name="path">The location of xml file</param>
-        /// <returns>Entity</returns>
-        public static T Deserialize<T>(string path) where T : IEntity
+        /// <returns>Object</returns>
+        public static T Deserialize<T>(string path)
         {
             DataContractSerializer xml = new DataContractSerializer(typeof(T));
 
