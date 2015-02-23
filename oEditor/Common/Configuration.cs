@@ -55,6 +55,22 @@ namespace oEditor.Common
 
                 return settings;
             }
+            set
+            {
+                settings = value;
+
+                try
+                {
+                    if (!Directory.Exists(Consts.OSC_DIRECTORY))
+                        Directory.CreateDirectory(Consts.OSC_DIRECTORY);
+
+                    Serializer.Serialize<Settings>(settings, Consts.OSC_EDITOR_SETTINGS);
+                }
+                catch(Exception exception)
+                {
+                    Logger.Log("Configuration", "Settings", exception, "Cannot serialize");
+                }
+            }
         }
     }
 }

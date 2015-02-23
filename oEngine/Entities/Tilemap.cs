@@ -65,6 +65,16 @@ namespace oEngine.Entities
         [DataMember]
         public int TileHeight { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the pixel to draw grid
+        /// </summary>
+        public Texture2D Pixel { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the grid should be drawn
+        /// </summary>
+        public bool IsGridVisible;
+
         public void Initialize(string name, string description, int tileWidth, int tileHeight, int tilemapWidth, int tilemapHeight)
         {
             // Prevent this method from being called more than once
@@ -230,6 +240,22 @@ namespace oEngine.Entities
             }
 
             // TODO: Implement merged layers and if we want the old method of top tiles per cell
-        }        
+
+            DrawGrid(spriteBatch);
+        }
+
+        public void DrawGrid(SpriteBatch spriteBatch)
+        {
+            if (!IsGridVisible || Pixel == null)
+                return;
+
+            for(int x = 0; x < Width; x++)
+            {
+                for(int y = 0; y < Height; y++)
+                {
+                    spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight), Color.White);
+                }
+            }
+        }
     }
 }

@@ -39,6 +39,9 @@ namespace oEngine.Entities
         /// </summary>
         private float Rotation { get; set; }
 
+        /// <summary>
+        /// Gets or sets the cameras linear interpoliation amount
+        /// </summary>
         public float LerpAmount { get; set; }
 
         /// <summary>
@@ -62,7 +65,7 @@ namespace oEngine.Entities
 
         public void UpdateZoom(float zoom, float min, float max)
         {
-            Zoom = MathHelper.Clamp(MathHelper.Lerp(Zoom, zoom, 0.05f), min, max);
+            Zoom = MathHelper.Clamp(MathHelper.Lerp(Zoom, zoom, LerpAmount), min, max);
         }
        
     }

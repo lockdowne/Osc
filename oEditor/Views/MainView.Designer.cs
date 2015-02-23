@@ -93,7 +93,7 @@
             // 
             // radDock
             // 
-            this.radDock.ActiveWindow = this.windowConsole;
+            this.radDock.ActiveWindow = this.windowWorldMap;
             this.radDock.Controls.Add(this.toolTabStrip3);
             this.radDock.Controls.Add(this.radSplitContainer2);
             this.radDock.Controls.Add(this.toolTabStrip1);
@@ -209,10 +209,10 @@
             // windowWorldMap
             // 
             this.windowWorldMap.CloseAction = Telerik.WinControls.UI.Docking.DockWindowCloseAction.Hide;
-            this.windowWorldMap.Location = new System.Drawing.Point(4, 27);
+            this.windowWorldMap.Location = new System.Drawing.Point(4, 29);
             this.windowWorldMap.Name = "windowWorldMap";
             this.windowWorldMap.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.windowWorldMap.Size = new System.Drawing.Size(772, 467);
+            this.windowWorldMap.Size = new System.Drawing.Size(772, 465);
             this.windowWorldMap.Text = "World Map";
             // 
             // toolTabStrip2
@@ -242,7 +242,7 @@
             // 
             // 
             this.toolTabStrip1.RootElement.MinSize = new System.Drawing.Size(0, 0);
-            this.toolTabStrip1.SelectedIndex = 1;
+            this.toolTabStrip1.SelectedIndex = 0;
             this.toolTabStrip1.Size = new System.Drawing.Size(200, 700);
             this.toolTabStrip1.TabIndex = 5;
             this.toolTabStrip1.TabStop = false;

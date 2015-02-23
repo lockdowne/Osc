@@ -15,7 +15,7 @@ namespace oEditor.Controls
     {
         private SpriteBatch spriteBatch;
 
-        private Color backgroundColor; 
+        private Color backgroundColor;
 
         private Camera camera;
 
@@ -35,10 +35,10 @@ namespace oEditor.Controls
         /// </summary>
         public Tilemap Tilemap { get; set; }
 
-        public System.Windows.Forms.MouseEventHandler OnMouseDown;
-        public System.Windows.Forms.MouseEventHandler OnMouseUp;
-        public System.Windows.Forms.MouseEventHandler OnMouseMove;
-        public System.Windows.Forms.MouseEventHandler OnMouseWheel;
+        public System.Windows.Forms.MouseEventHandler RenderMouseDown;
+        public System.Windows.Forms.MouseEventHandler RenderMouseUp;
+        public System.Windows.Forms.MouseEventHandler RenderMouseMove;
+        public System.Windows.Forms.MouseEventHandler RenderMouseWheel;
 
         protected override void Initialize()
         {
@@ -60,10 +60,10 @@ namespace oEditor.Controls
 
             MouseDown += (sender, e) =>
             {
-                if (OnMouseDown != null)
-                    OnMouseDown(sender, e);
+                if (RenderMouseDown != null)
+                    RenderMouseDown(sender, e);
 
-                if(e.Button == System.Windows.Forms.MouseButtons.Right)
+                if (e.Button == System.Windows.Forms.MouseButtons.Right)
                 {
                     isMouseRightDown = true;
 
@@ -73,8 +73,8 @@ namespace oEditor.Controls
 
             MouseUp += (sender, e) =>
             {
-                if (OnMouseUp != null)
-                    OnMouseUp(sender, e);
+                if (RenderMouseUp != null)
+                    RenderMouseUp(sender, e);
 
                 if (isMouseRightDown)
                     isMouseRightDown = false;
@@ -82,11 +82,11 @@ namespace oEditor.Controls
 
             MouseMove += (sender, e) =>
             {
-                if (OnMouseMove != null)
-                    OnMouseMove(sender, e);
+                if (RenderMouseMove != null)
+                    RenderMouseMove(sender, e);
 
-                if(isMouseRightDown && Tilemap != null)
-                {                    
+                if (isMouseRightDown && Tilemap != null)
+                {
                     currentMousePosition = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
 
                     Vector2 difference = currentMousePosition - previousMousePosition;
@@ -106,13 +106,13 @@ namespace oEditor.Controls
 
             MouseWheel += (sender, e) =>
             {
-                if (OnMouseWheel != null)
-                    OnMouseWheel(sender, e);
-
+                if (RenderMouseWheel != null)
+                    RenderMouseWheel(sender, e);
+                
                 if (e.Delta > 0)
                 {
                     cameraZoom += Configuration.Settings.ZoomIncrement;
-                }                    
+                }
                 else if (e.Delta < 0)
                 {
                     cameraZoom -= Configuration.Settings.ZoomIncrement;
