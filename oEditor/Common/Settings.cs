@@ -25,5 +25,17 @@ namespace oEditor.Common
 
         [DataMember]
         public float MinCameraZoom { get; set; }
+
+        public static Settings CreateDefault()
+        {
+            return new Settings()
+            {
+                TilemapBackground = new Color(40, 40, 40),
+                MaxNumberOfConsoleMessage = 1024,
+                ZoomIncrement = 0.1f,
+                MaxCameraZoom = 2.0f,
+                MinCameraZoom = 0.1f,
+            };
+        }
     }
 }

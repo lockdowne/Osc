@@ -32,12 +32,19 @@ namespace oEngine.Factories
                         redo.Clear();
                     }
 
+                    if(string.IsNullOrEmpty(command.Description))
+                        return "Command: Execute " + command.Name;
+
                     return "Command: Execute " + command.Name + " - " + command.Description;
                 }
             }
             catch(Exception exception)
             {
                 Logger.Log("CommandFactory", "ExecuteCommand", exception, command.Description);
+
+                if (string.IsNullOrEmpty(command.Description))
+                    return "Command: Execute " + command.Name + Environment.NewLine + "Exception - " + exception.ToString(); ;
+
                 return "Command: Error " + command.Name + " - " + command.Description + Environment.NewLine + "Exception - " + exception.ToString();
             }
 

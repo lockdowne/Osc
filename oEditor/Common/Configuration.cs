@@ -32,24 +32,14 @@ namespace oEditor.Common
                         Logger.Log("Configuration", "Settings", fileNotFoundException, "File not found");
 
                         // If settings not found then use default settings
-                        settings = new Settings();
-                        settings.TilemapBackground = new Color(40, 40, 40);
-                        settings.MaxNumberOfConsoleMessage = 5;
-                        settings.ZoomIncrement = 0.1f;
-                        settings.MaxCameraZoom = 2.0f;
-                        settings.MinCameraZoom = 0.1f;
+                        settings = Settings.CreateDefault();
                     }
                     catch(Exception exception)
                     {
                         Logger.Log("Configuration", "Settings", exception, "Invalid data");
 
                         // If settings not found then use default settings
-                        settings = new Settings();
-                        settings.TilemapBackground = new Color(40, 40, 40);
-                        settings.MaxNumberOfConsoleMessage = 5;
-                        settings.ZoomIncrement = 0.1f;
-                        settings.MaxCameraZoom = 2.0f;
-                        settings.MinCameraZoom = 0.1f;
+                        settings = Settings.CreateDefault();
                     }
                 }
 
