@@ -108,9 +108,14 @@ namespace oEditor.Views
             get { return listboxConsole; }
         }
 
+        public RadTreeNode SelectedEntityNode
+        {
+            get { return treeViewEntities.SelectedNode; }
+        }
+
 
         public event DockWindowCancelEventHandler DockWindowClosing;
-        public event Telerik.WinControls.UI.RadTreeView.TreeViewMouseEventHandler EntitiesTreeviewNodeClicked;
+        public event Telerik.WinControls.UI.RadTreeView.TreeViewEventHandler EntitiesNodeExpanded;
 
         public event Action MenuViewConsoleClicked;
         public event Action MenuViewProjectClicked;
@@ -131,7 +136,7 @@ namespace oEditor.Views
             InitializeComponent();
             
             // Populate Entities View
-            AddParentNodeToEntitiesTree(Enum.GetName(typeof(Enums.EditorEntities), Enums.EditorEntities.Characters), Enums.EditorEntities.Characters);
+            AddParentNodeToEntitiesTree(Enum.GetName(typeof(Enums.EditorEntities), Enums.EditorEntities.Sprites), Enums.EditorEntities.Sprites);
             AddParentNodeToEntitiesTree(Enum.GetName(typeof(Enums.EditorEntities), Enums.EditorEntities.Items), Enums.EditorEntities.Items);
             AddParentNodeToEntitiesTree(Enum.GetName(typeof(Enums.EditorEntities), Enums.EditorEntities.Nodes), Enums.EditorEntities.Nodes);
             AddParentNodeToEntitiesTree(Enum.GetName(typeof(Enums.EditorEntities), Enums.EditorEntities.Quests), Enums.EditorEntities.Quests);
@@ -144,14 +149,14 @@ namespace oEditor.Views
         }     
 
         private void AddParentNodeToEntitiesTree(string text, Enums.EditorEntities tag)
-        {
-           
+        {            
             treeViewEntities.Nodes.Add(new RadTreeNode(text)
             {
                 Name = text,
                 Tag = tag,
                 //Value = ,
                 ContextMenu = contextAdd,
+                Image = global::oEditor.Properties.Resources.Folder_6222,                
             });
         }
 
@@ -188,17 +193,9 @@ namespace oEditor.Views
 
         private void menuViewToolbox_Click(object sender, EventArgs e)
         {
-            if(MenuViewToolboxClicked != null)
+            if (MenuViewToolboxClicked != null)
             {
                 MenuViewToolboxClicked();
-            }
-        }
-        
-        private void treeViewEntities_NodeMouseDown(object sender, RadTreeViewMouseEventArgs e)
-        {
-            if (EntitiesTreeviewNodeClicked != null)
-            {
-                EntitiesTreeviewNodeClicked(sender, e);
             }
         }
 
@@ -211,7 +208,7 @@ namespace oEditor.Views
         }
 
         private void contextAddEntity_Click(object sender, EventArgs e)
-        {
+        {            
             if(ContextAddEntityClicked != null)
             {
                 ContextAddEntityClicked();
@@ -235,7 +232,7 @@ namespace oEditor.Views
         }
 
         private void contextEditCollapse_Click(object sender, EventArgs e)
-        {
+        {            
             if(ContextEditCollapseClicked != null)
             {
                 ContextEditCollapseClicked();
@@ -263,6 +260,14 @@ namespace oEditor.Views
             if(ContextEditExpandClicked != null)
             {
                 ContextEditExpandClicked();
+            }
+        }
+
+        private void treeViewEntities_NodeExpandedChanged(object sender, RadTreeViewEventArgs e)
+        {
+            if(EntitiesNodeExpanded != null)
+            {
+                EntitiesNodeExpanded(sender, e);
             }
         }
     }

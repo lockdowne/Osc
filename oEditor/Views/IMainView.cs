@@ -34,7 +34,9 @@ namespace oEditor.Views
 
         RadListControl ConsoleListBox { get; }
 
-        event Telerik.WinControls.UI.RadTreeView.TreeViewMouseEventHandler EntitiesTreeviewNodeClicked;
+        RadTreeNode SelectedEntityNode { get; }
+
+        event Telerik.WinControls.UI.RadTreeView.TreeViewEventHandler EntitiesNodeExpanded;
         event DockWindowCancelEventHandler DockWindowClosing;
         event Action MenuViewConsoleClicked;
         event Action MenuViewProjectClicked;

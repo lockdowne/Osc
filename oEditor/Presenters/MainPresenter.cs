@@ -1,6 +1,8 @@
 ﻿using oEditor.Common;
 using oEditor.Views;
 using oEngine.Commands;
+using oEngine.Common;
+using oEngine.Entities;
 using oEngine.Factories;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
 
 namespace oEditor.Presenters
@@ -21,6 +24,7 @@ namespace oEditor.Presenters
             // Main view initialization
             this.mainView = mainView;
 
+            
             mainView.DockWindowClosing += (sender, e) =>
             {
                 e.Cancel = false;
@@ -42,8 +46,7 @@ namespace oEditor.Presenters
                 }
                 else if(e.NewWindow is ToolWindow)
                 {
-                    // Transfer logic to dictionary
-                    if(e.NewWindow.Text == "Console")
+                    if(e.NewWindow.Text == Enum.GetName(typeof(Enums.EditorWindows), Enums.EditorWindows.Console))
                     {
                         ConsoleWriteLine(CommandFactory.ExecuteCommand(new Command()
                         {
@@ -59,11 +62,69 @@ namespace oEditor.Presenters
                                 mainView.ConsoleWindow.Show();
                                 mainView.MenuViewConsole.IsChecked = true;
                             },
-                            Name = "Close Console",
+                            Name = "Close Console Window",
+                        }));
+                    }
+                    else if(e.NewWindow.Text == Enum.GetName(typeof(Enums.EditorWindows), Enums.EditorWindows.Entities))
+                    {
+                        ConsoleWriteLine(CommandFactory.ExecuteCommand(new Command()
+                        {
+                            CanExecute = () => { return true; },
+                            Execute = () =>
+                            {
+                                mainView.EntitiesWindow.Hide();
+                                mainView.MenuViewEntities.IsChecked = false;
+
+                            },
+                            UnExecute = () =>
+                            {
+                                mainView.EntitiesWindow.Show();
+                                mainView.MenuViewEntities.IsChecked = true;
+                            },
+                            Name = "Close Entities Window",
+                        }));
+                    }
+                    else if (e.NewWindow.Text == Enum.GetName(typeof(Enums.EditorWindows), Enums.EditorWindows.Project))
+                    {
+                        ConsoleWriteLine(CommandFactory.ExecuteCommand(new Command()
+                        {
+                            CanExecute = () => { return true; },
+                            Execute = () =>
+                            {
+                                mainView.ProjectWindow.Hide();
+                                mainView.MenuViewProject.IsChecked = false;
+
+                            },
+                            UnExecute = () =>
+                            {
+                                mainView.ProjectWindow.Show();
+                                mainView.MenuViewProject.IsChecked = true;
+                            },
+                            Name = "Close Entities Window",
+                        }));
+                    }
+                    else if (e.NewWindow.Text == Enum.GetName(typeof(Enums.EditorWindows), Enums.EditorWindows.Toolbox))
+                    {
+                        ConsoleWriteLine(CommandFactory.ExecuteCommand(new Command()
+                        {
+                            CanExecute = () => { return true; },
+                            Execute = () =>
+                            {
+                                mainView.ToolboxWindow.Hide();
+                                mainView.MenuViewToolbox.IsChecked = false;
+
+                            },
+                            UnExecute = () =>
+                            {
+                                mainView.ToolboxWindow.Show();
+                                mainView.MenuViewToolbox.IsChecked = true;
+                            },
+                            Name = "Close Toolbox Window",
                         }));
                     }
                 }
             };
+           
 
             // <summary>
             // Menu clicked: View->Console
@@ -104,7 +165,7 @@ namespace oEditor.Presenters
                             mainView.ConsoleWindow.Show();
                             mainView.MenuViewConsole.IsChecked = true;
                         },
-                        Name = "Close Console Window",
+                        //Name = "Close Console Window",
                     }));
                 }
             };
@@ -148,7 +209,7 @@ namespace oEditor.Presenters
                             mainView.EntitiesWindow.Show();
                             mainView.MenuViewEntities.IsChecked = true;
                         },
-                        Name = "Close Entities Window",
+                        //Name = "Close Entities Window",
                     }));
                 }
             };
@@ -192,7 +253,7 @@ namespace oEditor.Presenters
                             mainView.ProjectWindow.Show();
                             mainView.MenuViewProject.IsChecked = true;
                         },
-                        Name = "Close Project Window",
+                        //Name = "Close Project Window",
                     }));
                 }
             };
@@ -205,7 +266,7 @@ namespace oEditor.Presenters
                 if (mainView.MenuViewToolbox.IsChecked)
                 {
                     ConsoleWriteLine(CommandFactory.ExecuteCommand(new Command()
-                    {
+                    {  
                         CanExecute = () => { return true; },
                         Execute = () =>
                         {
@@ -236,20 +297,64 @@ namespace oEditor.Presenters
                             mainView.ToolboxWindow.Show();
                             mainView.MenuViewToolbox.IsChecked = true;
                         },
-                        Name = "Close Toolbox Window",
+                        //Name = "Close Toolbox Window",
                     }));
                 }
             };
 
-            // <summary>
-            // Entities node clicked
-            // </summary>
-            mainView.EntitiesTreeviewNodeClicked += (sender, e) =>
+            mainView.EntitiesNodeExpanded += (sender, e) =>
             {
-                // If right click show context menu
-                if(e.OriginalEventArgs.Button == MouseButtons.Right)
+                // Doesn't need to be a command
+                if(e.Node.Expanded && e.Node.RootNode == e.Node)
                 {
-                   
+                    e.Node.Image = global::oEditor.Properties.Resources.Folder_6221;
+                }
+                else if(e.Node.RootNode == e.Node)
+                {
+                    e.Node.Image = global::oEditor.Properties.Resources.Folder_6222;
+                }
+            };
+
+            mainView.ContextAddCollapseClicked += () =>
+            {                
+                if(mainView.SelectedEntityNode != null)
+                {
+                    mainView.SelectedEntityNode.Collapse();
+                }
+            };
+
+            mainView.ContextAddExpandClicked += () =>
+            {
+                if(mainView.SelectedEntityNode != null)
+                {
+                    mainView.SelectedEntityNode.Expand();
+                }
+            };
+
+            mainView.ContextAddEntityClicked += () =>
+            {
+                // Add entity object to tree
+                if(mainView.SelectedEntityNode != null)
+                {
+                    // Get the type
+                    switch((Enums.EditorEntities)mainView.SelectedEntityNode.Tag)
+                    {
+                        case Enums.EditorEntities.Sprites:
+
+                            break;
+                        case Enums.EditorEntities.Items:
+
+                            break;
+                        case Enums.EditorEntities.Nodes:
+
+                            break;
+                        case Enums.EditorEntities.Quests:
+
+                            break;
+                        case Enums.EditorEntities.Scenes:
+
+                            break;                         
+                    }
                 }
             };
         }
@@ -262,6 +367,16 @@ namespace oEditor.Presenters
             {
                 mainView.ConsoleListBox.Items.RemoveAt(mainView.ConsoleListBox.Items.Count - 1);
             }
+        }
+
+        private void AddEntityNode(string text, Enums.EditorEntities tag, IEntity value)        
+        {
+
+        }
+
+        private void RemoveEntityNode(Guid id)
+        {
+            //mainView.EntitiesTreeView.Nodes.
         }
     }
 }

@@ -3,11 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace oEngine.Entities
 {
-    public class Tileset : IEntity
+    public class Tileset : IEntity, ITexture
     {
         /// <summary>
         /// Gets the unique ID of entity
@@ -24,10 +25,13 @@ namespace oEngine.Entities
         /// </summary>
         public string Description { get; set; }
 
+        public string TextureName { get; set; }
+
         /// <summary>
         /// Gets or sets the image of the tileset
         /// </summary>
-        public Texture2D Texture { get; private set; }
+        [IgnoreDataMember]
+        public Texture2D Texture { get; set; }
         
 
         public void Initialize(Texture2D texture)

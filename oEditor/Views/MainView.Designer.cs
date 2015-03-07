@@ -62,17 +62,17 @@
             this.toolTabStrip6 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
             this.toolTabStrip5 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
             this.contextAdd = new Telerik.WinControls.UI.RadContextMenu(this.components);
-            this.contextEdit = new Telerik.WinControls.UI.RadContextMenu(this.components);
             this.contextAddEntity = new Telerik.WinControls.UI.RadMenuItem();
-            this.contextEditEntity = new Telerik.WinControls.UI.RadMenuItem();
-            this.radContextMenuManager = new Telerik.WinControls.UI.RadContextMenuManager();
+            this.radMenuSeparatorItem1 = new Telerik.WinControls.UI.RadMenuSeparatorItem();
             this.contextAddExpand = new Telerik.WinControls.UI.RadMenuItem();
             this.contextAddCollapse = new Telerik.WinControls.UI.RadMenuItem();
-            this.radMenuSeparatorItem1 = new Telerik.WinControls.UI.RadMenuSeparatorItem();
+            this.contextEdit = new Telerik.WinControls.UI.RadContextMenu(this.components);
+            this.contextEditEntity = new Telerik.WinControls.UI.RadMenuItem();
             this.contextEditDelete = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuSeparatorItem2 = new Telerik.WinControls.UI.RadMenuSeparatorItem();
             this.contextEditExpand = new Telerik.WinControls.UI.RadMenuItem();
             this.contextEditCollapse = new Telerik.WinControls.UI.RadMenuItem();
+            this.radContextMenuManager = new Telerik.WinControls.UI.RadContextMenuManager();
             ((System.ComponentModel.ISupportInitialize)(this.cmdBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock)).BeginInit();
             this.radDock.SuspendLayout();
@@ -244,7 +244,7 @@
             // 
             // radDock
             // 
-            this.radDock.ActiveWindow = this.windowEntities;
+            this.radDock.ActiveWindow = this.windowToolbox;
             this.radDock.Controls.Add(this.toolTabStrip3);
             this.radDock.Controls.Add(this.radSplitContainer2);
             this.radDock.Controls.Add(this.toolTabStrip4);
@@ -292,7 +292,7 @@
             this.treeViewEntities.TabIndex = 0;
             this.treeViewEntities.Text = "radTreeView1";
             this.treeViewEntities.ThemeName = "VisualStudio2012Dark";
-            this.treeViewEntities.NodeMouseDown += new Telerik.WinControls.UI.RadTreeView.TreeViewMouseEventHandler(this.treeViewEntities_NodeMouseDown);
+            this.treeViewEntities.NodeExpandedChanged += new Telerik.WinControls.UI.RadTreeView.TreeViewEventHandler(this.treeViewEntities_NodeExpandedChanged);
             // 
             // toolTabStrip3
             // 
@@ -460,16 +460,6 @@
             this.contextAddCollapse});
             this.contextAdd.ThemeName = "VisualStudio2012Dark";
             // 
-            // contextEdit
-            // 
-            this.contextEdit.Items.AddRange(new Telerik.WinControls.RadItem[] {
-            this.contextEditEntity,
-            this.contextEditDelete,
-            this.radMenuSeparatorItem2,
-            this.contextEditExpand,
-            this.contextEditCollapse});
-            this.contextEdit.ThemeName = "VisualStudio2012Dark";
-            // 
             // contextAddEntity
             // 
             this.contextAddEntity.AccessibleDescription = "Add Entity";
@@ -478,13 +468,12 @@
             this.contextAddEntity.Text = "Add Entity";
             this.contextAddEntity.Click += new System.EventHandler(this.contextAddEntity_Click);
             // 
-            // contextEditEntity
+            // radMenuSeparatorItem1
             // 
-            this.contextEditEntity.AccessibleDescription = "Edit";
-            this.contextEditEntity.AccessibleName = "Edit";
-            this.contextEditEntity.Name = "contextEditEntity";
-            this.contextEditEntity.Text = "Edit";
-            this.contextEditEntity.Click += new System.EventHandler(this.contextEditEntity_Click);
+            this.radMenuSeparatorItem1.AccessibleDescription = "radMenuSeparatorItem1";
+            this.radMenuSeparatorItem1.AccessibleName = "radMenuSeparatorItem1";
+            this.radMenuSeparatorItem1.Name = "radMenuSeparatorItem1";
+            this.radMenuSeparatorItem1.Text = "radMenuSeparatorItem1";
             // 
             // contextAddExpand
             // 
@@ -502,12 +491,23 @@
             this.contextAddCollapse.Text = "Collapse";
             this.contextAddCollapse.Click += new System.EventHandler(this.contextAddCollapse_Click);
             // 
-            // radMenuSeparatorItem1
+            // contextEdit
             // 
-            this.radMenuSeparatorItem1.AccessibleDescription = "radMenuSeparatorItem1";
-            this.radMenuSeparatorItem1.AccessibleName = "radMenuSeparatorItem1";
-            this.radMenuSeparatorItem1.Name = "radMenuSeparatorItem1";
-            this.radMenuSeparatorItem1.Text = "radMenuSeparatorItem1";
+            this.contextEdit.Items.AddRange(new Telerik.WinControls.RadItem[] {
+            this.contextEditEntity,
+            this.contextEditDelete,
+            this.radMenuSeparatorItem2,
+            this.contextEditExpand,
+            this.contextEditCollapse});
+            this.contextEdit.ThemeName = "VisualStudio2012Dark";
+            // 
+            // contextEditEntity
+            // 
+            this.contextEditEntity.AccessibleDescription = "Edit";
+            this.contextEditEntity.AccessibleName = "Edit";
+            this.contextEditEntity.Name = "contextEditEntity";
+            this.contextEditEntity.Text = "Edit";
+            this.contextEditEntity.Click += new System.EventHandler(this.contextEditEntity_Click);
             // 
             // contextEditDelete
             // 

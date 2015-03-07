@@ -5,6 +5,7 @@ using System.Text;
 
 namespace oEngine.Commands
 {
+    
     public class Command
     {
         /// <summary>
@@ -35,4 +36,5 @@ namespace oEngine.Commands
 
 
     }
+
 }
