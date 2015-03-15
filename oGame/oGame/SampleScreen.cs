@@ -78,6 +78,7 @@ namespace oGame
             {
                 // When its a left click see if button has been clicked
                 helloButton.HandleClick(input.Position);
+                ExitScreen();
             }
             
             if(input.LeftDown)
@@ -100,7 +101,7 @@ namespace oGame
             base.Draw(gameTime);
 
             // Clears screen
-            ScreenFactory.GraphicsDevice.Clear(Color.Black);
+            ScreenFactory.GraphicsDevice.Clear(Color.Red);
 
             // We use screen factories spritebatch as it shared among screens
             ScreenFactory.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);

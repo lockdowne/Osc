@@ -35,6 +35,9 @@ namespace oGame
             try
             {
                 graphics = new GraphicsDeviceManager(this);
+                //graphics.PreferredBackBufferHeight = 0;
+               // graphics.PreferredBackBufferWidth = 0;
+
                 Content.RootDirectory = "Content";
                 IsMouseVisible = true;
 
