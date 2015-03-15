@@ -11,45 +11,7 @@ namespace oEditor.Views
 {
     public interface IMainView
     {
-        ToolWindow ConsoleWindow { get; }
-        ToolWindow ToolboxWindow { get; }
-        ToolWindow ProjectWindow { get; }
-        ToolWindow EntitiesWindow { get; }
-
-        RadMenuItem MenuViewConsole { get; }
-        RadMenuItem MenuViewEntities { get; }
-        RadMenuItem MenuViewProject { get; }
-        RadMenuItem MenuViewToolbox { get; }
-        RadMenuItem ContextAddEntity{ get; }
-        RadMenuItem ContextAddExpand { get; }
-        RadMenuItem ContextAddCollapse { get; }
-        RadMenuItem ContextEditEntity { get; }
-        RadMenuItem ContextEditDelete { get; }
-        RadMenuItem ContextEditExpand { get; }
-        RadMenuItem ContextEditCollapse { get; }
-
-        RadTreeView EntitiesTreeView { get; }
-
-        RadDock RadDock { get; }
-
-        RadListControl ConsoleListBox { get; }
-
-        RadTreeNode SelectedEntityNode { get; }
-
-        event Telerik.WinControls.UI.RadTreeView.TreeViewEventHandler EntitiesNodeExpanded;
-        event DockWindowCancelEventHandler DockWindowClosing;
-        event Action MenuViewConsoleClicked;
-        event Action MenuViewProjectClicked;
-        event Action MenuViewEntitiesClicked;
-        event Action MenuViewToolboxClicked;
-        event Action ContextAddEntityClicked;
-        event Action ContextAddExpandClicked;
-        event Action ContextAddCollapseClicked;
-        event Action ContextEditEntityClicked;
-        event Action ContextEditDeleteClicked;
-        event Action ContextEditExpandClicked;
-        event Action ContextEditCollapseClicked;
-       
+        RadDock DockManager { get; set; }
 
         DialogResult ShowMessageBox(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton);
     }

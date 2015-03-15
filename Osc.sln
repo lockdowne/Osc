@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oEditor", "oEditor\oEditor.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oGame", "oGame\oGame\oGame.csproj", "{2C3C076C-A521-41DD-A1CE-C75710D2E6D7}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "Content", "oGame\oGameContent\Content.contentproj", "{9D28C6A8-A4F6-4B4D-A2FC-3EC15FE7479E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content", "oGame\oGameContent\Content.contentproj", "{9D28C6A8-A4F6-4B4D-A2FC-3EC15FE7479E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

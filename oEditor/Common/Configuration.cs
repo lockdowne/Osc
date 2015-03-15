@@ -25,7 +25,7 @@ namespace oEditor.Common
                 {
                     try
                     {
-                        settings = Serializer.Deserialize<Settings>(Consts.OSC_EDITOR_SETTINGS);
+                        settings = Serializer.Deserialize<Settings>(Consts.OscEditorSettingsPath);// = Serializer.Deserialize<Settings>(Consts.OSC_EDITOR_SETTINGS);
                     }
                     catch(FileNotFoundException fileNotFoundException)
                     {
@@ -51,10 +51,10 @@ namespace oEditor.Common
 
                 try
                 {
-                    if (!Directory.Exists(Consts.OSC_DIRECTORY))
-                        Directory.CreateDirectory(Consts.OSC_DIRECTORY);
+                    if (!Directory.Exists(Consts.OscDirectory))
+                        Directory.CreateDirectory(Consts.OscDirectory);
 
-                    Serializer.Serialize<Settings>(settings, Consts.OSC_EDITOR_SETTINGS);
+                    settings.Serialize(Consts.OscEditorSettingsPath);
                 }
                 catch(Exception exception)
                 {
