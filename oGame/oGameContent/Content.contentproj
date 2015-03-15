@@ -46,13 +46,19 @@
   <ItemGroup>
     <Folder Include="Audio\Songs\" />
     <Folder Include="Audio\SoundEffects\" />
-    <Folder Include="Textures\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fonts\arial12.spritefont">
       <Name>arial12</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\osc_logo_original.jpg">
+      <Name>osc_logo_original</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

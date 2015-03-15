@@ -26,6 +26,18 @@ namespace oEditor.Common
         [DataMember]
         public float MinCameraZoom { get; set; }
 
+        [DataMember]
+        public int TileWidth { get; set; }
+
+        [DataMember]
+        public int TileHeight { get; set; }
+
+        [DataMember]
+        public int SceneWidth { get; set; }
+
+        [DataMember]
+        public int SceneHeight { get; set; }
+
         public static Settings CreateDefault()
         {
             return new Settings()
@@ -35,6 +47,10 @@ namespace oEditor.Common
                 ZoomIncrement = 0.1f,
                 MaxCameraZoom = 2.0f,
                 MinCameraZoom = 0.1f,
+                TileWidth = 100,
+                TileHeight = 50,
+                SceneWidth = 50,
+                SceneHeight = 50,
             };
         }
     }

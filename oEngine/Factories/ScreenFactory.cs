@@ -300,9 +300,6 @@ namespace oEngine.Factories
         public void AddScreen(GameScreen screen)
         {
             screen.ScreenFactory = this;
-            screen.AudioFactory.Content = this.Content;
-            screen.FontFactory.Content = this.Content;
-            screen.TextureFactory.Content = this.Content;
 
             // If we have a graphics device, tell the screen to load content.
             if ((graphicsDeviceService != null) &&

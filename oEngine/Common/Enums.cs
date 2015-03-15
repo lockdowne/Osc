@@ -49,11 +49,19 @@ namespace oEngine.Common
         /// </summary>
         public enum EditorEntities
         {
-            Characters,
+            Sprites,
             Items,
             Quests,
             Scenes,
             Nodes,
+        }
+
+        public enum LayerTypes
+        {
+            Visual,
+            Trigger,
+            Movement,
+            Placement,
         }
     }
 }

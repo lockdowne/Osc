@@ -20,10 +20,12 @@ namespace oEngine.Factories
         /// <returns>Logging message</returns>
         public static string ExecuteCommand(Command command, bool saveToStack = true)
         {
+           
             try
             {
                 if(command.CanExecute())
-                {
+                {      
+                   
                     command.Execute();
 
                     if (saveToStack)

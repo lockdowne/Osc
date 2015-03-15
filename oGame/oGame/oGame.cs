@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using oEngine.Factories;
 using oEngine.Common;
 using oEngine.Screens;
+using oEngine.Entities;
 
 namespace oGame
 {
@@ -40,6 +41,8 @@ namespace oGame
 
                 Content.RootDirectory = "Content";
                 IsMouseVisible = true;
+                graphics.PreferredBackBufferWidth = 1024;
+                graphics.PreferredBackBufferHeight = 768;
 
                 screenFactory = new ScreenFactory(this);
                 Components.Add(screenFactory);
@@ -57,6 +60,7 @@ namespace oGame
                 spriteBatch = new SpriteBatch(GraphicsDevice);
 
                 screenFactory.AddScreen(new SampleScreen());
+                
             }
             catch(Exception exception)
             {
@@ -94,5 +98,7 @@ namespace oGame
 
             spriteBatch.End();
         }
+
+        
     }
 }

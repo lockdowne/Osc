@@ -19,7 +19,7 @@ namespace oEditor.Views
         public event MouseEventHandler SceneMouseMove;
         public event MouseEventHandler SceneMouseWheel;
 
-        public Tilemap Tilemap
+        public Scene Tilemap
         {
             get { return tilemapRender.Tilemap; }
             set { tilemapRender.Tilemap = value; }

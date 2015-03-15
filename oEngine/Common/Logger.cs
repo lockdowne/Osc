@@ -8,7 +8,7 @@ namespace oEngine.Common
 {
     public static class Logger
     {
-        public static void Log(string classes, string method, Exception exception = null, string description = "")
+        public static void Log(string className, string method, Exception exception = null, string description = "")
         {
             DateTime dateTime = DateTime.Now;
             StringBuilder builder = new StringBuilder();
@@ -17,17 +17,17 @@ namespace oEngine.Common
 
             builder.AppendLine(LineBreak());
             builder.AppendLine(dateTime.ToString());
-            builder.AppendLine("Location: " + classes + "." + method);
+            builder.AppendLine("Location: " + className + "." + method);
             if (!string.IsNullOrEmpty(description))
                 builder.AppendLine("Description: " + description);
             builder.AppendLine("Status: " + status);
 
             try
             {
-                if (!Directory.Exists(Consts.OSC_DIRECTORY))
-                    Directory.CreateDirectory(Consts.OSC_DIRECTORY);
+                if (!Directory.Exists(Consts.OscDirectory))
+                    Directory.CreateDirectory(Consts.OscDirectory);
 
-                File.AppendAllText(Consts.OSC_FILE, builder.ToString());
+                File.AppendAllText(Consts.OscLog, builder.ToString());
             }
             catch(Exception e)
             {
@@ -35,7 +35,7 @@ namespace oEngine.Common
             }
         }
 
-        public static void Log(string classes, string method, string description = "", Exception exception = null)
+        public static void Log(string className, string method, string description = "", Exception exception = null)
         {
             DateTime dateTime = DateTime.Now;
             StringBuilder builder = new StringBuilder();
@@ -44,17 +44,17 @@ namespace oEngine.Common
 
             builder.AppendLine(LineBreak());
             builder.AppendLine(dateTime.ToString());
-            builder.AppendLine("Location: " + classes + "." + method);
+            builder.AppendLine("Location: " + className + "." + method);
             if (!string.IsNullOrEmpty(description))
                 builder.AppendLine("Description: " + description);
             builder.AppendLine("Status: " + status);
 
             try
             {
-                if (!Directory.Exists(Consts.OSC_DIRECTORY))
-                    Directory.CreateDirectory(Consts.OSC_DIRECTORY);
+                if (!Directory.Exists(Consts.OscDirectory))
+                    Directory.CreateDirectory(Consts.OscDirectory);
 
-                File.AppendAllText(Consts.OSC_FILE, builder.ToString());
+                File.AppendAllText(Consts.OscLog, builder.ToString());
             }
             catch (Exception e)
             {

@@ -23,7 +23,6 @@ namespace oGame
         {
             TransitionOnTime = TimeSpan.FromSeconds(1);
             TransitionOffTime = TimeSpan.FromSeconds(1);
-
         }
 
         public override void LoadContent()
@@ -33,8 +32,11 @@ namespace oGame
             {
                 base.LoadContent();
 
+
+                // Due to my awesome clever method of loading textures and other unserializable objects we dont need a manager for textures
+
                 // Load factories here
-                FontFactory.AddFont("arial12"); // all fonts go in Fonts/ folder
+                //FontFactory.AddFont("arial12"); // all fonts go in Fonts/ folder
                 //AudioFactory.AddSong("sampleSong"); // all songs go in the Audio/Songs folder
                 //AudioFactory.AddSoundEffect("sampleSoundEffect"); // all sound effects go in the Audio/SoundEffects folder
                 //TextureFactory.AddTexture("sampleTexture"); // all textures go in the Textures/ folder
@@ -45,7 +47,8 @@ namespace oGame
                 // TODO: Content names will be in xml per object, but see if we can find an easy want to load factories automatically when objects are deserialized
 
                 // Instantiate objects here
-                helloButton = new Button() { Position = new Vector2(400, 300), Width = 100, Height = 25, Font = FontFactory.GetFont("arial12"), Text = "Hello", Tint = Color.Black, TextColor = new Color(255, 255, 255) };
+                //helloButton = new Button() { Position = new Vector2(400, 300), Width = 100, Height = 25, 
+                //    Font = FontFactory.GetFont("arial12"), Text = "Hello", Tint = Color.Black, TextColor = new Color(255, 255, 255) };
                 
                 helloButton.Clicked += () =>
                 {                    
@@ -113,7 +116,6 @@ namespace oGame
             // This will tell the screen to fade in/out
             if (TransitionPosition > 0)
                 ScreenFactory.FadeBackBufferToBlack(255 - TransitionAlpha);
-            
         }
     }
 }
