@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Telerik.WinControls.UI.Docking;
 using oEngine.Entities;
+using oEngine.Common;
 
 namespace oEditor.Views
 {
@@ -77,6 +78,8 @@ namespace oEditor.Views
             this.tilemapRender.Size = new System.Drawing.Size(150, 150);
             this.tilemapRender.TabIndex = 0;
             this.tilemapRender.Tilemap = null;
+            this.tilemapRender.Dock = DockStyle.Fill;
+            
             this.ResumeLayout(false);
 
         }

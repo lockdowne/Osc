@@ -12,12 +12,15 @@ namespace oEditor.Repositories
 {
     public class SceneRepository : IRepository<Scene>
     {
+        public event Action RepositoryChanged;
+        public event Action<Scene> OpenEntity;
+
         public void CheckPath()
         {
-            if (!File.Exists(Consts.OscSceneRepositoryPath))
+            if (!File.Exists(Consts.Repositories.Scenes))
             {
                 XDocument file = new XDocument(new XElement("Root"));
-                file.Save(Consts.OscSceneRepositoryPath);
+                file.Save(Consts.Repositories.Scenes);
             }
         }
 
@@ -26,49 +29,80 @@ namespace oEditor.Repositories
             CheckPath();
 
             // If file gets too large then we should use xmlreader instead of loading it all in memory
-            XDocument xml = XDocument.Load(Consts.OscSceneRepositoryPath);
+            XDocument xml = XDocument.Load(Consts.Repositories.Scenes);
 
-            foreach (XElement element in xml.Descendants(Consts.SceneNode))
+            foreach (XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Scene))
             {
                 Scene scene = element.FromXElement<Scene>();
 
                 if (predicate(scene))
                     yield return scene;
             }
+
+            OnRepositoryChanged();
         }
 
         public void SaveEntity(Scene entity)
         {
-            // Check if path exists if not create file
+            // Check for path existence
             CheckPath();
 
-            // First check if scene already exists
-            XDocument xml = XDocument.Load(Consts.OscSceneRepositoryPath);
+            // Load file
+            XDocument xml = XDocument.Load(Consts.Repositories.Scenes);
 
-            // Iterate through elements finding matching scene id
-            foreach (XElement element in xml.Descendants(Consts.SceneNode))
-            {
-                Scene fileScene = element.FromXElement<Scene>();
+            // Check if entity already exists and remove old copies
+            RemoveEntities(scene => scene.ID == entity.ID);
+          
+            // Add entity to root
+            xml.Element("Root").Add(entity.ToXElement());
 
-                if (fileScene.ID == entity.ID)
-                {
-                    element.Remove();
-                }
-            }
+            // Save new file
+            xml.Save(Consts.Repositories.Scenes);
 
-            xml.Add(entity.ToXElement());
-
-            xml.Save(Consts.OscSceneRepositoryPath);
+            OnRepositoryChanged();
+            
         }
 
         public void RemoveEntities(Func<Scene, bool> predicate)
         {
-            
+            CheckPath();
+
+            XDocument xml = XDocument.Load(Consts.Repositories.Scenes);
+
+            List<XElement> toRemove = new List<XElement>();
+
+            foreach(XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Scene))
+            {
+                Scene scene = element.FromXElement<Scene>();
+
+                if (predicate(scene))
+                    toRemove.Add(element);//.Remove();
+            }
+
+            toRemove.ForEach(element => element.Remove());
+
+            xml.Save(Consts.Repositories.Scenes);
+
+            OnRepositoryChanged();
         }
 
         public void RemoveEntity(Scene entity)
         {
-            
+            CheckPath();
+
+            RemoveEntities(scene => scene.ID == entity.ID);
+        }
+
+        public void OnOpenEntity(Scene obj)
+        {
+            if (OpenEntity != null)
+                OpenEntity(obj);
+        }
+
+        private void OnRepositoryChanged()
+        {
+            if (RepositoryChanged != null)
+                RepositoryChanged();
         }
     }
 }

@@ -3,6 +3,7 @@ using oEditor.Repositories;
 using oEditor.Views;
 using oEngine.Common;
 using oEngine.Entities;
+using oEngine.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +17,18 @@ namespace oEditor.Presenters
     {
         private readonly IEntitiesView view;
 
-        private SceneRepository repo;
+        private readonly IRepository<Scene> sceneRepository;
 
-        public EntitiesPresenter(IEntitiesView entitiesView)
+        public EntitiesPresenter(IEntitiesView entitiesView, IRepository<Scene> sceneRepository)
         {
             this.view = entitiesView;
 
-            repo = new SceneRepository();
+            this.sceneRepository = sceneRepository;
 
+            this.sceneRepository.RepositoryChanged += () =>
+            {
+                RefreshTree();
+            };
 
             this.view.AddEntityClicked += () =>
             {
@@ -38,14 +43,14 @@ namespace oEditor.Presenters
 
                 switch ((Enums.EditorEntities)view.SelectedNode.Tag)
                 {
-                    case Enums.EditorEntities.Sprites:
+                    case Enums.EditorEntities.Characters:
                         break;
                     case Enums.EditorEntities.Items:
                         break;
                     case Enums.EditorEntities.Quests:
                         break;
                     case Enums.EditorEntities.Scenes:
-                        CreateScene();
+                        CreateScene(view.SelectedNode);
                         break;
                     case Enums.EditorEntities.Nodes:
                         break;
@@ -57,7 +62,23 @@ namespace oEditor.Presenters
                 if (view.SelectedNode == null)
                     return;
 
+                if (view.SelectedNode.RootNode == view.SelectedNode)
+                    return;
 
+                switch ((Enums.EditorEntities)view.SelectedNode.Tag)
+                {
+                    case Enums.EditorEntities.Characters:
+                        break;
+                    case Enums.EditorEntities.Items:
+                        break;
+                    case Enums.EditorEntities.Quests:
+                        break;
+                    case Enums.EditorEntities.Scenes:
+                        DeleteScene(view.SelectedNode);
+                        break;
+                    case Enums.EditorEntities.Nodes:
+                        break;
+                }
 
 
             };
@@ -67,30 +88,94 @@ namespace oEditor.Presenters
 
             };
 
-            
+            this.view.NodeDoubleClicked += () =>
+            {
+                // Do the same as edit entity
+            };
         }
 
-        private void CreateScene()
+        private void CreateScene(RadTreeNode selectedNode)
         {
-            RadTreeNode node = new RadTreeNode() { Text = "Empty Scene", Name = "Scene" };
-            //view.SelectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Scene", Name = "Scene", Value = })
-            Scene scene = new Scene();
-            scene.Initialize("Empty Scene", string.Empty, Configuration.Settings.TileWidth,
-                Configuration.Settings.TileHeight, Configuration.Settings.SceneWidth, Configuration.Settings.SceneHeight);
+            Guid id = Guid.NewGuid();
 
-            // TODO: Save to repo and have scene presenter load new tabbed document window in mainview
-            //repo.SaveScene(scene); // Not implemented yet
+            ConsoleView.WriteLine(CommandFactory.ExecuteCommand(new Command()
+            {
+                Name = "Create Scene",
+                Description = "Create an empty scene entity",
+                CanExecute = () =>
+                {
+                    return true;
+                },
+                Execute = () =>
+                {
+                    //view.SelectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Scene", Name = "Scene", Value = })
+                    Scene scene = new Scene() { ID = id };
+                    scene.Initialize("Empty Scene", string.Empty, Configuration.Settings.TileWidth,
+                        Configuration.Settings.TileHeight, Configuration.Settings.SceneWidth, Configuration.Settings.SceneHeight);
 
-            // This would be easy just to have main presenter handle all events
+                    sceneRepository.SaveEntity(scene);
 
-            node.Value = scene;
+                    selectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Scene", Name = "Scene", Value = id, Tag = Enums.EditorEntities.Scenes });
+                },
+                UnExecute = () =>
+                {
+                    sceneRepository.RemoveEntities(entity => entity.ID == id);
+                    selectedNode.Nodes.FirstOrDefault(node => (Guid)node.Value == id).Remove();
+                },
+            }));
+        }
 
-            this.view.SelectedNode.Nodes.Add(node);
+        private void DeleteScene(RadTreeNode selectedNode)
+        {
+            ConsoleView.WriteLine(CommandFactory.ExecuteCommand(new Command()
+                {
+                    Name = "Delete Scene",
+                    Description = "Deletes selected scene",
+                    CanExecute = () =>
+                    {
+                        // No restrictions currently
+                        return true;
+                    },
+                    Execute = () =>
+                    {
+                        sceneRepository.RemoveEntities(entity => entity.ID == (Guid)selectedNode.Value);
+                        selectedNode.Remove();
+                    },
+                }));
+        }
+
+        private void EditScene(RadTreeNode selectedNode)
+        {
+            // TODO: create a scene view with the nodes data
         }
 
         private void CreateSprite()
         {
 
+        }
+
+        private void RefreshTree()
+        {
+            foreach(var node in view.NodeCollection)
+            {
+                switch ((Enums.EditorEntities)node.Tag)
+                {
+                    case Enums.EditorEntities.Characters:
+                        break;
+                    case Enums.EditorEntities.Items:
+                        break;
+                    case Enums.EditorEntities.Quests:
+                        break;
+                    case Enums.EditorEntities.Scenes:
+                        sceneRepository.FindEntities(x => true).ForEach(entity =>
+                            {
+                                node.Nodes.Add(new RadTreeNode() { Text = entity.Name, Name = entity.Name, Value = entity.ID, Tag = Enums.EditorEntities.Scenes });
+                            });                        
+                        break;
+                    case Enums.EditorEntities.Nodes:
+                        break;
+                }
+            }
         }
     }
 }

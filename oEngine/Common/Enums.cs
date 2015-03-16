@@ -49,7 +49,7 @@ namespace oEngine.Common
         /// </summary>
         public enum EditorEntities
         {
-            Sprites,
+            Characters,
             Items,
             Quests,
             Scenes,

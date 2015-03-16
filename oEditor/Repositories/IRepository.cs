@@ -8,7 +8,11 @@ namespace oEditor.Repositories
 {
     public interface IRepository<T>
     {
+        event Action RepositoryChanged;
+        event Action<T> OpenEntity;
+
         void CheckPath();
+        void OnOpenEntity(T obj);
 
         IEnumerable<T> FindEntities(Func<T, bool> predicate);
 

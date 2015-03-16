@@ -130,22 +130,35 @@ namespace oEngine.Common
                 action(item);
         }
 
+        /// <summary>
+        /// Serializes object into an xelement node used to append to a xml file
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static XElement ToXElement<T>(this T obj)
         {
             using (var memoryStream = new MemoryStream())
             {
-                using (XmlWriter streamWriter = XmlWriter.Create(memoryStream))
+                using (var streamWriter = new StreamReader(memoryStream))
                 {
-                    //var xmlSerializer = new XmlSerializer(typeof(T));
-
                     DataContractSerializer xml = new DataContractSerializer(typeof(T));
 
-                    xml.WriteObject(streamWriter, obj);
-                    return XElement.Parse(Encoding.ASCII.GetString(memoryStream.ToArray()));
+                    xml.WriteObject(memoryStream, obj);
+
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+
+                    return XElement.Parse(streamWriter.ReadToEnd());
                 }
             }
         }
 
+        /// <summary>
+        /// Deserializes an xelement node into object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="xElement"></param>
+        /// <returns></returns>
         public static T FromXElement<T>(this XElement xElement)
         {
             using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(xElement.ToString())))

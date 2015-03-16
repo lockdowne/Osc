@@ -13,6 +13,8 @@ namespace oEditor.Views
     {
         RadDock DockManager { get; set; }
 
+        event DockWindowCancelEventHandler WindowClosing;
+
         DialogResult ShowMessageBox(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton);
     }
 }

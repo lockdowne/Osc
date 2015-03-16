@@ -24,10 +24,10 @@ namespace oEngine.Common
 
             try
             {
-                if (!Directory.Exists(Consts.OscDirectory))
-                    Directory.CreateDirectory(Consts.OscDirectory);
+                if (!Directory.Exists(Consts.OscPaths.MainDirectory))
+                    Directory.CreateDirectory(Consts.OscPaths.MainDirectory);
 
-                File.AppendAllText(Consts.OscLog, builder.ToString());
+                File.AppendAllText(Consts.OscPaths.ExceptionLog, builder.ToString());
             }
             catch(Exception e)
             {
@@ -51,10 +51,10 @@ namespace oEngine.Common
 
             try
             {
-                if (!Directory.Exists(Consts.OscDirectory))
-                    Directory.CreateDirectory(Consts.OscDirectory);
+                if (!Directory.Exists(Consts.OscPaths.MainDirectory))
+                    Directory.CreateDirectory(Consts.OscPaths.MainDirectory);
 
-                File.AppendAllText(Consts.OscLog, builder.ToString());
+                File.AppendAllText(Consts.OscPaths.ExceptionLog, builder.ToString());
             }
             catch (Exception e)
             {
@@ -64,7 +64,7 @@ namespace oEngine.Common
 
         private static string LineBreak()
         {
-            return string.Empty.PadRight(Consts.LOG_WIDTH, '-');
+            return string.Empty.PadRight(Consts.LogWidth, '-');
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using oEngine.Commands;
 using oEngine.Common;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace oEngine.Entities
 {
-    [DataContract]
+    [DataContract(Name=Consts.Nodes.Scene)]
     public class Scene : IEntity
     {
         [DataMember(Name = "Initialized")]
@@ -86,7 +85,7 @@ namespace oEngine.Entities
             if (tileWidth <= 0 || tileHeight <= 0 || tilemapWidth <= 0 || tilemapHeight <= 0)
                 throw new ArgumentOutOfRangeException("Tile and Tilemap dimensions should be greater than zero");
 
-            ID = Guid.NewGuid();
+            //ID = Guid.NewGuid();
 
             Name = name;
             Description = description;

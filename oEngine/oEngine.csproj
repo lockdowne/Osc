@@ -67,7 +67,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Entities\Command.cs" />
     <Compile Include="Common\Consts.cs" />
     <Compile Include="Common\Enums.cs" />
     <Compile Include="Common\Extensions.cs" />

@@ -39,6 +39,7 @@
             this.btnExpand = new Telerik.WinControls.UI.RadMenuItem();
             this.btnCollapse = new Telerik.WinControls.UI.RadMenuItem();
             this.visualStudio2012DarkTheme1 = new Telerik.WinControls.Themes.VisualStudio2012DarkTheme();
+            this.Tag = oEngine.Common.Enums.EditorWindows.Entities;
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView)).BeginInit();
             this.SuspendLayout();
             // 
