@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Telerik.WinControls;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
 
@@ -18,7 +19,6 @@ namespace oEditor.Views
         public RadDock DockManager
         {
             get { return radDock; }
-            set { radDock = value; }
         }
 
         public event DockWindowCancelEventHandler WindowClosing;
@@ -26,6 +26,10 @@ namespace oEditor.Views
         public MainView()
         {
             InitializeComponent();
+
+            this.WindowState = FormWindowState.Maximized;
+
+            RadMessageBox.SetThemeName("VisualStudio2012Dark");
 
             // Testing
             this.MouseWheel += (sender, e) =>
@@ -38,7 +42,7 @@ namespace oEditor.Views
                 if (WindowClosing != null)
                     WindowClosing(sender, e);
 
-                // While this should be in presenter I have it in view due to a poor mans binding the menu item checked property should be tied to visibilty to tool windows
+                // While this should be in presenter I have it in view due to a shitty binding, the menu item checked property should be tied to visibilty to tool windows
                 try
                 {
                     if (e.NewWindow.Text == Enums.EditorWindows.Console.ToString())
@@ -120,9 +124,9 @@ namespace oEditor.Views
             };
         }
 
-        public DialogResult ShowMessageBox(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
-        {
-            return MessageBox.Show(message, caption, buttons, icon, defaultButton);
+        public static DialogResult ShowMessageBox(string message, string caption, MessageBoxButtons buttons, RadMessageIcon icon, MessageBoxDefaultButton defaultButton)
+        {  
+            return RadMessageBox.Show(MainView.ActiveForm, message, caption, buttons, icon, defaultButton);
         }
     }
 }

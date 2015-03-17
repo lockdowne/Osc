@@ -25,14 +25,14 @@ namespace oEditor.Common
                 {
                     try
                     {
-                        settings = Serializer.Deserialize<Settings>(Consts.OscPaths.EditorSettings);// = Serializer.Deserialize<Settings>(Consts.OSC_EDITOR_SETTINGS);
-                    }
-                    catch(FileNotFoundException fileNotFoundException)
-                    {
-                        Logger.Log("Configuration", "Settings", fileNotFoundException, "File not found");
-
-                        // If settings not found then use default settings
-                        settings = Settings.CreateDefault();
+                        if (File.Exists(Consts.OscPaths.EditorSettings))
+                        {
+                            settings = Serializer.Deserialize<Settings>(Consts.OscPaths.EditorSettings);// = Serializer.Deserialize<Settings>(Consts.OSC_EDITOR_SETTINGS);
+                        }
+                        else
+                        {
+                            settings = Settings.CreateDefault();
+                        }
                     }
                     catch(Exception exception)
                     {

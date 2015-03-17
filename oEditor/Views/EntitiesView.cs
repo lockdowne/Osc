@@ -112,17 +112,11 @@ namespace oEditor.Views
                     radTreeView.SelectedNode.Expand();
             };
 
-            radTreeView.MouseDoubleClick += (s, e) =>
+            radTreeView.NodeMouseDoubleClick += (s, e) =>
             {
-                if(e.Button == System.Windows.Forms.MouseButtons.Left)
+                if (NodeDoubleClicked != null)
                 {
-                    if (SelectedNode != null)
-                    {
-                        if (NodeDoubleClicked != null)
-                        {
-                            NodeDoubleClicked();
-                        }
-                    }
+                    NodeDoubleClicked();
                 }
             };
         }

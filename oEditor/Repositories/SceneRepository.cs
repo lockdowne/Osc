@@ -38,8 +38,6 @@ namespace oEditor.Repositories
                 if (predicate(scene))
                     yield return scene;
             }
-
-            OnRepositoryChanged();
         }
 
         public void SaveEntity(Scene entity)
@@ -51,7 +49,18 @@ namespace oEditor.Repositories
             XDocument xml = XDocument.Load(Consts.Repositories.Scenes);
 
             // Check if entity already exists and remove old copies
-            RemoveEntities(scene => scene.ID == entity.ID);
+        
+            List<XElement> toRemove = new List<XElement>();
+
+            foreach (XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Scene))
+            {
+                Scene scene = element.FromXElement<Scene>();
+
+                if (scene.ID == entity.ID)
+                    toRemove.Add(element);//.Remove();
+            }
+
+            toRemove.ForEach(element => element.Remove());
           
             // Add entity to root
             xml.Element("Root").Add(entity.ToXElement());
@@ -95,6 +104,9 @@ namespace oEditor.Repositories
 
         public void OnOpenEntity(Scene obj)
         {
+            if (obj == null)
+                return;
+
             if (OpenEntity != null)
                 OpenEntity(obj);
         }

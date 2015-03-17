@@ -33,6 +33,12 @@
             this.commandBarRowElement1 = new Telerik.WinControls.UI.CommandBarRowElement();
             this.commandBarStripElement1 = new Telerik.WinControls.UI.CommandBarStripElement();
             this.commandBarDropDownButton1 = new Telerik.WinControls.UI.CommandBarDropDownButton();
+            this.commandBarDropDownButton2 = new Telerik.WinControls.UI.CommandBarDropDownButton();
+            this.commandBarDropDownButton3 = new Telerik.WinControls.UI.CommandBarDropDownButton();
+            this.btnConsoleWindow = new Telerik.WinControls.UI.RadMenuItem();
+            this.btnProjectWindow = new Telerik.WinControls.UI.RadMenuItem();
+            this.btnEntitiesWindow = new Telerik.WinControls.UI.RadMenuItem();
+            this.btnToolboxWindow = new Telerik.WinControls.UI.RadMenuItem();
             this.commandBarRowElement2 = new Telerik.WinControls.UI.CommandBarRowElement();
             this.toolWindow2 = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.toolWindow1 = new Telerik.WinControls.UI.Docking.ToolWindow();
@@ -40,12 +46,6 @@
             this.documentTabStrip1 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
             this.documentWindow2 = new Telerik.WinControls.UI.Docking.DocumentWindow();
             this.radDock = new Telerik.WinControls.UI.Docking.RadDock();
-            this.commandBarDropDownButton2 = new Telerik.WinControls.UI.CommandBarDropDownButton();
-            this.commandBarDropDownButton3 = new Telerik.WinControls.UI.CommandBarDropDownButton();
-            this.btnConsoleWindow = new Telerik.WinControls.UI.RadMenuItem();
-            this.btnProjectWindow = new Telerik.WinControls.UI.RadMenuItem();
-            this.btnEntitiesWindow = new Telerik.WinControls.UI.RadMenuItem();
-            this.btnToolboxWindow = new Telerik.WinControls.UI.RadMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip1)).BeginInit();
@@ -57,13 +57,14 @@
             // 
             // radCommandBar
             // 
+            this.radCommandBar.CausesValidation = false;
             this.radCommandBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.radCommandBar.Location = new System.Drawing.Point(0, 0);
             this.radCommandBar.Name = "radCommandBar";
             this.radCommandBar.Rows.AddRange(new Telerik.WinControls.UI.CommandBarRowElement[] {
             this.commandBarRowElement1,
             this.commandBarRowElement2});
-            this.radCommandBar.Size = new System.Drawing.Size(792, 60);
+            this.radCommandBar.Size = new System.Drawing.Size(792, 55);
             this.radCommandBar.TabIndex = 0;
             this.radCommandBar.Text = "radCommandBar1";
             this.radCommandBar.ThemeName = "VisualStudio2012Dark";
@@ -95,87 +96,6 @@
             this.commandBarDropDownButton1.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.commandBarDropDownButton1.Text = "FILE";
             ((Telerik.WinControls.UI.RadCommandBarArrowButton)(this.commandBarDropDownButton1.GetChildAt(0))).Visibility = Telerik.WinControls.ElementVisibility.Collapsed;
-            // 
-            // commandBarRowElement2
-            // 
-            this.commandBarRowElement2.MinSize = new System.Drawing.Size(25, 25);
-            // 
-            // toolWindow2
-            // 
-            this.toolWindow2.Caption = null;
-            this.toolWindow2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolWindow2.Location = new System.Drawing.Point(4, 24);
-            this.toolWindow2.Name = "toolWindow2";
-            this.toolWindow2.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.Docked;
-            this.toolWindow2.Size = new System.Drawing.Size(192, 479);
-            this.toolWindow2.Text = "toolWindow2";
-            // 
-            // toolWindow1
-            // 
-            this.toolWindow1.Caption = null;
-            this.toolWindow1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolWindow1.Location = new System.Drawing.Point(4, 24);
-            this.toolWindow1.Name = "toolWindow1";
-            this.toolWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.Docked;
-            this.toolWindow1.Size = new System.Drawing.Size(192, 479);
-            this.toolWindow1.Text = "toolWindow1";
-            // 
-            // documentContainer1
-            // 
-            this.documentContainer1.Name = "documentContainer1";
-            // 
-            // 
-            // 
-            this.documentContainer1.RootElement.MinSize = new System.Drawing.Size(0, 0);
-            this.documentContainer1.SizeInfo.SizeMode = Telerik.WinControls.UI.Docking.SplitPanelSizeMode.Fill;
-            this.documentContainer1.SplitterWidth = 2;
-            this.documentContainer1.ThemeName = "VisualStudio2012Dark";
-            // 
-            // documentTabStrip1
-            // 
-            this.documentTabStrip1.CanUpdateChildIndex = true;
-            this.documentTabStrip1.Controls.Add(this.documentWindow2);
-            this.documentTabStrip1.Location = new System.Drawing.Point(0, 0);
-            this.documentTabStrip1.Name = "documentTabStrip1";
-            // 
-            // 
-            // 
-            this.documentTabStrip1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.documentTabStrip1.SelectedIndex = 0;
-            this.documentTabStrip1.Size = new System.Drawing.Size(388, 507);
-            this.documentTabStrip1.TabIndex = 0;
-            this.documentTabStrip1.TabStop = false;
-            this.documentTabStrip1.ThemeName = "VisualStudio2012Dark";
-            // 
-            // documentWindow2
-            // 
-            this.documentWindow2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.documentWindow2.Location = new System.Drawing.Point(4, 4);
-            this.documentWindow2.Name = "documentWindow2";
-            this.documentWindow2.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.documentWindow2.Size = new System.Drawing.Size(380, 499);
-            this.documentWindow2.Text = "documentWindow2";
-            // 
-            // radDock
-            // 
-            this.radDock.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.radDock.Controls.Add(this.documentContainer1);
-            this.radDock.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radDock.IsCleanUpTarget = true;
-            this.radDock.Location = new System.Drawing.Point(0, 60);
-            this.radDock.MainDocumentContainer = this.documentContainer1;
-            this.radDock.Name = "radDock";
-            this.radDock.Padding = new System.Windows.Forms.Padding(0);
-            // 
-            // 
-            // 
-            this.radDock.RootElement.MinSize = new System.Drawing.Size(0, 0);
-            this.radDock.Size = new System.Drawing.Size(792, 507);
-            this.radDock.SplitterWidth = 2;
-            this.radDock.TabIndex = 1;
-            this.radDock.TabStop = false;
-            this.radDock.Text = "radDock1";
-            this.radDock.ThemeName = "VisualStudio2012Dark";
             // 
             // commandBarDropDownButton2
             // 
@@ -247,6 +167,87 @@
             this.btnToolboxWindow.Name = "btnToolboxWindow";
             this.btnToolboxWindow.Text = "Toolbox Window";
             this.btnToolboxWindow.ToggleState = Telerik.WinControls.Enumerations.ToggleState.On;
+            // 
+            // commandBarRowElement2
+            // 
+            this.commandBarRowElement2.MinSize = new System.Drawing.Size(25, 25);
+            // 
+            // toolWindow2
+            // 
+            this.toolWindow2.Caption = null;
+            this.toolWindow2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolWindow2.Location = new System.Drawing.Point(4, 24);
+            this.toolWindow2.Name = "toolWindow2";
+            this.toolWindow2.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.Docked;
+            this.toolWindow2.Size = new System.Drawing.Size(192, 479);
+            this.toolWindow2.Text = "toolWindow2";
+            // 
+            // toolWindow1
+            // 
+            this.toolWindow1.Caption = null;
+            this.toolWindow1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolWindow1.Location = new System.Drawing.Point(4, 24);
+            this.toolWindow1.Name = "toolWindow1";
+            this.toolWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.Docked;
+            this.toolWindow1.Size = new System.Drawing.Size(192, 479);
+            this.toolWindow1.Text = "toolWindow1";
+            // 
+            // documentContainer1
+            // 
+            this.documentContainer1.Name = "documentContainer1";
+            // 
+            // 
+            // 
+            this.documentContainer1.RootElement.MinSize = new System.Drawing.Size(0, 0);
+            this.documentContainer1.SizeInfo.SizeMode = Telerik.WinControls.UI.Docking.SplitPanelSizeMode.Fill;
+            this.documentContainer1.SplitterWidth = 2;
+            this.documentContainer1.ThemeName = "VisualStudio2012Dark";
+            // 
+            // documentTabStrip1
+            // 
+            this.documentTabStrip1.CanUpdateChildIndex = true;
+            this.documentTabStrip1.Controls.Add(this.documentWindow2);
+            this.documentTabStrip1.Location = new System.Drawing.Point(0, 0);
+            this.documentTabStrip1.Name = "documentTabStrip1";
+            // 
+            // 
+            // 
+            this.documentTabStrip1.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.documentTabStrip1.SelectedIndex = 0;
+            this.documentTabStrip1.Size = new System.Drawing.Size(388, 507);
+            this.documentTabStrip1.TabIndex = 0;
+            this.documentTabStrip1.TabStop = false;
+            this.documentTabStrip1.ThemeName = "VisualStudio2012Dark";
+            // 
+            // documentWindow2
+            // 
+            this.documentWindow2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.documentWindow2.Location = new System.Drawing.Point(4, 27);
+            this.documentWindow2.Name = "documentWindow2";
+            this.documentWindow2.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
+            this.documentWindow2.Size = new System.Drawing.Size(380, 476);
+            this.documentWindow2.Text = "documentWindow2";
+            // 
+            // radDock
+            // 
+            this.radDock.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.radDock.Controls.Add(this.documentContainer1);
+            this.radDock.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radDock.IsCleanUpTarget = true;
+            this.radDock.Location = new System.Drawing.Point(0, 55);
+            this.radDock.MainDocumentContainer = this.documentContainer1;
+            this.radDock.Name = "radDock";
+            this.radDock.Padding = new System.Windows.Forms.Padding(0);
+            // 
+            // 
+            // 
+            this.radDock.RootElement.MinSize = new System.Drawing.Size(0, 0);
+            this.radDock.Size = new System.Drawing.Size(792, 512);
+            this.radDock.SplitterWidth = 2;
+            this.radDock.TabIndex = 1;
+            this.radDock.TabStop = false;
+            this.radDock.Text = "radDock1";
+            this.radDock.ThemeName = "VisualStudio2012Dark";
             // 
             // MainView
             // 

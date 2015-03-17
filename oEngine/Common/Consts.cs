@@ -26,6 +26,12 @@ namespace oEngine.Common
             public const string Character = "Character";            
         }
 
+        public static class AlertMessages
+        {
+            public const string DeleteConfirmation = "Are you sure you want to delete this entity?";
+            public const string DeleteConfirmationCaption = "Warning";
+        }
+
 
         public const int MaxSounds = 16;
         public const int LogWidth = 128;

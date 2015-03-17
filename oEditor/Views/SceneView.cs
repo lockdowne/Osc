@@ -36,7 +36,7 @@ namespace oEditor.Views
         {
             this.Text = "Scene";
 
-            InitializeComponent();
+            InitializeComponent();            
 
             tilemapRender.RenderMouseDown += (sender, e) =>
             {
@@ -68,7 +68,7 @@ namespace oEditor.Views
 
         private void InitializeComponent()
         {
-            this.tilemapRender = new oEditor.Controls.TilemapRender();
+            this.tilemapRender = new oEditor.Controls.TilemapRender();            
             this.SuspendLayout();
             // 
             // tilemapRender
@@ -79,7 +79,8 @@ namespace oEditor.Views
             this.tilemapRender.TabIndex = 0;
             this.tilemapRender.Tilemap = null;
             this.tilemapRender.Dock = DockStyle.Fill;
-            
+
+            this.Controls.Add(tilemapRender);
             this.ResumeLayout(false);
 
         }

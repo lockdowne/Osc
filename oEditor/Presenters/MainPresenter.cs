@@ -45,20 +45,20 @@ namespace oEditor.Presenters
             DockView((ConsoleView)consoleView, DockPosition.Bottom);
             DockView((EntitiesView)entitiesView, DockPosition.Right);
 
-            this.view.WindowClosing += (sender, e) =>
-            {
-                
-                if(e.OldWindow is ToolWindow)
-                {
 
-                }
+            sceneRepository.OpenEntity += (scene) =>
+            {
+                // Create new window with scene values
+                // Does not need to be a command as no logic is created just a tabbed window
+                DockView(new SceneView() { Tilemap = scene }, DockPosition.Fill);
+                
             };
 
         }
 
-        private void DockView(Control control, DockPosition position)
+        private void DockView(DockWindow control, DockPosition position)
         {
-            this.view.DockManager.DockControl(control, position);
+            this.view.DockManager.DockWindow(control, position);
         }
     }
 }

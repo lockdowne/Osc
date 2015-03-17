@@ -27,7 +27,15 @@ namespace oEditor.Presenters
 
             this.sceneRepository.RepositoryChanged += () =>
             {
-                RefreshTree();
+                try
+                {
+                    RefreshTree();
+                }
+                catch(Exception exception)
+                {
+                    ConsoleView.WriteLine(exception.ToString());
+                    Logger.Log("EntitiesPresenter", "RepositoryChanged", exception);
+                }
             };
 
             this.view.AddEntityClicked += () =>
@@ -50,7 +58,7 @@ namespace oEditor.Presenters
                     case Enums.EditorEntities.Quests:
                         break;
                     case Enums.EditorEntities.Scenes:
-                        CreateScene(view.SelectedNode);
+                        CreateScene();
                         break;
                     case Enums.EditorEntities.Nodes:
                         break;
@@ -85,23 +93,49 @@ namespace oEditor.Presenters
 
             this.view.EditEntityClicked += () =>
             {
-
+                try
+                {
+                    OpenEntity();
+                }
+                catch (Exception exception)
+                {
+                    ConsoleView.WriteLine(exception.ToString());
+                    Logger.Log("EntitiesPresenter", "EditEntityClicked", exception);
+                }
             };
 
             this.view.NodeDoubleClicked += () =>
             {
-                // Do the same as edit entity
+                try
+                {
+                    OpenEntity();
+                }
+                catch(Exception exception)
+                {
+                    ConsoleView.WriteLine(exception.ToString());
+                    Logger.Log("EntitiesPresenter", "NodeDoubleClicked", exception);
+                }
+                
             };
+
+            try
+            {
+                RefreshTree();
+            }
+            catch (Exception exception)
+            {
+                ConsoleView.WriteLine(exception.ToString());
+                Logger.Log("EntitiesPresenter", "Constructor", exception);
+            }
         }
 
-        private void CreateScene(RadTreeNode selectedNode)
+        private void CreateScene()
         {
             Guid id = Guid.NewGuid();
 
             ConsoleView.WriteLine(CommandFactory.ExecuteCommand(new Command()
             {
-                Name = "Create Scene",
-                Description = "Create an empty scene entity",
+                Name = "Create Empty Scene",
                 CanExecute = () =>
                 {
                     return true;
@@ -115,49 +149,49 @@ namespace oEditor.Presenters
 
                     sceneRepository.SaveEntity(scene);
 
-                    selectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Scene", Name = "Scene", Value = id, Tag = Enums.EditorEntities.Scenes });
+                    //selectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Scene", Name = "Scene", Value = id, Tag = Enums.EditorEntities.Scenes });
                 },
                 UnExecute = () =>
                 {
                     sceneRepository.RemoveEntities(entity => entity.ID == id);
-                    selectedNode.Nodes.FirstOrDefault(node => (Guid)node.Value == id).Remove();
+                    //selectedNode.Nodes.FirstOrDefault(node => (Guid)node.Value == id).Remove();
                 },
             }));
         }
 
         private void DeleteScene(RadTreeNode selectedNode)
         {
+            // Get dialog result outside command as we dont need a undo/redo calling it
+            if (MainView.ShowMessageBox(Consts.AlertMessages.DeleteConfirmation, Consts.AlertMessages.DeleteConfirmationCaption,
+                System.Windows.Forms.MessageBoxButtons.YesNo, Telerik.WinControls.RadMessageIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.No)
+                return;
+
+            Scene scene = sceneRepository.FindEntities(x => x.ID == (Guid)selectedNode.Value).FirstOrDefault();
+
             ConsoleView.WriteLine(CommandFactory.ExecuteCommand(new Command()
+            {
+                Name = "Delete Scene",
+                CanExecute = () =>
                 {
-                    Name = "Delete Scene",
-                    Description = "Deletes selected scene",
-                    CanExecute = () =>
-                    {
-                        // No restrictions currently
-                        return true;
-                    },
-                    Execute = () =>
-                    {
-                        sceneRepository.RemoveEntities(entity => entity.ID == (Guid)selectedNode.Value);
-                        selectedNode.Remove();
-                    },
-                }));
-        }
-
-        private void EditScene(RadTreeNode selectedNode)
-        {
-            // TODO: create a scene view with the nodes data
-        }
-
-        private void CreateSprite()
-        {
-
+                    return (scene != null);
+                },
+                Execute = () =>
+                {
+                    sceneRepository.RemoveEntities(entity => entity.ID == scene.ID);
+                },
+                UnExecute = () =>
+                {
+                    sceneRepository.SaveEntity(scene);
+                },
+            }));
         }
 
         private void RefreshTree()
-        {
+        {  
             foreach(var node in view.NodeCollection)
             {
+                node.Nodes.Clear();
+
                 switch ((Enums.EditorEntities)node.Tag)
                 {
                     case Enums.EditorEntities.Characters:
@@ -167,14 +201,40 @@ namespace oEditor.Presenters
                     case Enums.EditorEntities.Quests:
                         break;
                     case Enums.EditorEntities.Scenes:
-                        sceneRepository.FindEntities(x => true).ForEach(entity =>
-                            {
-                                node.Nodes.Add(new RadTreeNode() { Text = entity.Name, Name = entity.Name, Value = entity.ID, Tag = Enums.EditorEntities.Scenes });
-                            });                        
+                        sceneRepository.FindEntities(x => { return true; }).ForEach(entity =>
+                        {
+                            node.Nodes.Add(new RadTreeNode() { Text = entity.Name, Name = entity.Name, Value = entity.ID, Tag = Enums.EditorEntities.Scenes });
+                        });                        
                         break;
                     case Enums.EditorEntities.Nodes:
                         break;
                 }
+            }
+        }
+
+        private void OpenEntity()
+        {
+            RadTreeNode node = view.SelectedNode;
+
+            if (node == null)
+                return;
+
+            if (node.RootNode == node)
+                return;
+
+            switch ((Enums.EditorEntities)node.Tag)
+            {
+                case Enums.EditorEntities.Characters:
+                    break;
+                case Enums.EditorEntities.Items:
+                    break;
+                case Enums.EditorEntities.Quests:
+                    break;
+                case Enums.EditorEntities.Scenes:                    
+                    sceneRepository.OnOpenEntity(sceneRepository.FindEntities(x => x.ID == (Guid)node.Value).FirstOrDefault());
+                    break;
+                case Enums.EditorEntities.Nodes:
+                    break;
             }
         }
     }

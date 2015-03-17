@@ -44,13 +44,13 @@ namespace oEditor.Common
             {
                 TilemapBackground = new Color(40, 40, 40),
                 MaxNumberOfConsoleMessage = 1024,
-                ZoomIncrement = 0.1f,
+                ZoomIncrement = 0.2f,
                 MaxCameraZoom = 2.0f,
-                MinCameraZoom = 0.1f,
+                MinCameraZoom = 0.5f,
                 TileWidth = 100,
                 TileHeight = 50,
-                SceneWidth = 50,
-                SceneHeight = 50,
+                SceneWidth = 25,
+                SceneHeight = 25,
             };
         }
     }
