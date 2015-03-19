@@ -7,11 +7,11 @@ using System.Text;
 
 namespace oEngine.Common
 {
-   public static class Encryption
-    {        
+    public static class Encryption
+    {
         private const int KeySize = 256;
         private const int PasswordIterations = 1000;
-        
+
         private static readonly byte[] vector = new byte[16]
         {
             181, 246, 130,  78,   0, 143,  63,  17,  52,  28, 232, 234,  25, 164,  33,  24, 
@@ -29,7 +29,7 @@ namespace oEngine.Common
         {
             byte[] encryptedTextBytes = Convert.FromBase64String(encryptedText);
             byte[] passwordBytes = Encoding.UTF8.GetBytes(key);
-           
+
 
             Rfc2898DeriveBytes aesKey = new Rfc2898DeriveBytes(passwordBytes, salt, PasswordIterations);
             byte[] keyBytes = aesKey.GetBytes(KeySize / 8);
@@ -54,7 +54,7 @@ namespace oEngine.Common
             }
             catch (Exception)
             {
-               
+
             }
 
             return null;
@@ -87,11 +87,12 @@ namespace oEngine.Common
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
 
             }
 
             return null;
         }
+    }
 }
