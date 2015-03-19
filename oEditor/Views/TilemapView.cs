@@ -10,7 +10,7 @@ using oEngine.Common;
 
 namespace oEditor.Views
 {
-    public class SceneView : DocumentWindow, ISceneView
+    public class TilemapView : DocumentWindow, ITilemapView
     {
         private Controls.TilemapRender tilemapRender;
 
@@ -20,7 +20,7 @@ namespace oEditor.Views
         public event MouseEventHandler SceneMouseMove;
         public event MouseEventHandler SceneMouseWheel;
 
-        public Scene Tilemap
+        public Tilemap Tilemap
         {
             get { return tilemapRender.Tilemap; }
             set { tilemapRender.Tilemap = value; }
@@ -32,9 +32,9 @@ namespace oEditor.Views
             set { this.Text = value; }
         }
     
-        public SceneView()
+        public TilemapView()
         {
-            this.Text = "Scene";
+            this.Text = "Tilemap";
 
             InitializeComponent();            
 

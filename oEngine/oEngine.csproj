@@ -67,6 +67,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Encryption.cs" />
     <Compile Include="Entities\Command.cs" />
     <Compile Include="Common\Consts.cs" />
     <Compile Include="Common\Enums.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="Entities\Layer.cs" />
     <Compile Include="Entities\Sprite.cs" />
     <Compile Include="Entities\Tile.cs" />
-    <Compile Include="Entities\Scene.cs" />
+    <Compile Include="Entities\Tilemap.cs" />
     <Compile Include="Entities\Tileset.cs" />
     <Compile Include="Entities\TileVisual.cs" />
     <Compile Include="Entities\Trigger.cs" />

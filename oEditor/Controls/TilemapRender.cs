@@ -36,7 +36,7 @@ namespace oEditor.Controls
         /// <summary>
         /// Gets or sets the current render controls tilemap data
         /// </summary>
-        public Scene Tilemap { get; set; }
+        public Tilemap Tilemap { get; set; }
 
         public System.Windows.Forms.MouseEventHandler RenderMouseDown;
         public System.Windows.Forms.MouseEventHandler RenderMouseUp;

@@ -10,53 +10,52 @@ using System.Xml.Linq;
 
 namespace oEditor.Repositories
 {
-    public class SceneRepository : IRepository<Scene>
+    public class TilemapRepository : IRepository<Tilemap>
     {
         public event Action RepositoryChanged;
-        public event Action<Scene> OpenEntity;
+        public event Action<Tilemap> OpenEntity;
 
         public void CheckPath()
         {
-            if (!File.Exists(Consts.Repositories.Scenes))
+            if (!File.Exists(Consts.Repositories.Tilemaps))
             {
                 XDocument file = new XDocument(new XElement("Root"));
-                file.Save(Consts.Repositories.Scenes);
+                file.Save(Consts.Repositories.Tilemaps);
             }
         }
 
-        public IEnumerable<Scene> FindEntities(Func<Scene, bool> predicate)
+        public IEnumerable<Tilemap> FindEntities(Func<Tilemap, bool> predicate)
         {
             CheckPath();
 
             // If file gets too large then we should use xmlreader instead of loading it all in memory
-            XDocument xml = XDocument.Load(Consts.Repositories.Scenes);
+            XDocument xml = XDocument.Load(Consts.Repositories.Tilemaps);
 
-            foreach (XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Scene))
+            foreach (XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Tilemap))
             {
-                Scene scene = element.FromXElement<Scene>();
-
-                if (predicate(scene))
-                    yield return scene;
+                Tilemap tilemap = element.FromXElement<Tilemap>();
+                if (predicate(tilemap))
+                    yield return tilemap;
             }
         }
 
-        public void SaveEntity(Scene entity)
+        public void SaveEntity(Tilemap entity)
         {
             // Check for path existence
             CheckPath();
 
             // Load file
-            XDocument xml = XDocument.Load(Consts.Repositories.Scenes);
+            XDocument xml = XDocument.Load(Consts.Repositories.Tilemaps);
 
             // Check if entity already exists and remove old copies
         
             List<XElement> toRemove = new List<XElement>();
 
-            foreach (XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Scene))
+            foreach (XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Tilemap))
             {
-                Scene scene = element.FromXElement<Scene>();
+                Tilemap tilemap = element.FromXElement<Tilemap>();
 
-                if (scene.ID == entity.ID)
+                if (tilemap.ID == entity.ID)
                     toRemove.Add(element);//.Remove();
             }
 
@@ -66,43 +65,43 @@ namespace oEditor.Repositories
             xml.Element("Root").Add(entity.ToXElement());
 
             // Save new file
-            xml.Save(Consts.Repositories.Scenes);
+            xml.Save(Consts.Repositories.Tilemaps);
 
             OnRepositoryChanged();
             
         }
 
-        public void RemoveEntities(Func<Scene, bool> predicate)
+        public void RemoveEntities(Func<Tilemap, bool> predicate)
         {
             CheckPath();
 
-            XDocument xml = XDocument.Load(Consts.Repositories.Scenes);
+            XDocument xml = XDocument.Load(Consts.Repositories.Tilemaps);
 
             List<XElement> toRemove = new List<XElement>();
 
-            foreach(XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Scene))
+            foreach(XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Tilemap))
             {
-                Scene scene = element.FromXElement<Scene>();
+                Tilemap tilemap = element.FromXElement<Tilemap>();
 
-                if (predicate(scene))
+                if (predicate(tilemap))
                     toRemove.Add(element);//.Remove();
             }
 
             toRemove.ForEach(element => element.Remove());
 
-            xml.Save(Consts.Repositories.Scenes);
+            xml.Save(Consts.Repositories.Tilemaps);
 
             OnRepositoryChanged();
         }
 
-        public void RemoveEntity(Scene entity)
+        public void RemoveEntity(Tilemap entity)
         {
             CheckPath();
 
             RemoveEntities(scene => scene.ID == entity.ID);
         }
 
-        public void OnOpenEntity(Scene obj)
+        public void OnOpenEntity(Tilemap obj)
         {
             if (obj == null)
                 return;

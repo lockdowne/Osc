@@ -52,8 +52,11 @@ namespace oEngine.Common
             Characters,
             Items,
             Quests,
-            Scenes,
+            Tilemaps,
             Nodes,
+            BattleScene,
+            FreeRoamScene,
+            RandomBattleScene,
         }
 
         public enum LayerTypes

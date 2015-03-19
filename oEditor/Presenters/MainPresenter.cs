@@ -17,7 +17,7 @@ namespace oEditor.Presenters
 {
     public class MainPresenter
     {
-        private readonly IRepository<Scene> sceneRepository;
+        private readonly IRepository<Tilemap> sceneRepository;
 
         private readonly IMainView view;
 
@@ -34,7 +34,7 @@ namespace oEditor.Presenters
         {
             this.view = mainView;
 
-            sceneRepository = new SceneRepository();
+            sceneRepository = new TilemapRepository();
 
             entitiesView = new EntitiesView();
             entitiesPresenter = new EntitiesPresenter(entitiesView, sceneRepository);
@@ -50,10 +50,38 @@ namespace oEditor.Presenters
             {
                 // Create new window with scene values
                 // Does not need to be a command as no logic is created just a tabbed window
-                DockView(new SceneView() { Tilemap = scene }, DockPosition.Fill);
+                DockView(new TilemapView() { Tilemap = scene, Tag = scene.ID }, DockPosition.Fill);
                 
             };
 
+            sceneRepository.RepositoryChanged += () =>
+            {
+                // There should probably be individual methods specific to each repo changed event
+                try
+                {
+                    RefreshDockWindows();
+                }
+                catch(Exception exception)
+                {
+                    Logger.Log("MainPresenter", "RepositoryChanged", exception);
+                    ConsoleView.WriteLine(exception.ToString());
+                }
+            };
+
+        }
+
+        private void RefreshDockWindows()
+        {
+            List<Guid> ids = new List<Guid>();
+            ids.AddRange(sceneRepository.FindEntities(x => true).Select(i => i.ID));
+
+            this.view.DockManager.DockWindows.Where(w => w.DockType == DockType.Document).ForEach(x =>
+            {
+                if (!ids.Contains((Guid)x.Tag))
+                    x.Close();
+            });
+
+            ids.Clear();
         }
 
         private void DockView(DockWindow control, DockPosition position)

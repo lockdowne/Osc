@@ -57,6 +57,7 @@ namespace oGame
                 };
 
                 camera = new Camera() { Name = "MainCamera", Zoom = 1.0f, LerpAmount = 0.1f };
+                
             }
             catch (Exception exception)
             {

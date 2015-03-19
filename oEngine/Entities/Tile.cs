@@ -45,11 +45,9 @@ namespace oEngine.Entities
         /// </summary>
         public Enums.TileTypes TileType { get; set; }
 
-        
         // TODO: Add triggers
 
         // TODO: Look into other ways to merge layers
         // public List<Tuple<int, string>> TopTiles = new List<Tuple<int, string>>();
-
     }
 }

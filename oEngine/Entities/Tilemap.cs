@@ -11,8 +11,8 @@ using System.Xml.Serialization;
 
 namespace oEngine.Entities
 {
-    [DataContract(Name=Consts.Nodes.Scene)]
-    public class Scene : IEntity
+    [DataContract(Name=Consts.Nodes.Tilemap)]
+    public class Tilemap : IEntity
     {
         [DataMember(Name = "Initialized")]
         private bool isInitialized;
@@ -20,7 +20,7 @@ namespace oEngine.Entities
         [DataMember(Name = "Tilesets")]
         private List<Tileset> tilesets = new List<Tileset>();
 
-        [DataMember(Name = "Tilemap")]
+        [DataMember(Name = "Layers")]
         private List<Layer<TileVisual>> tilemapLayers = new List<Layer<TileVisual>>();
 
 

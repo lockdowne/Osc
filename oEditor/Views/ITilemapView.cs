@@ -8,13 +8,13 @@ using System.Windows.Forms;
 
 namespace oEditor.Views
 {
-    public interface ISceneView
+    public interface ITilemapView
     {
         event MouseEventHandler SceneMouseDown;
         event MouseEventHandler SceneMouseUp;
         event MouseEventHandler SceneMouseMove;
         event MouseEventHandler SceneMouseWheel;
 
-        Scene Tilemap { get; set; }
+        Tilemap Tilemap { get; set; }
     }
 }

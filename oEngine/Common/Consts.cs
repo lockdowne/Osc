@@ -16,13 +16,13 @@ namespace oEngine.Common
 
         public static class Repositories
         {
-            public static readonly string Scenes = "Scenes.xml";
+            public static readonly string Tilemaps = "Tilemaps.xml";
             public static readonly string Characters = "Characters.xml";
         }
 
         public static class Nodes
         {
-            public const string Scene = "Scene";
+            public const string Tilemap = "Tilemap";
             public const string Character = "Character";            
         }
 

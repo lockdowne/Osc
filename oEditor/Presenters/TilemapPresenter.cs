@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace oEditor.Presenters
 {
-    public class ScenePresenter
+    public class TilemapPresenter
     {
-        private readonly ISceneView view;
+        private readonly ITilemapView view;
 
-        private readonly IRepository<Scene> repository;
+        private readonly IRepository<Tilemap> repository;
 
-        public ScenePresenter(ISceneView sceneView, IRepository<Scene> sceneRepository)
+        public TilemapPresenter(ITilemapView sceneView, IRepository<Tilemap> sceneRepository)
         {
             this.view = sceneView;
 
@@ -40,6 +40,8 @@ namespace oEditor.Presenters
             {
                                 
             };
+
+
         }
     }
 }

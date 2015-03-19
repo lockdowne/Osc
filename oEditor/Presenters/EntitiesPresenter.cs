@@ -17,9 +17,9 @@ namespace oEditor.Presenters
     {
         private readonly IEntitiesView view;
 
-        private readonly IRepository<Scene> sceneRepository;
+        private readonly IRepository<Tilemap> sceneRepository;
 
-        public EntitiesPresenter(IEntitiesView entitiesView, IRepository<Scene> sceneRepository)
+        public EntitiesPresenter(IEntitiesView entitiesView, IRepository<Tilemap> sceneRepository)
         {
             this.view = entitiesView;
 
@@ -29,6 +29,7 @@ namespace oEditor.Presenters
             {
                 try
                 {
+                    // Should refresh individual parts of tree based of repo change
                     RefreshTree();
                 }
                 catch(Exception exception)
@@ -57,7 +58,7 @@ namespace oEditor.Presenters
                         break;
                     case Enums.EditorEntities.Quests:
                         break;
-                    case Enums.EditorEntities.Scenes:
+                    case Enums.EditorEntities.Tilemaps:
                         CreateScene();
                         break;
                     case Enums.EditorEntities.Nodes:
@@ -81,7 +82,7 @@ namespace oEditor.Presenters
                         break;
                     case Enums.EditorEntities.Quests:
                         break;
-                    case Enums.EditorEntities.Scenes:
+                    case Enums.EditorEntities.Tilemaps:
                         DeleteScene(view.SelectedNode);
                         break;
                     case Enums.EditorEntities.Nodes:
@@ -142,14 +143,14 @@ namespace oEditor.Presenters
                 },
                 Execute = () =>
                 {
-                    //view.SelectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Scene", Name = "Scene", Value = })
-                    Scene scene = new Scene() { ID = id };
+                    //view.SelectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Tilemap", Name = "Tilemap", Value = })
+                    Tilemap scene = new Tilemap() { ID = id };
                     scene.Initialize("Empty Scene", string.Empty, Configuration.Settings.TileWidth,
                         Configuration.Settings.TileHeight, Configuration.Settings.SceneWidth, Configuration.Settings.SceneHeight);
 
                     sceneRepository.SaveEntity(scene);
 
-                    //selectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Scene", Name = "Scene", Value = id, Tag = Enums.EditorEntities.Scenes });
+                    //selectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Tilemap", Name = "Tilemap", Value = id, Tag = Enums.EditorEntities.Scenes });
                 },
                 UnExecute = () =>
                 {
@@ -166,7 +167,7 @@ namespace oEditor.Presenters
                 System.Windows.Forms.MessageBoxButtons.YesNo, Telerik.WinControls.RadMessageIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.No)
                 return;
 
-            Scene scene = sceneRepository.FindEntities(x => x.ID == (Guid)selectedNode.Value).FirstOrDefault();
+            Tilemap scene = sceneRepository.FindEntities(x => x.ID == (Guid)selectedNode.Value).FirstOrDefault();
 
             ConsoleView.WriteLine(CommandFactory.ExecuteCommand(new Command()
             {
@@ -200,10 +201,11 @@ namespace oEditor.Presenters
                         break;
                     case Enums.EditorEntities.Quests:
                         break;
-                    case Enums.EditorEntities.Scenes:
-                        sceneRepository.FindEntities(x => { return true; }).ForEach(entity =>
+                    case Enums.EditorEntities.Tilemaps:
+                        sceneRepository.FindEntities(x => true).ForEach(entity =>
                         {
-                            node.Nodes.Add(new RadTreeNode() { Text = entity.Name, Name = entity.Name, Value = entity.ID, Tag = Enums.EditorEntities.Scenes });
+                            Console.WriteLine("Debug: " + entity.Name);
+                            node.Nodes.Add(new RadTreeNode() { Text = entity.Name, Name = entity.Name, Value = entity.ID, Tag = Enums.EditorEntities.Tilemaps });
                         });                        
                         break;
                     case Enums.EditorEntities.Nodes:
@@ -230,7 +232,7 @@ namespace oEditor.Presenters
                     break;
                 case Enums.EditorEntities.Quests:
                     break;
-                case Enums.EditorEntities.Scenes:                    
+                case Enums.EditorEntities.Tilemaps:                    
                     sceneRepository.OnOpenEntity(sceneRepository.FindEntities(x => x.ID == (Guid)node.Value).FirstOrDefault());
                     break;
                 case Enums.EditorEntities.Nodes:

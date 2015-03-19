@@ -6,8 +6,8 @@ using System.Text;
 
 namespace oEngine.Scenes
 {
-    public class BattleScene : Scene
-    {
+    public class BattleScene
+    {        
 
     }
 }
