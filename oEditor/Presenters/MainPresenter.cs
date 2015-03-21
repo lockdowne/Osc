@@ -46,12 +46,21 @@ namespace oEditor.Presenters
             DockView((EntitiesView)entitiesView, DockPosition.Right);
 
 
-            sceneRepository.OpenEntity += (scene) =>
+            sceneRepository.OpenEntity += (tilemap) =>
             {
                 // Create new window with scene values
                 // Does not need to be a command as no logic is created just a tabbed window
-                DockView(new TilemapView() { Tilemap = scene, Tag = scene.ID }, DockPosition.Fill);
-                
+
+                var window = view.DockManager.DockWindows.Where(w => w.DockType == DockType.Document && typeof(ITabbedView).IsAssignableFrom(w.GetType())).FirstOrDefault(w => ((ITabbedView)w).ID == tilemap.ID);
+
+                if (window == null)
+                {
+                    DockView(new TilemapView() { Tilemap = tilemap, ID = tilemap.ID, EntityType = Enums.EditorEntities.Tilemaps, Text = tilemap.Name }, DockPosition.Fill);
+                }
+                else
+                    window.Select();
+
+                SetToolbox(Enums.EditorEntities.Tilemaps);
             };
 
             sceneRepository.RepositoryChanged += () =>
@@ -70,17 +79,48 @@ namespace oEditor.Presenters
 
         }
 
+        private void SetToolbox(Enums.EditorEntities type)        
+        {
+            // TODO: Set toolbox views value 
+            switch (type)
+            {
+                case Enums.EditorEntities.Characters:
+                    break;
+                case Enums.EditorEntities.Items:
+                    break;
+                case Enums.EditorEntities.Quests:
+                    break;
+                case Enums.EditorEntities.Tilemaps:
+                    //this.view.Toolbox = new TilemapToolbox();
+                    break;
+                case Enums.EditorEntities.Nodes:
+                    break;
+                case Enums.EditorEntities.BattleScene:
+                    break;
+                case Enums.EditorEntities.FreeRoamScene:
+                    break;
+                case Enums.EditorEntities.RandomBattleScene:
+                    break;
+            }
+        }
+
         private void RefreshDockWindows()
         {
             List<Guid> ids = new List<Guid>();
             ids.AddRange(sceneRepository.FindEntities(x => true).Select(i => i.ID));
 
-            this.view.DockManager.DockWindows.Where(w => w.DockType == DockType.Document).ForEach(x =>
+            // TODO: Add remaining repos
+
+            List<DockWindow> windowsToClose = new List<DockWindow>();
+
+            this.view.DockManager.DockWindows.Where(w => w.DockType == DockType.Document && typeof(ITabbedView).IsAssignableFrom(w.GetType())).ForEach(x =>
             {
-                if (!ids.Contains((Guid)x.Tag))
-                    x.Close();
+                if (!ids.Contains(((ITabbedView)x).ID))
+                    windowsToClose.Add(x);
             });
 
+            windowsToClose.ForEach(w => w.Close());
+            windowsToClose.Clear();
             ids.Clear();
         }
 

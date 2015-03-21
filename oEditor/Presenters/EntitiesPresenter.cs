@@ -136,7 +136,7 @@ namespace oEditor.Presenters
 
             ConsoleView.WriteLine(CommandFactory.ExecuteCommand(new Command()
             {
-                Name = "Create Empty Scene",
+                Name = "Create Empty Tilemap",
                 CanExecute = () =>
                 {
                     return true;
@@ -145,7 +145,7 @@ namespace oEditor.Presenters
                 {
                     //view.SelectedNode.Nodes.Add(new RadTreeNode() { Text = "Empty Tilemap", Name = "Tilemap", Value = })
                     Tilemap scene = new Tilemap() { ID = id };
-                    scene.Initialize("Empty Scene", string.Empty, Configuration.Settings.TileWidth,
+                    scene.Initialize("Empty Tilemap", string.Empty, Configuration.Settings.TileWidth,
                         Configuration.Settings.TileHeight, Configuration.Settings.SceneWidth, Configuration.Settings.SceneHeight);
 
                     sceneRepository.SaveEntity(scene);

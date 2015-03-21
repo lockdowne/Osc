@@ -5,7 +5,7 @@ using System.Text;
 
 namespace oEngine.Entities
 {
-    public interface ITile : IEntity
+    public interface ITile
     {
         /// <summary>
         /// Gets or sets the unique ID of entity

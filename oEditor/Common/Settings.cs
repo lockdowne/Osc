@@ -15,6 +15,9 @@ namespace oEditor.Common
         public Color TilemapBackground { get; set; }
 
         [DataMember]
+        public Color TilesetBackground { get; set; }
+
+        [DataMember]
         public int MaxNumberOfConsoleMessage { get; set; }
 
         [DataMember]
@@ -38,11 +41,14 @@ namespace oEditor.Common
         [DataMember]
         public int SceneHeight { get; set; }
 
+
+
         public static Settings CreateDefault()
         {
             return new Settings()
             {
                 TilemapBackground = new Color(40, 40, 40),
+                TilesetBackground = Color.White,
                 MaxNumberOfConsoleMessage = 1024,
                 ZoomIncrement = 0.2f,
                 MaxCameraZoom = 2.0f,

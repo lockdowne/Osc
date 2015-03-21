@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace oEditor.Controls
 {
-    public class TilemapRender : GraphicsDeviceControl
+    public class TilesetRender : GraphicsDeviceControl
     {
         private SpriteBatch spriteBatch;
 
@@ -22,7 +22,10 @@ namespace oEditor.Controls
 
         private Vector2 cameraPosition;
         private Vector2 currentMousePosition;
-        private Vector2 previousMousePosition;       
+        private Vector2 previousMousePosition;
+
+        private Vector2? selectionBoxStart;
+        private Vector2? selectionBoxEnd;
 
         private float cameraZoom;
 
@@ -30,11 +33,31 @@ namespace oEditor.Controls
         private bool isMouseRightDown;
 
         private Texture2D pixel;
+        private Texture2D tileOverlay;
+
+        private Rectangle SelectionBoxBounds
+        {
+            get
+            {
+                if (selectionBoxStart == null || selectionBoxEnd == null)
+                    return Rectangle.Empty;
+
+                return new Rectangle((int)Math.Min(MathExtension.IsoSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X,
+                    MathExtension.IsoSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X),
+                    (int)Math.Min(MathExtension.IsoSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y,
+                    MathExtension.IsoSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y),
+                    (int)Math.Abs(MathExtension.IsoSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X
+                    - MathExtension.IsoSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X),
+                    (int)Math.Abs(MathExtension.IsoSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y
+                    - MathExtension.IsoSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y));
+            }
+        }
+
+        public Tileset Tileset { get; set; }
 
         /// <summary>
         /// Gets or sets the current render controls tilemap data
-        /// </summary>
-        public Tilemap Tilemap { get; set; }
+        /// </summary>      
 
         public System.Windows.Forms.MouseEventHandler RenderMouseDown;
         public System.Windows.Forms.MouseEventHandler RenderMouseUp;
@@ -45,12 +68,12 @@ namespace oEditor.Controls
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            backgroundColor = Configuration.Settings.TilemapBackground;
+            backgroundColor = Configuration.Settings.TilesetBackground;
 
             camera = new Camera()
             {
                 LerpAmount = 0.25f,
-                Name = "Tilemap Camera",
+                Name = "Tileset Camera",
                 Zoom = 1.0f,
             };
 
@@ -59,19 +82,24 @@ namespace oEditor.Controls
             pixel = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             pixel.SetData<Color>(new Color[] { Color.White });
 
-            Tilemap.Pixel = pixel;
-            Tilemap.IsGridVisible = true;
+      
 
             MouseDown += (sender, e) =>
             {
                 if (RenderMouseDown != null)
                     RenderMouseDown(sender, e);
 
-                if (e.Button == System.Windows.Forms.MouseButtons.Right)
+                switch (e.Button)
                 {
-                    isMouseRightDown = true;
-
-                    previousMousePosition = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                    case MouseButtons.Left:
+                                               
+                        break;
+                    case MouseButtons.Right:
+                        isMouseRightDown = true;
+                        previousMousePosition = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                        break;
+                    case MouseButtons.Middle:
+                        break;
                 }
             };
 
@@ -89,7 +117,7 @@ namespace oEditor.Controls
                 if (RenderMouseMove != null)
                     RenderMouseMove(sender, e);
 
-                if (isMouseRightDown && Tilemap != null)
+                if (isMouseRightDown)
                 {
                     currentMousePosition = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
 
@@ -97,9 +125,9 @@ namespace oEditor.Controls
 
                     cameraPosition += -difference;
 
-                    camera.UpdatePosition(cameraPosition,
-                        new Vector2(-(Tilemap.Width * Tilemap.TileWidth), -(Tilemap.Height * Tilemap.TileHeight)),
-                        new Vector2(Tilemap.Width * Tilemap.TileWidth, Tilemap.Height * Tilemap.TileHeight));
+                    //camera.UpdatePosition(cameraPosition,
+                    //    new Vector2(-(Tilemap.Width * Tilemap.TileWidth), -(Tilemap.Height * Tilemap.TileHeight)),
+                    //    new Vector2(Tilemap.Width * Tilemap.TileWidth, Tilemap.Height * Tilemap.TileHeight));
 
                     // Used to remove pixels beyond bounds
                     cameraPosition = camera.Position;
@@ -135,12 +163,15 @@ namespace oEditor.Controls
         {
             GraphicsDevice.Clear(backgroundColor);
 
-            if (Tilemap == null)
+            if (Tileset == null)
+                return;
+
+            if (Tileset.Texture == null)
                 return;
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
 
-            Tilemap.Draw(spriteBatch);
+            spriteBatch.Draw(Tileset.Texture, Vector2.Zero, null, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);
 
             spriteBatch.End();
         }

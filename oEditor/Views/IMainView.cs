@@ -13,6 +13,8 @@ namespace oEditor.Views
     {
         RadDock DockManager { get; }
 
+        ToolWindow Toolbox { get; set; }
+
         event DockWindowCancelEventHandler WindowClosing;
     }
 }

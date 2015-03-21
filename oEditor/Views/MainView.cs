@@ -21,6 +21,19 @@ namespace oEditor.Views
             get { return radDock; }
         }
 
+        public ToolWindow Toolbox
+        {
+            get { return windowToolbox; }
+            set
+            {
+                if (value == null)
+                    windowToolbox = new ToolWindow() { Name = "windowToolbox", Text = "Toolbox" };
+                else
+                    windowToolbox = value;
+               
+            }
+        }
+
         public event DockWindowCancelEventHandler WindowClosing;
 
         public MainView()
@@ -32,11 +45,15 @@ namespace oEditor.Views
             RadMessageBox.SetThemeName("VisualStudio2012Dark");
 
             // Testing
+
+            //TilemapToolbox t = new TilemapToolbox();
+           // radDock.DockWindow(t, )
             this.MouseWheel += (sender, e) =>
             {
                 oEngine.Factories.CommandFactory.Undo();
             };
 
+            // End Testing
             radDock.DockWindowClosing += (sender, e) =>
             {
                 if (WindowClosing != null)

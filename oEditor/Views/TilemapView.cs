@@ -10,7 +10,7 @@ using oEngine.Common;
 
 namespace oEditor.Views
 {
-    public class TilemapView : DocumentWindow, ITilemapView
+    public class TilemapView : DocumentWindow, ITabbedView, ITilemapView
     {
         private Controls.TilemapRender tilemapRender;
 
@@ -19,6 +19,10 @@ namespace oEditor.Views
         public event MouseEventHandler SceneMouseUp;
         public event MouseEventHandler SceneMouseMove;
         public event MouseEventHandler SceneMouseWheel;
+
+        public Guid ID { get; set; }
+
+        public Enums.EditorEntities EntityType { get; set; }
 
         public Tilemap Tilemap
         {
@@ -84,5 +88,7 @@ namespace oEditor.Views
             this.ResumeLayout(false);
 
         }
+
+    
     }
 }

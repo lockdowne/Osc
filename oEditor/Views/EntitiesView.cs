@@ -59,7 +59,10 @@ namespace oEditor.Views
             AddRootNode(Enums.EditorEntities.Items);
             AddRootNode(Enums.EditorEntities.Nodes);
             AddRootNode(Enums.EditorEntities.Quests);
-            AddRootNode(Enums.EditorEntities.Tilemaps);  
+            AddRootNode(Enums.EditorEntities.Tilemaps);
+            AddRootNode(Enums.EditorEntities.BattleScene);
+            AddRootNode(Enums.EditorEntities.FreeRoamScene);
+            AddRootNode(Enums.EditorEntities.RandomBattleScene);  
 
             // Bind image to expand property
             radTreeView.NodeExpandedChanged += (s, e) =>

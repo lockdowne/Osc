@@ -105,10 +105,10 @@ namespace oEngine.Common
             Vector2 p3 = new Vector2((n1 - m1) / 2 * tileWidth, (n1 + m1) / 2 * tileHeight);
             Vector2 p4 = new Vector2((n0 - m1) / 2 * tileWidth, (n0 + m1) / 2 * tileHeight);
 
-            int startX = (int)Math.Min(IsoPixelsToCoordinate(p1, tileWidth, tileHeight).X, IsoPixelsToCoordinate(p3, tileWidth, tileHeight).X);
-            int startY = (int)Math.Min(IsoPixelsToCoordinate(p1, tileWidth, tileHeight).Y, IsoPixelsToCoordinate(p3, tileWidth, tileHeight).Y);
-            int width = (int)Math.Abs((int)IsoPixelsToCoordinate(p2, tileWidth, tileHeight).X - (int)IsoPixelsToCoordinate(p1, tileWidth, tileHeight).X) + 1;
-            int height = (int)Math.Abs((int)IsoPixelsToCoordinate(p3, tileWidth, tileHeight).Y - (int)IsoPixelsToCoordinate(p2, tileWidth, tileHeight).Y) + 1;
+            int startX = Math.Min(IsoPixelsToCoordinate(p1, tileWidth, tileHeight).X, IsoPixelsToCoordinate(p3, tileWidth, tileHeight).X);
+            int startY = Math.Min(IsoPixelsToCoordinate(p1, tileWidth, tileHeight).Y, IsoPixelsToCoordinate(p3, tileWidth, tileHeight).Y);
+            int width = Math.Abs(IsoPixelsToCoordinate(p2, tileWidth, tileHeight).X - IsoPixelsToCoordinate(p1, tileWidth, tileHeight).X) + 1;
+            int height = Math.Abs(IsoPixelsToCoordinate(p3, tileWidth, tileHeight).Y - IsoPixelsToCoordinate(p2, tileWidth, tileHeight).Y) + 1;
 
             for (int x = startX; x < startX + width; x++)
             {

@@ -42,8 +42,6 @@ namespace oEngine.Entities
             if (texture == null)
                 throw new ArgumentNullException("Tileset texture cannot be null");
 
-            ID = Guid.NewGuid();
-
             Texture = texture;
         }
 
@@ -56,7 +54,7 @@ namespace oEngine.Entities
         public Rectangle GetSourceRectangle(int tileIndex, int tileWidth, int tileHeight)
         {
             if (Texture == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Must set texture to a value");
 
             int tileY = tileIndex / (Texture.Width / tileWidth);
             int tileX = tileIndex % (Texture.Width / tileWidth);
