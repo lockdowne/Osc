@@ -9,13 +9,18 @@ using System.Text;
 using oEngine.Common;
 using oEngine.Entities;
 
+
 namespace oGame
 {
     public class SampleScreen : GameScreen
     {
-        private Button helloButton;
-
         private Camera camera;
+        private TestCharacterClass charA;
+        private TestCharacterClass charB;
+        private TestCharacterClass charC;
+
+        private List<TestCharacterClass> charList;
+        private CharacterCollection charCollection;
 
         // Constructor must have base
         public SampleScreen()
@@ -31,6 +36,20 @@ namespace oGame
             try
             {
                 base.LoadContent();
+                
+                charList = new List<TestCharacterClass>();
+                charA = new TestCharacterClass(2, "charA");
+                charB = new TestCharacterClass(3, "charB");
+                charC = new TestCharacterClass(4, "charC");
+                charList.Add(charA);
+                charList.Add(charB);
+                charList.Add(charC);
+
+                charCollection = new CharacterCollection();
+
+                charCollection.Add(charA);
+                charCollection.Add(charB);
+                charCollection.Add(charC);
 
 
                 // Due to my awesome clever method of loading textures and other unserializable objects we dont need a manager for textures
@@ -50,14 +69,14 @@ namespace oGame
                 //helloButton = new Button() { Position = new Vector2(400, 300), Width = 100, Height = 25, 
                 //    Font = FontFactory.GetFont("arial12"), Text = "Hello", Tint = Color.Black, TextColor = new Color(255, 255, 255) };
                 
-                helloButton.Clicked += () =>
-                {                    
+                //helloButton.Clicked += () =>
+                //{                    
                     // Do something when the button is clicked
                     // NOTE: These button controls are more useful for UI interaction                
-                };
+                //};
 
+                Console.WriteLine("here");
                 camera = new Camera() { Name = "MainCamera", Zoom = 1.0f, LerpAmount = 0.1f };
-                
             }
             catch (Exception exception)
             {
@@ -80,14 +99,19 @@ namespace oGame
             // Check for left click
             if(input.LeftClick)
             {
-                // When its a left click see if button has been clicked
-                helloButton.HandleClick(input.Position);
+                //ExitScreen();
+                Console.WriteLine(charCollection.GetNext().Name);
             }
             
             if(input.LeftDown)
             {
                 // While mouse left is held down move camera to that position
                 camera.UpdatePosition(input.Position, new Vector2(-1000, -1000), new Vector2(1000, 1000));
+            }
+
+            if(input.RightClick)
+            {
+                charCollection.debugGetSpeed();
             }
         }
 
@@ -104,12 +128,11 @@ namespace oGame
             base.Draw(gameTime);
 
             // Clears screen
-            ScreenFactory.GraphicsDevice.Clear(Color.Black);
-
+            ScreenFactory.GraphicsDevice.Clear(Color.Red);
             // We use screen factories spritebatch as it shared among screens
             ScreenFactory.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
 
-            helloButton.Draw(ScreenFactory.SpriteBatch);
+            //helloButton.Draw(ScreenFactory.SpriteBatch);
 
             ScreenFactory.SpriteBatch.End();
 
@@ -117,5 +140,10 @@ namespace oGame
             if (TransitionPosition > 0)
                 ScreenFactory.FadeBackBufferToBlack(255 - TransitionAlpha);
         }
+
+        //public TestCharacterClass whoNext(List<TestCharacterClass> charList)
+        //{
+
+        //}
     }
 }
