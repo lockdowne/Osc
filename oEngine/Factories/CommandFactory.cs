@@ -1,5 +1,5 @@
-﻿using oEngine.Commands;
-using oEngine.Common;
+﻿using oEngine.Common;
+using oEngine.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,8 @@ namespace oEngine.Factories
 {
     public static class CommandFactory
     {
-        private static Stack<Command> undo = new Stack<Command>();
-        private static Stack<Command> redo = new Stack<Command>();
+        private static readonly Stack<Command> undo = new Stack<Command>();
+        private static readonly Stack<Command> redo = new Stack<Command>();
 
         /// <summary>
         /// Executes command
@@ -24,8 +24,7 @@ namespace oEngine.Factories
             try
             {
                 if(command.CanExecute())
-                {      
-                   
+                {                         
                     command.Execute();
 
                     if (saveToStack)
@@ -35,9 +34,9 @@ namespace oEngine.Factories
                     }
 
                     if(string.IsNullOrEmpty(command.Description))
-                        return "Command: Execute " + command.Name;
+                        return "Command: " + command.Name;
 
-                    return "Command: Execute " + command.Name + " - " + command.Description;
+                    return "Command: " + command.Name + " - " + command.Description;
                 }
             }
             catch(Exception exception)
@@ -45,9 +44,9 @@ namespace oEngine.Factories
                 Logger.Log("CommandFactory", "ExecuteCommand", exception, command.Description);
 
                 if (string.IsNullOrEmpty(command.Description))
-                    return "Command: Execute " + command.Name + Environment.NewLine + "Exception - " + exception.ToString(); ;
+                    return "Command: " + command.Name + Environment.NewLine + "Exception: " + exception.ToString(); ;
 
-                return "Command: Error " + command.Name + " - " + command.Description + Environment.NewLine + "Exception - " + exception.ToString();
+                return "Error: " + command.Name + " - " + command.Description + Environment.NewLine + "Exception: " + exception.ToString();
             }
 
             return "Command: Cannot execute";

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using oEngine.Entities;
 using oEngine.Common;
 using oEditor.Common;
+using System.Windows.Forms;
 
 namespace oEditor.Controls
 {
@@ -23,17 +24,19 @@ namespace oEditor.Controls
         private Vector2 currentMousePosition;
         private Vector2 previousMousePosition;
 
-        private Texture2D pixel;
+       
 
         private float cameraZoom;
 
         private bool isMouseLeftDown;
         private bool isMouseRightDown;
 
+        public Texture2D pixel;
+
         /// <summary>
         /// Gets or sets the current render controls tilemap data
         /// </summary>
-        public Scene Tilemap { get; set; }
+        public Tilemap Tilemap { get; set; }
 
         public System.Windows.Forms.MouseEventHandler RenderMouseDown;
         public System.Windows.Forms.MouseEventHandler RenderMouseUp;
@@ -48,7 +51,7 @@ namespace oEditor.Controls
 
             camera = new Camera()
             {
-                LerpAmount = 0.1f,
+                LerpAmount = 0.25f,
                 Name = "Tilemap Camera",
                 Zoom = 1.0f,
             };
@@ -57,6 +60,9 @@ namespace oEditor.Controls
 
             pixel = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             pixel.SetData<Color>(new Color[] { Color.White });
+
+            Tilemap.Pixel = pixel;
+            Tilemap.IsGridVisible = true;
 
             MouseDown += (sender, e) =>
             {
@@ -123,6 +129,8 @@ namespace oEditor.Controls
                 // Used to reset scale beyond bounds
                 cameraZoom = camera.Zoom;
             };
+
+            Application.Idle += (sender, e) => { Invalidate(); };
         }
 
         protected override void Draw()

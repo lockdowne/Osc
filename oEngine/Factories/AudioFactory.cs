@@ -12,7 +12,7 @@ namespace oEngine.Factories
 {
     public sealed class AudioFactory : IFactory
     {
-        private SoundEffectInstance[] playingSounds = new SoundEffectInstance[Consts.MAX_SOUNDS];       
+        private SoundEffectInstance[] playingSounds = new SoundEffectInstance[Consts.MaxSounds];       
                 
         private bool isMuteSounds;
         private bool isMuteSongs;

@@ -49,11 +49,14 @@ namespace oEngine.Common
         /// </summary>
         public enum EditorEntities
         {
-            Sprites,
+            Characters,
             Items,
             Quests,
-            Scenes,
+            Tilemaps,
             Nodes,
+            BattleScene,
+            FreeRoamScene,
+            RandomBattleScene,
         }
 
         public enum LayerTypes

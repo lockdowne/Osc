@@ -11,8 +11,8 @@ namespace oEditor.Views
 {
     public interface IMainView
     {
-        RadDock DockManager { get; set; }
+        RadDock DockManager { get; }
 
-        DialogResult ShowMessageBox(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton);
+        event DockWindowCancelEventHandler WindowClosing;
     }
 }

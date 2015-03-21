@@ -30,7 +30,7 @@ namespace oEditor.Controls
     /// interface, which provides notification events for when the device is reset
     /// or disposed.
     /// </summary>
-    class GraphicsDeviceService : IGraphicsDeviceService, IDisposable, IGraphicsDeviceManager
+    public class GraphicsDeviceService : IGraphicsDeviceService, IDisposable, IGraphicsDeviceManager
     {
         #region Fields
 

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace oEngine.Commands
+namespace oEngine.Entities
 {
     
-    public class Command
+    public class Command : IEntity
     {
+        public Guid ID { get; set; }
         /// <summary>
         /// Gets or sets the method to execute
         /// </summary>

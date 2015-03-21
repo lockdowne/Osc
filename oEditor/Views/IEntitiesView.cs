@@ -11,8 +11,11 @@ namespace oEditor.Views
     {
         RadTreeNode SelectedNode { get; set; }
 
+        RadTreeNodeCollection NodeCollection { get; }
+
         event Action AddEntityClicked;
         event Action DeleteEntityClicked;
         event Action EditEntityClicked;
+        event Action NodeDoubleClicked;
     }
 }

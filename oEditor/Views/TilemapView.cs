@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Telerik.WinControls.UI.Docking;
 using oEngine.Entities;
+using oEngine.Common;
 
 namespace oEditor.Views
 {
-    public class SceneView : DocumentWindow, ISceneView
+    public class TilemapView : DocumentWindow, ITilemapView
     {
         private Controls.TilemapRender tilemapRender;
 
@@ -19,7 +20,7 @@ namespace oEditor.Views
         public event MouseEventHandler SceneMouseMove;
         public event MouseEventHandler SceneMouseWheel;
 
-        public Scene Tilemap
+        public Tilemap Tilemap
         {
             get { return tilemapRender.Tilemap; }
             set { tilemapRender.Tilemap = value; }
@@ -31,11 +32,11 @@ namespace oEditor.Views
             set { this.Text = value; }
         }
     
-        public SceneView()
+        public TilemapView()
         {
-            this.Text = "Scene";
+            this.Text = "Tilemap";
 
-            InitializeComponent();
+            InitializeComponent();            
 
             tilemapRender.RenderMouseDown += (sender, e) =>
             {
@@ -67,7 +68,7 @@ namespace oEditor.Views
 
         private void InitializeComponent()
         {
-            this.tilemapRender = new oEditor.Controls.TilemapRender();
+            this.tilemapRender = new oEditor.Controls.TilemapRender();            
             this.SuspendLayout();
             // 
             // tilemapRender
@@ -77,6 +78,9 @@ namespace oEditor.Views
             this.tilemapRender.Size = new System.Drawing.Size(150, 150);
             this.tilemapRender.TabIndex = 0;
             this.tilemapRender.Tilemap = null;
+            this.tilemapRender.Dock = DockStyle.Fill;
+
+            this.Controls.Add(tilemapRender);
             this.ResumeLayout(false);
 
         }

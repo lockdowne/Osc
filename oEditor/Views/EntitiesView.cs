@@ -23,9 +23,15 @@ namespace oEditor.Views
             set { radTreeView.SelectedNode = value; }
         }
 
+        public RadTreeNodeCollection NodeCollection
+        {
+            get { return radTreeView.Nodes; }
+        }
+
         public event Action AddEntityClicked;
         public event Action DeleteEntityClicked;
         public event Action EditEntityClicked;
+        public event Action NodeDoubleClicked;
 
         public EntitiesView()
         {
@@ -49,11 +55,11 @@ namespace oEditor.Views
             
 
             // Dynamically create root folders in view
-            AddRootNode(Enums.EditorEntities.Sprites);
+            AddRootNode(Enums.EditorEntities.Characters);
             AddRootNode(Enums.EditorEntities.Items);
             AddRootNode(Enums.EditorEntities.Nodes);
             AddRootNode(Enums.EditorEntities.Quests);
-            AddRootNode(Enums.EditorEntities.Scenes);  
+            AddRootNode(Enums.EditorEntities.Tilemaps);  
 
             // Bind image to expand property
             radTreeView.NodeExpandedChanged += (s, e) =>
@@ -104,6 +110,14 @@ namespace oEditor.Views
             {
                 if (radTreeView.SelectedNode != null)
                     radTreeView.SelectedNode.Expand();
+            };
+
+            radTreeView.NodeMouseDoubleClick += (s, e) =>
+            {
+                if (NodeDoubleClicked != null)
+                {
+                    NodeDoubleClicked();
+                }
             };
         }
 

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace oEditor.Views
 {
-    public interface ISceneView
+    public interface IConsoleView
     {
+        
     }
 }
