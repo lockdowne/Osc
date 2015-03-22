@@ -15,13 +15,27 @@ namespace oEngine.Entities
         private float frameTimer;
 
         private int currentFrame;
+        private int playCount;
 
+        /// <summary>
+        /// Gets or sets the unique ID
+        /// </summary>
         public Guid ID { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name of animation
+        /// </summary>
         public string Name { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets the description of animation
+        /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets or sets the textures name associated with animation that is drawn
+        /// </summary>
         public string TextureName { get; set; }
 
         /// <summary>
@@ -41,6 +55,23 @@ namespace oEngine.Entities
         public int FrameCount { get; set; }
 
         /// <summary>
+        /// Gets the current play count of animation to determine once the animation has completed its sequence
+        /// </summary>
+        public int PlayCount
+        {
+            get { return playCount; }
+            private set
+            {
+                playCount = (int)MathHelper.Clamp(value, 0, Int32.MaxValue);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the number of times the animation should repeat before continuing
+        /// </summary>
+        public int RepeatCount { get; set; }
+
+        /// <summary>
         /// Gets or sets the current frame being drawn
         /// </summary>
         public int CurrentFrame
@@ -52,6 +83,11 @@ namespace oEngine.Entities
             }
         }
 
+        public bool IsAnimationComplete
+        {
+            get { return playCount >= RepeatCount; }
+        }
+
         /// <summary>
         /// Gets bounds of current frame in animation sequence
         /// </summary>
@@ -59,8 +95,6 @@ namespace oEngine.Entities
         {
             get { return new Rectangle(mainFrame.X + (mainFrame.Width * CurrentFrame), mainFrame.Y, mainFrame.Width, mainFrame.Height); }
         }
-
-        public event Action AnimationComplete;
 
         /// <summary>
         /// Update animation by current frame
@@ -78,22 +112,46 @@ namespace oEngine.Entities
           
                 if(CurrentFrame == 0)
                 {
-                    // Animation sequence completed
-                    if(AnimationComplete != null)
-                    {
-                        AnimationComplete();
-                    }
+                    // Animation complete
+                    PlayCount++;
                 }
             }
         }
 
-        public void Initialize(int x, int y, int width, int height, int frameCount, float frameDuration = 0.2f)
+        /// <summary>
+        /// Initializes all required information for animation
+        /// </summary>
+        /// <param name="textureName">Image local name</param>
+        /// <param name="texture">Texture to be drawn</param>
+        /// <param name="x">Starting X position on in pixels</param>
+        /// <param name="y">Starting Y position on texture in pixels</param>
+        /// <param name="width">Width of the frame</param>
+        /// <param name="height">Height of the frame</param>
+        /// <param name="frameCount">The number of frames in animation</param>
+        /// <param name="repeatCount">How many times the sequence should repeat until moving on</param>
+        /// <param name="frameDuration">How long a single frame should wait until moving on</param>
+        public void Initialize(string textureName, Texture2D texture, int x, int y, int width, int height, int frameCount, int repeatCount = 1, float frameDuration = 0.2f)
         {
-            mainFrame = new Rectangle(x, y, width, height);
+            TextureName = textureName;
+
+            Texture = texture;
+
+            mainFrame = new Rectangle(x, y, width, height);            
 
             FrameCount = frameCount;
+            
+            RepeatCount = repeatCount;
 
             FrameDuration = frameDuration;
+        }
+
+        /// <summary>
+        /// Resets the animation to start from beginning of sequence
+        /// </summary>
+        public void Reset()
+        {
+            PlayCount = 0;
+            CurrentFrame = 0;
         }
 
     }

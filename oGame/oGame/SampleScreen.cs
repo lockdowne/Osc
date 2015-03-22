@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using oEngine.Common;
 using oEngine.Entities;
+using Microsoft.Xna.Framework.Content;
 
 
 namespace oGame
@@ -21,6 +22,9 @@ namespace oGame
 
         private List<TestCharacterClass> charList;
         private CharacterCollection charCollection;
+
+        private Texture2D testTexture;
+        private Sprite testSprite;
 
         // Constructor must have base
         public SampleScreen()
@@ -36,7 +40,12 @@ namespace oGame
             try
             {
                 base.LoadContent();
-                
+
+                // Create a local copy of content when we have large amounts of data to load
+                // Use the shared ScreenFactory.Content when content is shared between screens
+                // Most of the time we will want local copies 
+                ContentManager content = new ContentManager(ScreenFactory.Game.Services, "Content");
+
                 charList = new List<TestCharacterClass>();
                 charA = new TestCharacterClass(2, "charA");
                 charB = new TestCharacterClass(3, "charB");
@@ -51,6 +60,35 @@ namespace oGame
                 charCollection.Add(charB);
                 charCollection.Add(charC);
 
+                                
+                testTexture = content.Load<Texture2D>("test-animation");
+                Animation animation = new Animation();
+                animation.Initialize("test-animation", content.Load<Texture2D>("test-animation"), 0, 0, 32, 32, 3, 10); 
+
+                Animation animation2 = new Animation();
+                animation2.Initialize("test-animation", content.Load<Texture2D>("test-animation"), 0, 5*32, 32, 32, 9, 1, 1.0f);
+
+                Animation animation3 = new Animation();
+                animation3.Initialize("test-animation", content.Load<Texture2D>("test-animation"), 9 * 32, 5 * 32, 32, 32, 3, 10);
+                
+
+
+                testSprite = new Sprite();
+                testSprite.AddAnimation("Animation01", new List<Animation>().Populate(animation, animation2));
+                testSprite.AddAnimation("Animation02", animation3);
+
+                testSprite.PlayAnimation("Animation02"); // Plays immediatly since there is no current animation
+                testSprite.PlayAnimation("Animation01"); // Gets queued up to play after previous animation is done (This gets repeated until you call play animation again)
+                
+                testSprite.Position = new Vector2(100, 100);
+
+                // The sprite will not update unless this is set to true
+                testSprite.IsActive = true;
+
+                // A sprite will not be seen if you dont set the below values as you can probably guess, but Im pointing it out so you can remember about them
+                testSprite.IsVisible = true;
+                testSprite.Scale = 1.0f;
+                testSprite.Tint = Color.White; // I believe the default value of Color has an alpha of 0 so nothing will be visible
 
                 // Due to my awesome clever method of loading textures and other unserializable objects we dont need a manager for textures
 
@@ -76,7 +114,7 @@ namespace oGame
                 //};
 
                 Console.WriteLine("here");
-                camera = new Camera() { Name = "MainCamera", Zoom = 1.0f, LerpAmount = 0.1f };
+                camera = new Camera() { Name = "MainCamera", Zoom = 1.0f, LerpAmount = 0.1f, Position = Vector2.Zero };
             }
             catch (Exception exception)
             {
@@ -106,7 +144,7 @@ namespace oGame
             if(input.LeftDown)
             {
                 // While mouse left is held down move camera to that position
-                camera.UpdatePosition(input.Position, new Vector2(-1000, -1000), new Vector2(1000, 1000));
+               // camera.UpdatePosition(input.Position, new Vector2(-1000, -1000), new Vector2(1000, 1000));
             }
 
             if(input.RightClick)
@@ -119,6 +157,7 @@ namespace oGame
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
+            testSprite.Update(gameTime);
             
             
         }
@@ -128,10 +167,15 @@ namespace oGame
             base.Draw(gameTime);
 
             // Clears screen
-            ScreenFactory.GraphicsDevice.Clear(Color.Red);
+            ScreenFactory.GraphicsDevice.Clear(Color.CornflowerBlue);
+                        
             // We use screen factories spritebatch as it shared among screens
-            ScreenFactory.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
+           // ScreenFactory.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
+            ScreenFactory.SpriteBatch.Begin();
 
+            testSprite.Draw(ScreenFactory.SpriteBatch);
+
+            //ScreenFactory.SpriteBatch.Draw(testTexture, Vector2.Zero, Color.White);
             //helloButton.Draw(ScreenFactory.SpriteBatch);
 
             ScreenFactory.SpriteBatch.End();

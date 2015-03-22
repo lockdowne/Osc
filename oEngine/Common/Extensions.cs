@@ -124,10 +124,31 @@ namespace oEngine.Common
             return result;
         }
               
+        /// <summary>
+        /// Iterates through collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="action"></param>
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {            
             foreach (var item in source)
                 action(item);
+        }
+
+        /// <summary>
+        /// Add element to list after instantiation with return of the list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static IList<T> Populate<T>(this IList<T> collection, params T[] objs)
+        {
+            foreach (var obj in objs)
+                collection.Add(obj);
+
+            return collection;
         }
 
         /// <summary>
