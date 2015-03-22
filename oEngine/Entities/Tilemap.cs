@@ -139,7 +139,7 @@ namespace oEngine.Entities
                 throw new Exception("Tileset with that name already exists");
 
             Tileset tileset = new Tileset();
-            tileset.Initialize(texture);
+            tileset.Initialize(name, texture);
             tileset.Name = name;
             tileset.Description = description;
             tilesets.Add(tileset);

@@ -8,6 +8,7 @@ using System.Text;
 
 namespace oEngine.Entities
 {
+    [DataContract(Namespace="")]
     public class Tileset : IEntity, ITexture
     {
         /// <summary>
@@ -34,13 +35,15 @@ namespace oEngine.Entities
         public Texture2D Texture { get; set; }
         
 
-        public void Initialize(Texture2D texture)
+        public void Initialize(string textureName, Texture2D texture)
         {
             if (Texture != null)
                 throw new Exception("Tileset has already been initialized");
 
             if (texture == null)
                 throw new ArgumentNullException("Tileset texture cannot be null");
+
+            TextureName = textureName;
 
             Texture = texture;
         }

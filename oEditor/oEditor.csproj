@@ -111,6 +111,7 @@
     <Compile Include="Presenters\EntitiesPresenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="Presenters\TilemapPresenter.cs" />
+    <Compile Include="Presenters\TilemapToolsPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CharacterRepository.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Views\IConsoleView.cs" />
     <Compile Include="Views\IEntitiesView.cs" />
     <Compile Include="Views\IMainView.cs" />
+    <Compile Include="Views\ITilemapToolsView.cs" />
     <Compile Include="Views\ITilemapView.cs" />
     <Compile Include="Views\ITabbedView.cs" />
     <Compile Include="Views\MainView.cs">
@@ -136,13 +138,16 @@
     <Compile Include="Views\MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\TilemapToolbox.cs">
+    <Compile Include="Views\TilemapToolsView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\TilemapToolbox.Designer.cs">
-      <DependentUpon>TilemapToolbox.cs</DependentUpon>
+    <Compile Include="Views\TilemapToolsView.Designer.cs">
+      <DependentUpon>TilemapToolsView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\TilemapView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Views\TilesetView.cs">
       <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="Properties\licenses.licx" />
@@ -162,8 +167,8 @@
     <EmbeddedResource Include="Views\MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\TilemapToolbox.resx">
-      <DependentUpon>TilemapToolbox.cs</DependentUpon>
+    <EmbeddedResource Include="Views\TilemapToolsView.resx">
+      <DependentUpon>TilemapToolsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TilemapView.resx">
       <DependentUpon>TilemapView.cs</DependentUpon>

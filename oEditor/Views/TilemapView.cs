@@ -15,10 +15,10 @@ namespace oEditor.Views
         private Controls.TilemapRender tilemapRender;
 
         // Send over mouse interaction of graphics control to presenter
-        public event MouseEventHandler SceneMouseDown;
-        public event MouseEventHandler SceneMouseUp;
-        public event MouseEventHandler SceneMouseMove;
-        public event MouseEventHandler SceneMouseWheel;
+        public event MouseEventHandler TilemapMouseDown;
+        public event MouseEventHandler TilemapMouseUp;
+        public event MouseEventHandler TilemapMouseMove;
+        public event MouseEventHandler TilemapMouseWheel;
 
         public Guid ID { get; set; }
 
@@ -44,26 +44,26 @@ namespace oEditor.Views
 
             tilemapRender.RenderMouseDown += (sender, e) =>
             {
-                if (SceneMouseDown != null)
-                    SceneMouseDown(sender, e);
+                if (TilemapMouseDown != null)
+                    TilemapMouseDown(sender, e);
             };
 
             tilemapRender.RenderMouseUp += (sender, e) =>
             {
-                if (SceneMouseUp != null)
-                    SceneMouseUp(sender, e);
+                if (TilemapMouseUp != null)
+                    TilemapMouseUp(sender, e);
             };
 
             tilemapRender.RenderMouseMove += (sender, e) =>
             {
-                if (SceneMouseMove != null)
-                    SceneMouseMove(sender, e);
+                if (TilemapMouseMove != null)
+                    TilemapMouseMove(sender, e);
             };
 
             tilemapRender.RenderMouseWheel += (sender, e) =>
             {
-                if (SceneMouseWheel != null)
-                    SceneMouseWheel(sender, e);
+                if (TilemapMouseWheel != null)
+                    TilemapMouseWheel(sender, e);
             };
 
             

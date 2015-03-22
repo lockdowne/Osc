@@ -1,6 +1,6 @@
 ﻿namespace oEditor.Views
 {
-    partial class TilemapToolbox
+    partial class TilemapToolsView
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TilemapToolbox));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TilemapToolsView));
             this.visualStudio2012DarkTheme1 = new Telerik.WinControls.Themes.VisualStudio2012DarkTheme();
             this.radDock1 = new Telerik.WinControls.UI.Docking.RadDock();
+            this.toolboxTilesets = new Telerik.WinControls.UI.Docking.DocumentWindow();
+            this.radPageView = new Telerik.WinControls.UI.RadPageView();
+            this.radCommandBar1 = new Telerik.WinControls.UI.RadCommandBar();
+            this.commandBarRowElement1 = new Telerik.WinControls.UI.CommandBarRowElement();
+            this.commandBarStripElement1 = new Telerik.WinControls.UI.CommandBarStripElement();
+            this.btnAddTileset = new Telerik.WinControls.UI.CommandBarButton();
+            this.btnDeleteTileset = new Telerik.WinControls.UI.CommandBarButton();
+            this.documentContainer1 = new Telerik.WinControls.UI.Docking.DocumentContainer();
+            this.documentTabStrip1 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
             this.toolboxLayers = new Telerik.WinControls.UI.Docking.DocumentWindow();
             this.radCommandBar2 = new Telerik.WinControls.UI.RadCommandBar();
             this.commandBarRowElement2 = new Telerik.WinControls.UI.CommandBarRowElement();
@@ -39,28 +48,19 @@
             this.btnDeleteLayer = new Telerik.WinControls.UI.CommandBarButton();
             this.btnMoveLayerUp = new Telerik.WinControls.UI.CommandBarButton();
             this.btnMoveLayerDown = new Telerik.WinControls.UI.CommandBarButton();
-            this.documentContainer1 = new Telerik.WinControls.UI.Docking.DocumentContainer();
-            this.documentTabStrip1 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
-            this.toolboxTilesets = new Telerik.WinControls.UI.Docking.DocumentWindow();
-            this.radPageView = new Telerik.WinControls.UI.RadPageView();
-            this.radCommandBar1 = new Telerik.WinControls.UI.RadCommandBar();
-            this.commandBarRowElement1 = new Telerik.WinControls.UI.CommandBarRowElement();
-            this.commandBarStripElement1 = new Telerik.WinControls.UI.CommandBarStripElement();
-            this.btnAddTileset = new Telerik.WinControls.UI.CommandBarButton();
-            this.btnDeleteTileset = new Telerik.WinControls.UI.CommandBarButton();
             this.toolboxProperties = new Telerik.WinControls.UI.Docking.DocumentWindow();
             this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).BeginInit();
             this.radDock1.SuspendLayout();
-            this.toolboxLayers.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).BeginInit();
+            this.toolboxTilesets.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radPageView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).BeginInit();
             this.documentContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip1)).BeginInit();
             this.documentTabStrip1.SuspendLayout();
-            this.toolboxTilesets.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radPageView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar1)).BeginInit();
+            this.toolboxLayers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).BeginInit();
             this.toolboxProperties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
@@ -86,6 +86,102 @@
             this.radDock1.TabStop = false;
             this.radDock1.Text = "radDock1";
             this.radDock1.ThemeName = "VisualStudio2012Dark";
+            // 
+            // toolboxTilesets
+            // 
+            this.toolboxTilesets.Controls.Add(this.radPageView);
+            this.toolboxTilesets.Controls.Add(this.radCommandBar1);
+            this.toolboxTilesets.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolboxTilesets.Location = new System.Drawing.Point(4, 29);
+            this.toolboxTilesets.Name = "toolboxTilesets";
+            this.toolboxTilesets.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
+            this.toolboxTilesets.Size = new System.Drawing.Size(383, 406);
+            this.toolboxTilesets.Text = "Tilesets";
+            // 
+            // radPageView
+            // 
+            this.radPageView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radPageView.Location = new System.Drawing.Point(0, 30);
+            this.radPageView.Name = "radPageView";
+            this.radPageView.Size = new System.Drawing.Size(383, 376);
+            this.radPageView.TabIndex = 1;
+            this.radPageView.ThemeName = "VisualStudio2012Dark";
+            // 
+            // radCommandBar1
+            // 
+            this.radCommandBar1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.radCommandBar1.Location = new System.Drawing.Point(0, 0);
+            this.radCommandBar1.Name = "radCommandBar1";
+            this.radCommandBar1.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.radCommandBar1.Rows.AddRange(new Telerik.WinControls.UI.CommandBarRowElement[] {
+            this.commandBarRowElement1});
+            this.radCommandBar1.Size = new System.Drawing.Size(383, 30);
+            this.radCommandBar1.TabIndex = 0;
+            this.radCommandBar1.Text = "radCommandBar1";
+            this.radCommandBar1.ThemeName = "VisualStudio2012Dark";
+            // 
+            // commandBarRowElement1
+            // 
+            this.commandBarRowElement1.MinSize = new System.Drawing.Size(25, 25);
+            this.commandBarRowElement1.Strips.AddRange(new Telerik.WinControls.UI.CommandBarStripElement[] {
+            this.commandBarStripElement1});
+            // 
+            // commandBarStripElement1
+            // 
+            this.commandBarStripElement1.DisplayName = "commandBarStripElement1";
+            this.commandBarStripElement1.Items.AddRange(new Telerik.WinControls.UI.RadCommandBarBaseItem[] {
+            this.btnAddTileset,
+            this.btnDeleteTileset});
+            this.commandBarStripElement1.Name = "commandBarStripElement1";
+            // 
+            // btnAddTileset
+            // 
+            this.btnAddTileset.DisplayName = "commandBarButton1";
+            this.btnAddTileset.Image = global::oEditor.Properties.Resources.AddControl_371;
+            this.btnAddTileset.Name = "btnAddTileset";
+            this.btnAddTileset.Text = "";
+            this.btnAddTileset.ToolTipText = "Add Tileset";
+            this.btnAddTileset.Click += new System.EventHandler(this.btnAddTileset_Click);
+            // 
+            // btnDeleteTileset
+            // 
+            this.btnDeleteTileset.DisplayName = "commandBarButton2";
+            this.btnDeleteTileset.Image = ((System.Drawing.Image)(resources.GetObject("btnDeleteTileset.Image")));
+            this.btnDeleteTileset.Name = "btnDeleteTileset";
+            this.btnDeleteTileset.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnDeleteTileset.Text = "";
+            this.btnDeleteTileset.ToolTipText = "Delete Tileset";
+            this.btnDeleteTileset.Click += new System.EventHandler(this.btnDeleteTileset_Click);
+            // 
+            // documentContainer1
+            // 
+            this.documentContainer1.Controls.Add(this.documentTabStrip1);
+            this.documentContainer1.Name = "documentContainer1";
+            // 
+            // 
+            // 
+            this.documentContainer1.RootElement.MinSize = new System.Drawing.Size(0, 0);
+            this.documentContainer1.SizeInfo.SizeMode = Telerik.WinControls.UI.Docking.SplitPanelSizeMode.Fill;
+            this.documentContainer1.SplitterWidth = 2;
+            this.documentContainer1.ThemeName = "VisualStudio2012Dark";
+            // 
+            // documentTabStrip1
+            // 
+            this.documentTabStrip1.CanUpdateChildIndex = true;
+            this.documentTabStrip1.Controls.Add(this.toolboxTilesets);
+            this.documentTabStrip1.Controls.Add(this.toolboxLayers);
+            this.documentTabStrip1.Controls.Add(this.toolboxProperties);
+            this.documentTabStrip1.Location = new System.Drawing.Point(0, 0);
+            this.documentTabStrip1.Name = "documentTabStrip1";
+            // 
+            // 
+            // 
+            this.documentTabStrip1.RootElement.MinSize = new System.Drawing.Size(0, 0);
+            this.documentTabStrip1.SelectedIndex = 0;
+            this.documentTabStrip1.Size = new System.Drawing.Size(391, 439);
+            this.documentTabStrip1.TabIndex = 0;
+            this.documentTabStrip1.TabStop = false;
+            this.documentTabStrip1.ThemeName = "VisualStudio2012Dark";
             // 
             // toolboxLayers
             // 
@@ -157,102 +253,6 @@
             this.btnMoveLayerDown.Text = "";
             this.btnMoveLayerDown.Click += new System.EventHandler(this.btnMoveLayerDown_Click);
             // 
-            // documentContainer1
-            // 
-            this.documentContainer1.Controls.Add(this.documentTabStrip1);
-            this.documentContainer1.Name = "documentContainer1";
-            // 
-            // 
-            // 
-            this.documentContainer1.RootElement.MinSize = new System.Drawing.Size(0, 0);
-            this.documentContainer1.SizeInfo.SizeMode = Telerik.WinControls.UI.Docking.SplitPanelSizeMode.Fill;
-            this.documentContainer1.SplitterWidth = 2;
-            this.documentContainer1.ThemeName = "VisualStudio2012Dark";
-            // 
-            // documentTabStrip1
-            // 
-            this.documentTabStrip1.CanUpdateChildIndex = true;
-            this.documentTabStrip1.Controls.Add(this.toolboxTilesets);
-            this.documentTabStrip1.Controls.Add(this.toolboxLayers);
-            this.documentTabStrip1.Controls.Add(this.toolboxProperties);
-            this.documentTabStrip1.Location = new System.Drawing.Point(0, 0);
-            this.documentTabStrip1.Name = "documentTabStrip1";
-            // 
-            // 
-            // 
-            this.documentTabStrip1.RootElement.MinSize = new System.Drawing.Size(0, 0);
-            this.documentTabStrip1.SelectedIndex = 0;
-            this.documentTabStrip1.Size = new System.Drawing.Size(391, 439);
-            this.documentTabStrip1.TabIndex = 0;
-            this.documentTabStrip1.TabStop = false;
-            this.documentTabStrip1.ThemeName = "VisualStudio2012Dark";
-            // 
-            // toolboxTilesets
-            // 
-            this.toolboxTilesets.Controls.Add(this.radPageView);
-            this.toolboxTilesets.Controls.Add(this.radCommandBar1);
-            this.toolboxTilesets.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolboxTilesets.Location = new System.Drawing.Point(4, 29);
-            this.toolboxTilesets.Name = "toolboxTilesets";
-            this.toolboxTilesets.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.toolboxTilesets.Size = new System.Drawing.Size(383, 406);
-            this.toolboxTilesets.Text = "Tilesets";
-            // 
-            // radPageView
-            // 
-            this.radPageView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radPageView.Location = new System.Drawing.Point(0, 30);
-            this.radPageView.Name = "radPageView";
-            this.radPageView.Size = new System.Drawing.Size(383, 376);
-            this.radPageView.TabIndex = 1;
-            this.radPageView.ThemeName = "VisualStudio2012Dark";
-            // 
-            // radCommandBar1
-            // 
-            this.radCommandBar1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.radCommandBar1.Location = new System.Drawing.Point(0, 0);
-            this.radCommandBar1.Name = "radCommandBar1";
-            this.radCommandBar1.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.radCommandBar1.Rows.AddRange(new Telerik.WinControls.UI.CommandBarRowElement[] {
-            this.commandBarRowElement1});
-            this.radCommandBar1.Size = new System.Drawing.Size(383, 30);
-            this.radCommandBar1.TabIndex = 0;
-            this.radCommandBar1.Text = "radCommandBar1";
-            this.radCommandBar1.ThemeName = "VisualStudio2012Dark";
-            // 
-            // commandBarRowElement1
-            // 
-            this.commandBarRowElement1.MinSize = new System.Drawing.Size(25, 25);
-            this.commandBarRowElement1.Strips.AddRange(new Telerik.WinControls.UI.CommandBarStripElement[] {
-            this.commandBarStripElement1});
-            // 
-            // commandBarStripElement1
-            // 
-            this.commandBarStripElement1.DisplayName = "commandBarStripElement1";
-            this.commandBarStripElement1.Items.AddRange(new Telerik.WinControls.UI.RadCommandBarBaseItem[] {
-            this.btnAddTileset,
-            this.btnDeleteTileset});
-            this.commandBarStripElement1.Name = "commandBarStripElement1";
-            // 
-            // btnAddTileset
-            // 
-            this.btnAddTileset.DisplayName = "commandBarButton1";
-            this.btnAddTileset.Image = global::oEditor.Properties.Resources.AddControl_371;
-            this.btnAddTileset.Name = "btnAddTileset";
-            this.btnAddTileset.Text = "";
-            this.btnAddTileset.ToolTipText = "Add Tileset";
-            this.btnAddTileset.Click += new System.EventHandler(this.btnAddTileset_Click);
-            // 
-            // btnDeleteTileset
-            // 
-            this.btnDeleteTileset.DisplayName = "commandBarButton2";
-            this.btnDeleteTileset.Image = ((System.Drawing.Image)(resources.GetObject("btnDeleteTileset.Image")));
-            this.btnDeleteTileset.Name = "btnDeleteTileset";
-            this.btnDeleteTileset.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnDeleteTileset.Text = "";
-            this.btnDeleteTileset.ToolTipText = "Delete Tileset";
-            this.btnDeleteTileset.Click += new System.EventHandler(this.btnDeleteTileset_Click);
-            // 
             // toolboxProperties
             // 
             this.toolboxProperties.Controls.Add(this.radLabel1);
@@ -272,13 +272,13 @@
             this.radLabel1.TabIndex = 0;
             this.radLabel1.ThemeName = "VisualStudio2012Dark";
             // 
-            // TilemapToolbox
+            // TilemapToolsView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(391, 439);
             this.Controls.Add(this.radDock1);
-            this.Name = "TilemapToolbox";
+            this.Name = "TilemapToolsView";
             // 
             // 
             // 
@@ -287,17 +287,17 @@
             this.ThemeName = "VisualStudio2012Dark";
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).EndInit();
             this.radDock1.ResumeLayout(false);
-            this.toolboxLayers.ResumeLayout(false);
-            this.toolboxLayers.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).EndInit();
-            this.documentContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip1)).EndInit();
-            this.documentTabStrip1.ResumeLayout(false);
             this.toolboxTilesets.ResumeLayout(false);
             this.toolboxTilesets.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radPageView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).EndInit();
+            this.documentContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip1)).EndInit();
+            this.documentTabStrip1.ResumeLayout(false);
+            this.toolboxLayers.ResumeLayout(false);
+            this.toolboxLayers.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).EndInit();
             this.toolboxProperties.ResumeLayout(false);
             this.toolboxProperties.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).EndInit();

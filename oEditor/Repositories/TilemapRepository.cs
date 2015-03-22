@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using oEditor.Common;
 
 namespace oEditor.Repositories
 {
@@ -33,7 +34,7 @@ namespace oEditor.Repositories
 
             foreach (XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Tilemap))
             {
-                Tilemap tilemap = element.FromXElement<Tilemap>();
+                Tilemap tilemap = element.DeserializeXElement<Tilemap>();
                 if (predicate(tilemap))
                     yield return tilemap;
             }

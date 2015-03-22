@@ -21,22 +21,22 @@ namespace oEditor.Presenters
 
             this.repository = sceneRepository;
 
-            view.SceneMouseDown += (s, e) =>
+            view.TilemapMouseDown += (s, e) =>
             {
                
             };
 
-            view.SceneMouseMove += (s, e) =>
+            view.TilemapMouseMove += (s, e) =>
             {
 
             };
 
-            view.SceneMouseUp += (s, e) =>
+            view.TilemapMouseUp += (s, e) =>
             {
 
             };
 
-            view.SceneMouseWheel += (s, e) =>
+            view.TilemapMouseWheel += (s, e) =>
             {
                                 
             };

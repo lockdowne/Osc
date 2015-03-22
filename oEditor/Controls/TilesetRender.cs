@@ -55,14 +55,19 @@ namespace oEditor.Controls
 
         public Tileset Tileset { get; set; }
 
+        public GraphicsDevice GraphicsDevice
+        {
+            get { return this.GraphicsDevice; }
+        }
+
         /// <summary>
         /// Gets or sets the current render controls tilemap data
         /// </summary>      
 
-        public System.Windows.Forms.MouseEventHandler RenderMouseDown;
-        public System.Windows.Forms.MouseEventHandler RenderMouseUp;
-        public System.Windows.Forms.MouseEventHandler RenderMouseMove;
-        public System.Windows.Forms.MouseEventHandler RenderMouseWheel;
+        public event System.Windows.Forms.MouseEventHandler RenderMouseDown;
+        public event System.Windows.Forms.MouseEventHandler RenderMouseUp;
+        public event System.Windows.Forms.MouseEventHandler RenderMouseMove;
+        public event System.Windows.Forms.MouseEventHandler RenderMouseWheel;
 
         protected override void Initialize()
         {

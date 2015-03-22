@@ -10,10 +10,10 @@ namespace oEditor.Views
 {
     public interface ITilemapView
     {
-        event MouseEventHandler SceneMouseDown;
-        event MouseEventHandler SceneMouseUp;
-        event MouseEventHandler SceneMouseMove;
-        event MouseEventHandler SceneMouseWheel;
+        event MouseEventHandler TilemapMouseDown;
+        event MouseEventHandler TilemapMouseUp;
+        event MouseEventHandler TilemapMouseMove;
+        event MouseEventHandler TilemapMouseWheel;
 
         Tilemap Tilemap { get; set; }
     }

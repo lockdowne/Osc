@@ -17,7 +17,7 @@ namespace oEditor.Presenters
 {
     public class MainPresenter
     {
-        private readonly IRepository<Tilemap> sceneRepository;
+        private readonly IRepository<Tilemap> tilemapRepository;
 
         private readonly IMainView view;
 
@@ -34,10 +34,10 @@ namespace oEditor.Presenters
         {
             this.view = mainView;
 
-            sceneRepository = new TilemapRepository();
+            tilemapRepository = new TilemapRepository();
 
             entitiesView = new EntitiesView();
-            entitiesPresenter = new EntitiesPresenter(entitiesView, sceneRepository);
+            entitiesPresenter = new EntitiesPresenter(entitiesView, tilemapRepository);
 
             consoleView = new ConsoleView();
 
@@ -46,7 +46,7 @@ namespace oEditor.Presenters
             DockView((EntitiesView)entitiesView, DockPosition.Right);
 
 
-            sceneRepository.OpenEntity += (tilemap) =>
+            tilemapRepository.OpenEntity += (tilemap) =>
             {
                 // Create new window with scene values
                 // Does not need to be a command as no logic is created just a tabbed window
@@ -63,7 +63,7 @@ namespace oEditor.Presenters
                 SetToolbox(Enums.EditorEntities.Tilemaps);
             };
 
-            sceneRepository.RepositoryChanged += () =>
+            tilemapRepository.RepositoryChanged += () =>
             {
                 // There should probably be individual methods specific to each repo changed event
                 try
@@ -107,7 +107,7 @@ namespace oEditor.Presenters
         private void RefreshDockWindows()
         {
             List<Guid> ids = new List<Guid>();
-            ids.AddRange(sceneRepository.FindEntities(x => true).Select(i => i.ID));
+            ids.AddRange(tilemapRepository.FindEntities(x => true).Select(i => i.ID));
 
             // TODO: Add remaining repos
 

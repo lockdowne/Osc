@@ -222,10 +222,10 @@
             // documentWindow2
             // 
             this.documentWindow2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.documentWindow2.Location = new System.Drawing.Point(4, 27);
+            this.documentWindow2.Location = new System.Drawing.Point(4, 4);
             this.documentWindow2.Name = "documentWindow2";
             this.documentWindow2.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.documentWindow2.Size = new System.Drawing.Size(380, 476);
+            this.documentWindow2.Size = new System.Drawing.Size(380, 499);
             this.documentWindow2.Text = "documentWindow2";
             // 
             // documentContainer1

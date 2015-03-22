@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -9,6 +10,7 @@ namespace oEngine.Common
     {
         public static class OscPaths
         {
+            public static readonly string TexturesDirectory = Directory.GetCurrentDirectory() + @"\Textures";
             public static readonly string MainDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Osc\Game";
             public static readonly string ExceptionLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Osc\Game\Log.txt";
             public static readonly string EditorSettings = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Osc\Game\EditorSettings.xml";
@@ -30,6 +32,7 @@ namespace oEngine.Common
         {
             public const string DeleteConfirmation = "Are you sure you want to delete this entity?";
             public const string DeleteConfirmationCaption = "Warning";
+            public const string ImageAlreadyExists = "An image with the same name already exists";
         }
 
 

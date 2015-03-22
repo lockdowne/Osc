@@ -10,8 +10,13 @@ using Telerik.WinControls.UI;
 
 namespace oEditor.Views
 {
-    public partial class TilemapToolbox : RadForm
+    public partial class TilemapToolsView : RadForm, ITilemapToolsView
     {        
+        public RadPageViewPageCollection Pages
+        {
+            get { return radPageView.Pages; }
+        }
+
         public event Action AddTilesetClicked;
         public event Action DeleteTilesetClicked;
         public event Action AddLayerClicked;
@@ -19,9 +24,10 @@ namespace oEditor.Views
         public event Action MoveLayerUpClicked;
         public event Action MoveLayerDownClicked;
 
-        public TilemapToolbox()
+        public TilemapToolsView()
         {
             InitializeComponent();
+
         }
 
         private void btnAddTileset_Click(object sender, EventArgs e)
@@ -38,22 +44,26 @@ namespace oEditor.Views
 
         private void btnAddLayer_Click(object sender, EventArgs e)
         {
-
+            if (AddLayerClicked != null)
+                AddLayerClicked();
         }
 
         private void btnDeleteLayer_Click(object sender, EventArgs e)
         {
-
+            if (DeleteLayerClicked != null)
+                DeleteLayerClicked();
         }
 
         private void btnMoveLayerUp_Click(object sender, EventArgs e)
         {
-
+            if (MoveLayerUpClicked != null)
+                MoveLayerUpClicked();
         }
 
         private void btnMoveLayerDown_Click(object sender, EventArgs e)
         {
-
+            if (MoveLayerDownClicked != null)
+                MoveLayerDownClicked();
         }
     }
 }

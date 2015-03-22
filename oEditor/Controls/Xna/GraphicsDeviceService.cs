@@ -36,7 +36,7 @@ namespace oEditor.Controls
 
 
         // Singleton device service instance.
-        static GraphicsDeviceService singletonInstance;
+        public static GraphicsDeviceService singletonInstance;
 
 
         // Keep track of how many controls are sharing the singletonInstance.
