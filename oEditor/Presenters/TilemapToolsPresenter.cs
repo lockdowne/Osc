@@ -59,17 +59,15 @@ namespace oEditor.Presenters
                     openFileDialog.FilterIndex = 1;
                     openFileDialog.Multiselect = false;
 
-                    string filePath = string.Empty;
-                    string fileName = string.Empty;
-
                     try
                     {
                         if (openFileDialog.ShowDialog() == DialogResult.OK)
                         {
                             CheckDirectory();
 
-                            filePath = Path.GetFullPath(filePath);
-                            fileName = Path.GetFileName(filePath);
+                            string filePath = Path.GetFullPath(openFileDialog.FileName);
+                            string fileName = @"\" + Path.GetFileName(filePath);
+                            string fileNameNoExtension = Path.GetFileNameWithoutExtension(filePath);
 
                             if(File.Exists(Consts.OscPaths.TexturesDirectory + fileName))
                             {
@@ -82,24 +80,10 @@ namespace oEditor.Presenters
                                 File.Copy(filePath, Consts.OscPaths.TexturesDirectory + fileName);
                             }
 
-                            // Create new tileset and view
-                            TilesetView tilesetView = new TilesetView();
-                            Tileset tileset = new Tileset(); // This should already be loaded into view, should be changed by repo change
+                            // Create new tileset                         
+                            tilemap.AddTileset(new Tileset() { ID = Guid.NewGuid(), Name = fileNameNoExtension, TextureName = fileNameNoExtension });
 
-                            Texture2D texture = null;
-
-                            using(FileStream fileStream = new FileStream(Consts.OscPaths.TexturesDirectory + fileName, FileMode.Open))
-                            {
-                                texture = Texture2D.FromStream(tilesetView.GraphicsDevice, fileStream);
-                                
-                            }
-                            
-                            tileset.Initialize(Path.GetFileNameWithoutExtension(filePath), texture);
-
-                            this.view.Pages.Add(tilesetView);
-
-                            // Apply to tilemap
-                            tilemap.AddTileset(Path.GetFileNameWithoutExtension(filePath), string.Empty, texture);  
+                            tilemapRepository.SaveEntity(tilemap);
                         }
                     }
                     catch (FileLoadException fileException)

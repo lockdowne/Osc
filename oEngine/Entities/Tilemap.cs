@@ -130,6 +130,14 @@ namespace oEngine.Entities
             return tilemapLayers.IndexOf(layer);
         }
 
+        public void AddTileset(Tileset tileset)
+        {
+            if (tilesets.Any(set => set.Name == tileset.Name))
+                throw new Exception("Tileset with that name already exists");
+
+            tilesets.Add(tileset);
+        }
+
         public void AddTileset(string name, string description, Texture2D texture)
         {
             if (!isInitialized)

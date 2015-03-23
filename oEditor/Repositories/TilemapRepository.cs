@@ -35,6 +35,7 @@ namespace oEditor.Repositories
             foreach (XElement element in xml.Descendants().Where(e => e.Name.LocalName == Consts.Nodes.Tilemap))
             {
                 Tilemap tilemap = element.DeserializeXElement<Tilemap>();
+
                 if (predicate(tilemap))
                     yield return tilemap;
             }

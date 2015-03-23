@@ -1,4 +1,6 @@
-﻿using oEngine.Common;
+﻿using oEditor.Repositories;
+using oEngine.Common;
+using oEngine.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,8 +48,7 @@ namespace oEditor.Views
 
             // Testing
 
-            //TilemapToolbox t = new TilemapToolbox();
-           // radDock.DockWindow(t, )
+           
             this.MouseWheel += (sender, e) =>
             {
                 oEngine.Factories.CommandFactory.Undo();

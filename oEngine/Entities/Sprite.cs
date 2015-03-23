@@ -34,7 +34,7 @@ namespace oEngine.Entities
         /// <summary>
         /// Gets the current animation string that is being played
         /// </summary>
-        public string CurrentAnimation { get; private set; }
+        public string CurrentAnimationSequence { get; private set; }
 
         /// <summary>
         /// Gets or sets the pixel position of sprite
@@ -61,23 +61,23 @@ namespace oEngine.Entities
         /// </summary>
         public Rectangle Bounds
         {
-            get { return CurrentAnimationSequence == null ? Rectangle.Empty : new Rectangle((int)Position.X, (int)Position.Y, CurrentAnimationSequence.FrameBounds.Width, CurrentAnimationSequence.FrameBounds.Height); }
+            get { return CurrentAnimation == null ? Rectangle.Empty : new Rectangle((int)Position.X, (int)Position.Y, CurrentAnimation.FrameBounds.Width, CurrentAnimation.FrameBounds.Height); }
         }
 
         /// <summary>
         /// Gets the current animation sequence that is being played
         /// </summary>
-        public Animation CurrentAnimationSequence
+        public Animation CurrentAnimation
         {
             get
             {
-                if (string.IsNullOrEmpty(CurrentAnimation))
+                if (string.IsNullOrEmpty(CurrentAnimationSequence))
                     return null;
 
                 if (AnimationIndex < 0)
                     return null; 
                 
-                return animations[CurrentAnimation][AnimationIndex];
+                return animations[CurrentAnimationSequence][AnimationIndex];
             }           
         }
 
@@ -89,13 +89,13 @@ namespace oEngine.Entities
             get { return animationIndex; }
             private set
             {
-                if (string.IsNullOrEmpty(CurrentAnimation) || !animations.ContainsKey(CurrentAnimation)) // Dont need this check as we cant get to this point without a valid curren animation sequence
+                if (string.IsNullOrEmpty(CurrentAnimationSequence) || !animations.ContainsKey(CurrentAnimationSequence)) // Dont need this check as we cant get to this point without a valid current animation sequence
                 {
                     animationIndex = -1;
                     return;
                 }
 
-                animationIndex = value % animations[CurrentAnimation].Count;               
+                animationIndex = value % animations[CurrentAnimationSequence].Count;               
             }
         }
         
@@ -122,15 +122,15 @@ namespace oEngine.Entities
 
             // Play current animation in sequence
 
-            if (CurrentAnimationSequence == null)
+            if (CurrentAnimation == null)
                 return;
 
-            CurrentAnimationSequence.Update(gameTime);
+            CurrentAnimation.Update(gameTime);
 
-            if (CurrentAnimationSequence.IsAnimationComplete)
+            if (CurrentAnimation.IsAnimationComplete)
             {
                 // Need to reset the animation for the next iteration
-                CurrentAnimationSequence.Reset();
+                CurrentAnimation.Reset();
 
                 // Play next animation in sequence
                 AnimationIndex++;
@@ -158,10 +158,10 @@ namespace oEngine.Entities
             if (spriteBatch == null)
                 return;
 
-            if (CurrentAnimationSequence == null)
+            if (CurrentAnimation == null)
                 return;          
 
-            spriteBatch.Draw(CurrentAnimationSequence.Texture, Position, CurrentAnimationSequence.FrameBounds, Tint, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(CurrentAnimation.Texture, Position, CurrentAnimation.FrameBounds, Tint, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0.0f);
         }
 
         /// <summary>
@@ -199,8 +199,8 @@ namespace oEngine.Entities
                         
             animations[animationName].ForEach(a => a.Reset());
             
-            if (forceAnimation || string.IsNullOrEmpty(CurrentAnimation))
-                CurrentAnimation = animationName;
+            if (forceAnimation || string.IsNullOrEmpty(CurrentAnimationSequence))
+                CurrentAnimationSequence = animationName;
             else
                 nextAnimation.Enqueue(animationName);
         }      

@@ -147,7 +147,7 @@
     <Compile Include="Views\TilemapView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Views\TilesetView.cs">
+    <Compile Include="Views\TilesetPageView.cs">
       <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="Properties\licenses.licx" />
