@@ -9,13 +9,11 @@ namespace oEditor.Views
 {
     public interface IEntitiesView
     {
-        RadTreeNode SelectedNode { get; set; }
+        RadTreeView TreeView { get; }
 
-        RadTreeNodeCollection NodeCollection { get; }
+        RadTreeNode SelectedNode { get; }
 
-        event Action AddEntityClicked;
-        event Action DeleteEntityClicked;
-        event Action EditEntityClicked;
-        event Action NodeDoubleClicked;
+        RadContextMenu ContextMenuRoot { get; }
+        RadContextMenu ContextMenuTilemap { get; }
     }
 }

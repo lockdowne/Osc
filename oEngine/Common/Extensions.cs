@@ -89,7 +89,7 @@ namespace oEngine.Common
         }
 
         /// <summary>
-        /// Gets the position of the center of the bottom edge of the rectangle.
+        /// TODO: NEED TO REDO THIS FOR ISOMETRIC ANGLE Gets the position of the center of the bottom edge of the rectangle.
         /// </summary>
         public static Vector2 GetBottomCenter(this Rectangle rect)
         {

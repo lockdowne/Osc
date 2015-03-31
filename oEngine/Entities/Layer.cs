@@ -3,57 +3,72 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using oEngine.Common;
+using System.Runtime.Serialization;
 
 namespace oEngine.Entities
 {
+    [DataContract]
     public class Layer<T> : IEntity where T : ITile
     {
+        [DataContract]
         public class Column
         {
+            [DataMember]
             public List<T> Rows = new List<T>();
         }
 
+        [DataMember]
         private int width;
+
+        [DataMember]
         private int height;
 
         /// <summary>
         /// Gets the unique ID of entity
         /// </summary>
+        [DataMember]
         public Guid ID { get; set; }
 
         /// <summary>
         /// Gets or sets the name of entity
         /// </summary>
+        [DataMember]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description of Entity
         /// </summary>
+        [DataMember]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the tiles inside layer
         /// </summary>
+        [DataMember]
         public List<Column> Columns = new List<Column>();
 
         /// <summary>
         /// Gets or sets the width of the layer
         /// </summary>
-        public int Width { get; set; }
+        [IgnoreDataMember]
+        public int Width { get { return width; } }
 
         /// <summary>
         /// Gets or sets the height of the layer
         /// </summary>
-        public int Height { get; set; }
+        [IgnoreDataMember]
+        public int Height { get { return height; } }
 
         /// <summary>
         /// Gets or sets the opacity of layer
         /// </summary>
+        [DataMember]
         public float Alpha { get; set; }
 
         /// <summary>
         /// Gets or sets the visibilty state of the layer
         /// </summary>
+        [DataMember]
         public bool IsVisble { get; set; }
 
         /// <summary>

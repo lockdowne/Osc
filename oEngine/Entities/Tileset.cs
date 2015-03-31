@@ -14,18 +14,22 @@ namespace oEngine.Entities
         /// <summary>
         /// Gets the unique ID of entity
         /// </summary>
+        [DataMember]
         public Guid ID { get; set; }
 
         /// <summary>
         /// Gets or sets the name of entity
         /// </summary>
+        [DataMember]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description of Entity
         /// </summary>
+        [DataMember]
         public string Description { get; set; }
 
+        [DataMember]
         public string TextureName { get; set; }
 
         /// <summary>

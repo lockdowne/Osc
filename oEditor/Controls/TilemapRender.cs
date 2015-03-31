@@ -22,7 +22,7 @@ namespace oEditor.Controls
 
         private Vector2 cameraPosition;
         private Vector2 currentMousePosition;
-        private Vector2 previousMousePosition;       
+        private Vector2 previousMousePosition;
 
         private float cameraZoom;
 
@@ -36,10 +36,7 @@ namespace oEditor.Controls
         /// </summary>
         public Tilemap Tilemap { get; set; }
 
-        public System.Windows.Forms.MouseEventHandler RenderMouseDown;
-        public System.Windows.Forms.MouseEventHandler RenderMouseUp;
-        public System.Windows.Forms.MouseEventHandler RenderMouseMove;
-        public System.Windows.Forms.MouseEventHandler RenderMouseWheel;
+      
 
         protected override void Initialize()
         {
@@ -64,8 +61,7 @@ namespace oEditor.Controls
 
             MouseDown += (sender, e) =>
             {
-                if (RenderMouseDown != null)
-                    RenderMouseDown(sender, e);
+              
 
                 if (e.Button == System.Windows.Forms.MouseButtons.Right)
                 {
@@ -77,8 +73,7 @@ namespace oEditor.Controls
 
             MouseUp += (sender, e) =>
             {
-                if (RenderMouseUp != null)
-                    RenderMouseUp(sender, e);
+              
 
                 if (isMouseRightDown)
                     isMouseRightDown = false;
@@ -86,8 +81,7 @@ namespace oEditor.Controls
 
             MouseMove += (sender, e) =>
             {
-                if (RenderMouseMove != null)
-                    RenderMouseMove(sender, e);
+             
 
                 if (isMouseRightDown && Tilemap != null)
                 {
@@ -110,9 +104,8 @@ namespace oEditor.Controls
 
             MouseWheel += (sender, e) =>
             {
-                if (RenderMouseWheel != null)
-                    RenderMouseWheel(sender, e);
-                
+               
+
                 if (e.Delta > 0)
                 {
                     cameraZoom += Configuration.Settings.ZoomIncrement;

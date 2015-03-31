@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using oEditor.Presenters;
+using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using oEditor.Views;
-using oEditor.Presenters;
 
 namespace oEditor
 {
@@ -18,13 +15,8 @@ namespace oEditor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            // Change to interface
-            IMainView view = new MainView();
-
-            MainPresenter main = new MainPresenter(view);
-
-            Application.Run((MainView)view);
+            //Application.Run(new RadForm1());
+            ApplicationPresenter main = new ApplicationPresenter();
         }
     }
 }

@@ -22,6 +22,12 @@ namespace oEditor.Common
             return new Microsoft.Xna.Framework.Vector2(point.X, point.Y);
         }
 
+        public static void RemoveList<T>(this IList<T> lst, IList<T> list)
+        {
+            foreach (T obj in list)
+                lst.Remove(obj);
+        }
+
         /// <summary>
         /// Deserializes an xelement node into object
         /// </summary>
@@ -45,7 +51,7 @@ namespace oEditor.Common
             if (obj == null) return;
 
             Type objType = obj.GetType();
-            PropertyInfo[] properties = objType.GetProperties();
+            PropertyInfo[] properties = objType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
             foreach (PropertyInfo property in properties)
             {
@@ -82,22 +88,24 @@ namespace oEditor.Common
                     }
                 }
 
-                if (property.Name == "TextureName")
+                if (property.Name.ToLower() == "texturename")
                 {
                     if (!string.IsNullOrEmpty(property.GetValue(obj, null).ToString()))
                     {
                         //((ITexture)obj).Texture = content.Load<Texture2D>("Textures/" + property.GetValue(obj, null));
-                        Bitmap bitmap = new Bitmap(Consts.OscPaths.TexturesDirectory + property.GetValue(obj, null));
+                        Bitmap bitmap = new Bitmap(Consts.OscPaths.TexturesDirectory + @"\" + property.GetValue(obj, null) + ".png"); // png is ok since I only accept pngs to save
                         // Need a universal graphics device
                         using (MemoryStream stream = new MemoryStream())
                         {
                             bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                             stream.Seek(0, SeekOrigin.Begin);
-                            ((ITexture)obj).Texture = Texture2D.FromStream(oEditor.Controls.GraphicsDeviceService.singletonInstance.GraphicsDevice, stream); // This might enable me to get a universal graphics device, since all the gfx controls share one anyways
+                            ((ITexture)obj).Texture = Texture2D.FromStream(oEditor.Controls.XnaHelper.Instance.GraphicsDevice, stream); // This might enable me to get a universal graphics device, since all the gfx controls share one anyways
                         }
                     }
                 }
             }
         }
+
+
     }
 }

@@ -54,9 +54,9 @@ namespace oEngine.Common
             Quests,
             Tilemaps,
             Nodes,
-            BattleScene,
-            FreeRoamScene,
-            RandomBattleScene,
+            BattleScenes,
+            FreeRoamScenes,
+            RandomBattleScenes,
         }
 
         public enum LayerTypes

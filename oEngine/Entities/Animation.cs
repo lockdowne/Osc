@@ -8,10 +8,13 @@ using System.Text;
 
 namespace oEngine.Entities
 {
+    [DataContract]
     public class Animation : IEntity, ITexture
     {
+        [DataMember]
         private Rectangle mainFrame;
 
+        [IgnoreDataMember]
         private float frameTimer;
 
         private int currentFrame;
@@ -20,22 +23,26 @@ namespace oEngine.Entities
         /// <summary>
         /// Gets or sets the unique ID
         /// </summary>
+        [DataMember]
         public Guid ID { get; set; }
 
         /// <summary>
         /// Gets or sets the name of animation
         /// </summary>
+        [DataMember]
         public string Name { get; set; }
 
 
         /// <summary>
         /// Gets or sets the description of animation
         /// </summary>
+        [DataMember]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the textures name associated with animation that is drawn
         /// </summary>
+        [DataMember]
         public string TextureName { get; set; }
 
         /// <summary>
@@ -47,16 +54,19 @@ namespace oEngine.Entities
         /// <summary>
         /// Gets or sets the length of time to stay on a frame
         /// </summary>
+        [DataMember]
         public float FrameDuration { get; set; }
 
         /// <summary>
         /// Gets or sets the number of frames in spritesheet to iterate through
         /// </summary>
+        [DataMember]
         public int FrameCount { get; set; }
 
         /// <summary>
         /// Gets the current play count of animation to determine once the animation has completed its sequence
         /// </summary>
+        [IgnoreDataMember]
         public int PlayCount
         {
             get { return playCount; }
@@ -69,11 +79,13 @@ namespace oEngine.Entities
         /// <summary>
         /// Gets or sets the number of times the animation should repeat before continuing
         /// </summary>
+        [DataMember]
         public int RepeatCount { get; set; }
 
         /// <summary>
         /// Gets or sets the current frame being drawn
         /// </summary>
+        [IgnoreDataMember]
         public int CurrentFrame
         {
             get { return currentFrame; }
@@ -83,6 +95,7 @@ namespace oEngine.Entities
             }
         }
 
+        [IgnoreDataMember]
         public bool IsAnimationComplete
         {
             get { return playCount >= RepeatCount; }
@@ -91,6 +104,7 @@ namespace oEngine.Entities
         /// <summary>
         /// Gets bounds of current frame in animation sequence
         /// </summary>
+        [IgnoreDataMember]
         public Rectangle FrameBounds
         {
             get { return new Rectangle(mainFrame.X + (mainFrame.Width * CurrentFrame), mainFrame.Y, mainFrame.Width, mainFrame.Height); }

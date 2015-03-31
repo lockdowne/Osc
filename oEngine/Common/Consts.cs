@@ -32,7 +32,7 @@ namespace oEngine.Common
         {
             public const string DeleteConfirmation = "Are you sure you want to delete this entity?";
             public const string DeleteConfirmationCaption = "Warning";
-            public const string ImageAlreadyExists = "An image with the same name already exists";
+            public const string ImageAlreadyExists = "An image with the same name already exists do you want to overwrite it?";
         }
 
 
