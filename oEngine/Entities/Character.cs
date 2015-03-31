@@ -8,5 +8,9 @@ namespace oEngine.Entities
     public class Character : Sprite
     {
         // Add stats here
+        #region Properties
+
+        
+
     }
 }

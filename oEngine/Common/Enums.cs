@@ -66,5 +66,14 @@ namespace oEngine.Common
             Movement,
             Placement,
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public enum PlacementType
+        {
+            Placeable,
+            UnPlaceable,
+        }
     }
 }
