@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Telerik.WinControls.UI.Docking;
 
-namespace oEditor.Views
+namespace oEditor.Aggregators
 {
-    public interface IMainView
+    public interface ISubscriber<T>
     {
-        RadDock DockManager { get; }
+        void OnEvent(T e);
     }
 }

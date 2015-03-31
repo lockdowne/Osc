@@ -1,9 +1,8 @@
-﻿using oEngine.Common;
+﻿using oEditor.Aggregators;
+using oEditor.Controls;
+using oEngine.Common;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,130 +11,147 @@ using Telerik.WinControls.UI.Docking;
 
 namespace oEditor.Views
 {
-    public partial class EntitiesView : ToolWindow, IEntitiesView
+    public class EntitiesView : ToolWindow, IEntitiesView
     {
-        /// <summary>
-        /// Gets or sets the selected node
-        /// </summary>
+        private readonly IEventAggregator eventAggregator;
+
+        private Telerik.WinControls.UI.RadContextMenu contextMenuRoot;
+        private System.ComponentModel.IContainer components;
+        private Telerik.WinControls.UI.RadMenuItem contextMenuRootAddEntity;
+        private Telerik.WinControls.UI.RadContextMenu contextMenuTilemap;
+        private Telerik.WinControls.UI.RadMenuItem contextMenuEditTilemap;
+        private Telerik.WinControls.UI.RadMenuItem contextMenuDeleteTilemap;
+        private Telerik.WinControls.UI.RadTreeView radTreeView;
+
+        public RadTreeView TreeView
+        {
+            get { return radTreeView; }
+        }
+
         public RadTreeNode SelectedNode
         {
             get { return radTreeView.SelectedNode; }
-            set { radTreeView.SelectedNode = value; }
         }
 
-        public RadTreeNodeCollection NodeCollection
+        public RadContextMenu ContextMenuRoot
         {
-            get { return radTreeView.Nodes; }
+            get { return contextMenuRoot; }
         }
 
-        public event Action AddEntityClicked;
-        public event Action DeleteEntityClicked;
-        public event Action EditEntityClicked;
-        public event Action NodeDoubleClicked;
-
-        public EntitiesView()
+        public RadContextMenu ContextMenuTilemap
         {
+            get { return contextMenuTilemap; }
+        }
+    
+        public EntitiesView(IEventAggregator eventAggregator)
+        {
+            this.eventAggregator = eventAggregator;
+
             InitializeComponent();
-
-            this.Controls.Add(radTreeView);
-
-            //this.toolWindow1.Caption = null;
-            //this.toolWindow1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            //this.toolWindow1.Location = new System.Drawing.Point(4, 24);
-            //this.toolWindow1.Name = "toolWindow1";
-            //this.toolWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.Docked;
-            //this.toolWindow1.Size = new System.Drawing.Size(192, 469);
-            //this.toolWindow1.Text = "toolWindow1";
-
-            this.Caption = null;
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "entitiesWindow";
-            this.Text = "Entities";
-             
             
-
-            // Dynamically create root folders in view
-            AddRootNode(Enums.EditorEntities.Characters);
-            AddRootNode(Enums.EditorEntities.Items);
-            AddRootNode(Enums.EditorEntities.Nodes);
-            AddRootNode(Enums.EditorEntities.Quests);
-            AddRootNode(Enums.EditorEntities.Tilemaps);
-            AddRootNode(Enums.EditorEntities.BattleScene);
-            AddRootNode(Enums.EditorEntities.FreeRoamScene);
-            AddRootNode(Enums.EditorEntities.RandomBattleScene);  
-
-            // Bind image to expand property
-            radTreeView.NodeExpandedChanged += (s, e) =>
+            // Create fixed root nodes
+            radTreeView.Nodes.Add(new EntitiesRootNode()
             {
-                if (e.Node.RootNode != e.Node)
+                EntityType = Enums.EditorEntities.Tilemaps,
+                Text = Enums.EditorEntities.Tilemaps.ToString(),
+                ContextMenu = contextMenuRoot,                
+            });
+
+            this.contextMenuRootAddEntity.Click += (sender, e) =>
+            { 
+                // This shouldn't be possibru
+                if (SelectedNode == null)
                     return;
 
-                if (e.Node.Expanded)
-                    e.Node.Image = global::oEditor.Properties.Resources.Folder_6221;
-                else
-                    e.Node.Image = global::oEditor.Properties.Resources.Folder_6222;
-            };
+                EntitiesRootNode root = (EntitiesRootNode)SelectedNode;
 
-            
-            btnAddEntity.Click += (s, e) =>
-            {
-                if(AddEntityClicked != null)
+                switch (root.EntityType)
                 {
-                    AddEntityClicked();
+                    case Enums.EditorEntities.Characters:
+                        break;
+                    case Enums.EditorEntities.Items:
+                        break;
+                    case Enums.EditorEntities.Quests:
+                        break;
+                    case Enums.EditorEntities.Tilemaps:
+                        eventAggregator.Publish(new OnCreateEmptyTilemap() { Root = root, ID = Guid.NewGuid(), Context = contextMenuTilemap });
+                        break;
+                    case Enums.EditorEntities.Nodes:
+                        break;
+                    case Enums.EditorEntities.BattleScenes:
+                        break;
+                    case Enums.EditorEntities.FreeRoamScenes:
+                        break;
+                    case Enums.EditorEntities.RandomBattleScenes:
+                        break;
                 }
             };
 
-            btnDeleteEntity.Click += (s, e) =>
-            {
-                if(DeleteEntityClicked != null)
-                {
-                    DeleteEntityClicked();
-                }
-            };
-
-            btnEditEntity.Click += (s, e) =>
-            {
-                if(EditEntityClicked != null)
-                {
-                    EditEntityClicked();
-                }
-            };
-            
-            // Collapse selected node
-            btnCollapse.Click += (s, e) =>
-            {
-                if (radTreeView.SelectedNode != null)
-                    radTreeView.SelectedNode.Collapse();
-            };
-
-            // Expand selected node
-            btnExpand.Click += (s, e) =>
-            {
-                if (radTreeView.SelectedNode != null)
-                    radTreeView.SelectedNode.Expand();
-            };
-
-            radTreeView.NodeMouseDoubleClick += (s, e) =>
-            {
-                if (NodeDoubleClicked != null)
-                {
-                    NodeDoubleClicked();
-                }
-            };
+            this.CloseAction = DockWindowCloseAction.Hide;
         }
 
-        private void AddRootNode(Enums.EditorEntities tag)
+        private void InitializeComponent()
         {
-            string name = Enum.GetName(typeof(Enums.EditorEntities), tag);
+            this.components = new System.ComponentModel.Container();
+            this.radTreeView = new Telerik.WinControls.UI.RadTreeView();
+            this.contextMenuRoot = new Telerik.WinControls.UI.RadContextMenu(this.components);
+            this.contextMenuRootAddEntity = new Telerik.WinControls.UI.RadMenuItem();
+            this.contextMenuTilemap = new Telerik.WinControls.UI.RadContextMenu(this.components);
+            this.contextMenuEditTilemap = new Telerik.WinControls.UI.RadMenuItem();
+            this.contextMenuDeleteTilemap = new Telerik.WinControls.UI.RadMenuItem();
+            ((System.ComponentModel.ISupportInitialize)(this.radTreeView)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // radTreeView
+            // 
+            this.radTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radTreeView.Location = new System.Drawing.Point(0, 0);
+            this.radTreeView.Name = "radTreeView";
+            this.radTreeView.Size = new System.Drawing.Size(150, 250);
+            this.radTreeView.SpacingBetweenNodes = -1;
+            this.radTreeView.TabIndex = 0;
+            this.radTreeView.Text = "radTreeView1";
+            // 
+            // contextMenuRoot
+            // 
+            this.contextMenuRoot.Items.AddRange(new Telerik.WinControls.RadItem[] {
+            this.contextMenuRootAddEntity});
+            // 
+            // contextMenuRootAddEntity
+            // 
+            this.contextMenuRootAddEntity.AccessibleDescription = "Add";
+            this.contextMenuRootAddEntity.AccessibleName = "Add";
+            this.contextMenuRootAddEntity.Name = "contextMenuRootAddEntity";
+            this.contextMenuRootAddEntity.Text = "Add";
+            // 
+            // contextMenuTilemap
+            // 
+            this.contextMenuTilemap.Items.AddRange(new Telerik.WinControls.RadItem[] {
+            this.contextMenuEditTilemap,
+            this.contextMenuDeleteTilemap});
+            // 
+            // contextMenuEditTilemap
+            // 
+            this.contextMenuEditTilemap.AccessibleDescription = "contextMenuEditTilemap";
+            this.contextMenuEditTilemap.AccessibleName = "contextMenuEditTilemap";
+            this.contextMenuEditTilemap.Name = "contextMenuEditTilemap";
+            this.contextMenuEditTilemap.Text = "Edit";
+            this.contextMenuEditTilemap.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // contextMenuDeleteTilemap
+            // 
+            this.contextMenuDeleteTilemap.AccessibleDescription = "Delete";
+            this.contextMenuDeleteTilemap.AccessibleName = "Delete";
+            this.contextMenuDeleteTilemap.Name = "contextMenuDeleteTilemap";
+            this.contextMenuDeleteTilemap.Text = "Delete";
+            // 
+            // EntitiesView
+            // 
+            this.Controls.Add(radTreeView);
+            this.Text = "Entities";
+            ((System.ComponentModel.ISupportInitialize)(this.radTreeView)).EndInit();
+            this.ResumeLayout(false);
 
-            radTreeView.Nodes.Add(new RadTreeNode(name)
-            {
-                Name = name,
-                Tag = tag,
-                //Value = ,
-                //ContextMenu = radContextMenu,
-                Image = global::oEditor.Properties.Resources.Folder_6222,
-            });
         }
     }
 }

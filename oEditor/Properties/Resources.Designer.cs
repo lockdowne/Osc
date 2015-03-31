@@ -63,9 +63,9 @@ namespace oEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AddControl_371 {
+        internal static System.Drawing.Bitmap Control_433 {
             get {
-                object obj = ResourceManager.GetObject("AddControl_371", resourceCulture);
+                object obj = ResourceManager.GetObject("Control_433", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -97,26 +97,6 @@ namespace oEditor.Properties {
             get {
                 object obj = ResourceManager.GetObject("osc_logo_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap pixel {
-            get {
-                object obj = ResourceManager.GetObject("pixel", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap tile_overlay {
-            get {
-                object obj = ResourceManager.GetObject("tile_overlay", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

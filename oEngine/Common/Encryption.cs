@@ -9,6 +9,8 @@ namespace oEngine.Common
 {
     public static class Encryption
     {
+        private const string Key = "osc@!q)a#Z$";
+
         private const int KeySize = 256;
         private const int PasswordIterations = 1000;
 
@@ -25,20 +27,17 @@ namespace oEngine.Common
             169,  97,  76,  88, 102, 134, 214, 117 , 95,  24, 175 ,107, 162, 168,  92 ,211,
         };
 
-        public static string Decrypt(string encryptedText, string key)
+        public static string Decrypt(string encryptedText)
         {
             byte[] encryptedTextBytes = Convert.FromBase64String(encryptedText);
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(key);
-
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(Key);
 
             Rfc2898DeriveBytes aesKey = new Rfc2898DeriveBytes(passwordBytes, salt, PasswordIterations);
             byte[] keyBytes = aesKey.GetBytes(KeySize / 8);
 
-            RijndaelManaged rijndaelManaged = new RijndaelManaged { Mode = CipherMode.CBC };
-
             try
             {
-                using (ICryptoTransform decryptor = rijndaelManaged.CreateDecryptor(keyBytes, vector))
+                using (ICryptoTransform decryptor = new RijndaelManaged { Mode = CipherMode.CBC }.CreateDecryptor(keyBytes, vector))
                 {
                     using (MemoryStream memoryStream = new MemoryStream(encryptedTextBytes))
                     {
@@ -60,19 +59,17 @@ namespace oEngine.Common
             return null;
         }
 
-        public static string Encrypt(string text, string key)
+        public static string Encrypt(string text)
         {
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(key);
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(Key);
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(text);
 
             Rfc2898DeriveBytes aesKey = new Rfc2898DeriveBytes(passwordBytes, salt, PasswordIterations);
             byte[] keyBytes = aesKey.GetBytes(KeySize / 8);
-
-            RijndaelManaged rijndaelManaged = new RijndaelManaged { Mode = CipherMode.CBC };
-
+                        
             try
             {
-                using (ICryptoTransform encryptor = rijndaelManaged.CreateEncryptor(keyBytes, vector))
+                using (ICryptoTransform encryptor = new RijndaelManaged { Mode = CipherMode.CBC }.CreateEncryptor(keyBytes, vector))
                 {
                     using (MemoryStream memoryStream = new MemoryStream())
                     {

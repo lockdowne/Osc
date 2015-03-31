@@ -55,20 +55,6 @@ namespace oEditor.Controls
 
         public Tileset Tileset { get; set; }
 
-        public GraphicsDevice GraphicsDevice
-        {
-            get { return this.GraphicsDevice; }
-        }
-
-        /// <summary>
-        /// Gets or sets the current render controls tilemap data
-        /// </summary>      
-
-        public event System.Windows.Forms.MouseEventHandler RenderMouseDown;
-        public event System.Windows.Forms.MouseEventHandler RenderMouseUp;
-        public event System.Windows.Forms.MouseEventHandler RenderMouseMove;
-        public event System.Windows.Forms.MouseEventHandler RenderMouseWheel;
-
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -87,17 +73,16 @@ namespace oEditor.Controls
             pixel = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             pixel.SetData<Color>(new Color[] { Color.White });
 
-      
+            
 
             MouseDown += (sender, e) =>
             {
-                if (RenderMouseDown != null)
-                    RenderMouseDown(sender, e);
+            
 
                 switch (e.Button)
                 {
                     case MouseButtons.Left:
-                                               
+
                         break;
                     case MouseButtons.Right:
                         isMouseRightDown = true;
@@ -110,8 +95,7 @@ namespace oEditor.Controls
 
             MouseUp += (sender, e) =>
             {
-                if (RenderMouseUp != null)
-                    RenderMouseUp(sender, e);
+           
 
                 if (isMouseRightDown)
                     isMouseRightDown = false;
@@ -119,8 +103,7 @@ namespace oEditor.Controls
 
             MouseMove += (sender, e) =>
             {
-                if (RenderMouseMove != null)
-                    RenderMouseMove(sender, e);
+            
 
                 if (isMouseRightDown)
                 {
@@ -143,9 +126,8 @@ namespace oEditor.Controls
 
             MouseWheel += (sender, e) =>
             {
-                if (RenderMouseWheel != null)
-                    RenderMouseWheel(sender, e);
-                
+         
+
                 if (e.Delta > 0)
                 {
                     cameraZoom += Configuration.Settings.ZoomIncrement;
@@ -166,7 +148,7 @@ namespace oEditor.Controls
 
         protected override void Draw()
         {
-            GraphicsDevice.Clear(backgroundColor);
+            GraphicsDevice.Clear(Color.White);
 
             if (Tileset == null)
                 return;

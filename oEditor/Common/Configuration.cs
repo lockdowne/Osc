@@ -1,11 +1,10 @@
-﻿using System;
+﻿using oEngine.Common;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using oEngine.Common;
-using Microsoft.Xna.Framework;
-using System.IO;
 
 namespace oEditor.Common
 {
@@ -34,7 +33,7 @@ namespace oEditor.Common
                             settings = Settings.CreateDefault();
                         }
                     }
-                    catch(Exception exception)
+                    catch (Exception exception)
                     {
                         Logger.Log("Configuration", "Settings", exception, "Invalid data");
 
@@ -56,7 +55,7 @@ namespace oEditor.Common
 
                     settings.Serialize(Consts.OscPaths.EditorSettings);
                 }
-                catch(Exception exception)
+                catch (Exception exception)
                 {
                     Logger.Log("Configuration", "Settings", exception, "Cannot serialize");
                 }

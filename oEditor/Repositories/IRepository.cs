@@ -6,19 +6,13 @@ using System.Threading.Tasks;
 
 namespace oEditor.Repositories
 {
-    public interface IRepository<T>
+    public interface IRepository<TModel>
     {
-        event Action RepositoryChanged;
-        event Action<T> OpenEntity;
+        void CheckRepository();
 
-        void CheckPath();
-        void OnOpenEntity(T obj);
+        IEnumerable<TModel> FindEntities(Func<TModel, bool> predicate);
 
-        IEnumerable<T> FindEntities(Func<T, bool> predicate);
-
-        void SaveEntity(T entity);
-
-        void RemoveEntities(Func<T, bool> predicate);
-        void RemoveEntity(T entity);
+        void SaveEntity(TModel entity);
+        void RemoveEntity(TModel entity);
     }
 }
