@@ -31,8 +31,6 @@ namespace oEditor.Presenters
             // Create main view
             IMainView mainView = new MainView(eventAggregator);
             MainPresenter mainPresenter = new MainPresenter(eventAggregator, mainView);
-            
-            RepositoryPresenter repositories = new RepositoryPresenter(eventAggregator);
 
             Application.Run((RadForm)mainView);
 

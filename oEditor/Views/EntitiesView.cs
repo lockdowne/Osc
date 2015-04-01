@@ -52,10 +52,22 @@ namespace oEditor.Views
             // Create fixed root nodes
             radTreeView.Nodes.Add(new EntitiesRootNode()
             {
-                EntityType = Enums.EditorEntities.Tilemaps,
-                Text = Enums.EditorEntities.Tilemaps.ToString(),
+                EntityType = Enums.EntityTypes.Tilemaps,
+                Text = Enums.EntityTypes.Tilemaps.ToString(),
                 ContextMenu = contextMenuRoot,                
             });
+
+            radTreeView.NodeMouseDoubleClick += (sender, e) =>
+            {
+                if (SelectedNode == null)
+                    return;
+
+               if(SelectedNode.GetType() == typeof(EntitiesTilemapNode))
+               {
+                   eventAggregator.Publish(new OnTilemapNodeDoubleClicked() { Node = (EntitiesTilemapNode)SelectedNode });
+               }
+
+            };
 
             this.contextMenuRootAddEntity.Click += (sender, e) =>
             { 
@@ -67,22 +79,22 @@ namespace oEditor.Views
 
                 switch (root.EntityType)
                 {
-                    case Enums.EditorEntities.Characters:
+                    case Enums.EntityTypes.Characters:
                         break;
-                    case Enums.EditorEntities.Items:
+                    case Enums.EntityTypes.Items:
                         break;
-                    case Enums.EditorEntities.Quests:
+                    case Enums.EntityTypes.Quests:
                         break;
-                    case Enums.EditorEntities.Tilemaps:
+                    case Enums.EntityTypes.Tilemaps:
                         eventAggregator.Publish(new OnCreateEmptyTilemap() { Root = root, ID = Guid.NewGuid(), Context = contextMenuTilemap });
                         break;
-                    case Enums.EditorEntities.Nodes:
+                    case Enums.EntityTypes.Nodes:
                         break;
-                    case Enums.EditorEntities.BattleScenes:
+                    case Enums.EntityTypes.BattleScenes:
                         break;
-                    case Enums.EditorEntities.FreeRoamScenes:
+                    case Enums.EntityTypes.FreeRoamScenes:
                         break;
-                    case Enums.EditorEntities.RandomBattleScenes:
+                    case Enums.EntityTypes.RandomBattleScenes:
                         break;
                 }
             };

@@ -10,7 +10,7 @@ namespace oEditor.Controls
 {
     public class EntitiesRootNode : RadTreeNode
     {
-        public Enums.EditorEntities EntityType { get; set; }
+        public Enums.EntityTypes EntityType { get; set; }
 
         public EntitiesRootNode()
             :base()

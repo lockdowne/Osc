@@ -64,7 +64,9 @@
     <Compile Include="Common\Settings.cs" />
     <Compile Include="Controls\EntitiesRootNode.cs" />
     <Compile Include="Controls\EntitiesTilemapNode.cs" />
+    <Compile Include="Presenters\TilemapPresenter.cs" />
     <Compile Include="Views\ITilemapDocumentView.cs" />
+    <Compile Include="Views\ITilemapToolboxView.cs" />
     <Compile Include="Views\TilemapDocumentView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -86,7 +88,6 @@
     <Compile Include="Presenters\ApplicationPresenter.cs" />
     <Compile Include="Presenters\EntitiesPresenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
-    <Compile Include="Presenters\RepositoryPresenter.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\TilemapRepository.cs" />
     <Compile Include="Views\EntitiesView.cs">
@@ -159,6 +160,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\osc_logo_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddMark_10580.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Clearallrequests_8816.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_Down_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_Up_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Merge_13256.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

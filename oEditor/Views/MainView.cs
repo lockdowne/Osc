@@ -28,7 +28,7 @@ namespace oEditor.Views
 
             InitializeComponent();
 
-            TilemapToolboxView v = new TilemapToolboxView();
+            TilemapToolboxView v = new TilemapToolboxView(eventAggregator);
             v.Show();
             
          

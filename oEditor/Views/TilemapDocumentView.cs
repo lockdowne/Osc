@@ -16,6 +16,8 @@ namespace oEditor.Views
 
         private TilemapRender tilemapRender;
 
+        public Guid ID { get; set; }
+
         public Tilemap Tilemap
         {
             get { return tilemapRender.Tilemap; }

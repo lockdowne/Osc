@@ -31,6 +31,11 @@ namespace oEditor.Aggregators
     {
         public EntitiesTilemapNode Node { get; set; }
     }
+
+    public class OnTilemapNodeDoubleClicked
+    {
+        public EntitiesTilemapNode Node { get; set; }
+    }
     #endregion
 
     #region MainView
@@ -60,7 +65,7 @@ namespace oEditor.Aggregators
     }
     #endregion
 
-    #region TilemapDocumentView
+    #region Tilemap
     public class OnTilemapMouseDown
     {
         public MouseEventArgs Args { get; set; }
@@ -87,6 +92,26 @@ namespace oEditor.Aggregators
         public MouseEventArgs Args { get; set; }
 
         public Tilemap Tilemap { get; set; }
+    }
+
+    public class OnTilemapNameChanged
+    {
+        public string Name { get; set; }
+    }
+
+    public class OnTilemapDescriptionChanged
+    {
+        public string Description { get; set; }
+    }
+
+    public class OnTilemapWidthChanged
+    {
+        public int Width { get; set; }
+    }
+
+    public class OnTilemapHeightChanged
+    {
+        public int Height { get; set; }
     }
     #endregion
 }

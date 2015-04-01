@@ -63,6 +63,46 @@ namespace oEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AddMark_10580 {
+            get {
+                object obj = ResourceManager.GetObject("AddMark_10580", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_Down_16xLG {
+            get {
+                object obj = ResourceManager.GetObject("arrow_Down_16xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_Up_16xLG {
+            get {
+                object obj = ResourceManager.GetObject("arrow_Up_16xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Clearallrequests_8816 {
+            get {
+                object obj = ResourceManager.GetObject("Clearallrequests_8816", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Control_433 {
             get {
                 object obj = ResourceManager.GetObject("Control_433", resourceCulture);
@@ -86,6 +126,16 @@ namespace oEditor.Properties {
         internal static System.Drawing.Bitmap Folder_6222 {
             get {
                 object obj = ResourceManager.GetObject("Folder_6222", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Merge_13256 {
+            get {
+                object obj = ResourceManager.GetObject("Merge_13256", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

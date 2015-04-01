@@ -8,6 +8,7 @@ namespace oEngine.Common
 {
     public static class Logger
     {
+        // TODO: Change to use xml instead txt
         public static void Log(string className, string method, Exception exception = null, string description = "")
         {
             DateTime dateTime = DateTime.Now;

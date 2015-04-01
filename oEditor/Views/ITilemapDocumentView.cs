@@ -9,6 +9,7 @@ namespace oEditor.Views
 {
     public interface ITilemapDocumentView
     {
+        Guid ID { get; set; }
         Tilemap Tilemap { get; set; }
     }
 }
