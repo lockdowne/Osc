@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace oEditor.Presenters
 {
-    public class EntitiesPresenter : ISubscriber<OnCreateEmptyTilemap>
+    public class EntitiesPresenter : IPresenter, ISubscriber<OnCreateEmptyTilemap>
     {
         private readonly IEventAggregator eventAggregator;
 

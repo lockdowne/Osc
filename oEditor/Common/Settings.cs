@@ -17,6 +17,9 @@ namespace oEditor.Common
         public Color TilesetBackground { get; set; }
 
         [DataMember]
+        public Color SelectionBoxColor { get; set; }
+
+        [DataMember]
         public int MaxNumberOfConsoleMessage { get; set; }
 
         [DataMember]
@@ -27,6 +30,9 @@ namespace oEditor.Common
 
         [DataMember]
         public float MinCameraZoom { get; set; }
+
+        [DataMember]
+        public float SelectionBoxOpacity { get; set; }
 
         [DataMember]
         public int TileWidth { get; set; }
@@ -45,11 +51,13 @@ namespace oEditor.Common
             return new Settings()
             {
                 TilemapBackground = new Color(40, 40, 40),
-                TilesetBackground = Color.White,
+                TilesetBackground = new Color(40, 40, 40),
+                SelectionBoxColor = new Color(150, 150, 150),
                 MaxNumberOfConsoleMessage = 1024,
                 ZoomIncrement = 0.2f,
                 MaxCameraZoom = 2.0f,
                 MinCameraZoom = 0.5f,
+                SelectionBoxOpacity = 0.2f,
                 TileWidth = 100,
                 TileHeight = 50,
                 SceneWidth = 25,

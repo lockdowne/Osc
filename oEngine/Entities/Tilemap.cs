@@ -96,16 +96,15 @@ namespace oEngine.Entities
 
         }
 
-        public void AddTilemapLayer<T>(string name, string description) where T : ITile
+        public void AddTilemapLayer(Guid id, string name, string description)
         {
-         
-
             Layer<TileVisual> layer = new Layer<TileVisual>();
             layer.Initialize(Width, Height);
             layer.Name = name;
             layer.Description = description;
             layer.IsVisble = true;
             layer.Alpha = 1.0f;
+            layer.ID = id;
             
             TilemapLayers.Add(layer);           
         }
@@ -135,8 +134,6 @@ namespace oEngine.Entities
 
         public void AddTileset(string name, string description, Texture2D texture)
         {
-          
-
             if (Tilesets.Any(set => set.Name == name))
                 throw new Exception("Tileset with that name already exists");
 

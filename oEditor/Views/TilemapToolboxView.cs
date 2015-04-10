@@ -1,15 +1,17 @@
 ﻿using oEditor.Aggregators;
+using oEditor.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Telerik.WinControls;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
 
 namespace oEditor.Views
 {
-    public class TilemapToolboxView : RadForm, ITilemapToolboxView
+    public class TilemapToolboxView : ToolWindow, ITilemapToolboxView
     {
         private RadDock radDock;
         private DocumentWindow toolboxTilesets;
@@ -21,11 +23,7 @@ namespace oEditor.Views
         private RadCommandBar radCommandBarTilesets;
         private CommandBarRowElement commandBarRowElement1;
         private CommandBarStripElement commandBarStripElement1;
-        private RadCheckedListBox radCheckedListBoxTilemapLayers;
-        private RadCommandBar btnAddTilemapLayer;
-        private CommandBarRowElement commandBarRowElement2;
-        private CommandBarStripElement commandBarStripElement2;
-        private RadGroupBox radGroupBox1;
+        private RadCheckedListBox radCheckedListBoxTilemapLayers;        
         private RadLabel radLabel5;
         private RadLabel radLabel4;
         private RadLabel radLabel3;
@@ -41,14 +39,18 @@ namespace oEditor.Views
         private RadSpinEditor txtTilemapWidth;
         private CommandBarButton btnAddTileset;
         private CommandBarButton btnRemoveTileset;
+        private RadCommandBar btnAddTilemapLayer;
+        private CommandBarRowElement commandBarRowElement2;
+        private CommandBarStripElement commandBarStripElement2;
         private CommandBarButton commandBarButton1;
         private CommandBarButton btnRemoveTilemapLayer;
         private CommandBarButton btnMoveTilemapLayerUp;
         private CommandBarButton btnMoveTilemapLayerDown;
         private CommandBarButton btnMergeTilemapLayer;
-        private RadGroupBox radGroupBox2;
         private RadRadioButton radioPassable;
         private RadRadioButton radioImpassable;
+        private CommandBarDropDownList dropDownTilesets;
+        private CommandBarButton btnRenameTilemapLayer;
 
         private readonly IEventAggregator eventAggregator;
 
@@ -81,20 +83,42 @@ namespace oEditor.Views
             get { return (int)txtTilemapHeight.Value; }
             set { txtTilemapHeight.Value = value; }
         }
-        
+
+        public TilesetPage SelectedTilesetPage
+        {
+            get { return (TilesetPage)radPageViewTilesets.SelectedPage; }
+        }
+
+        public ListViewDataItem SelectedTilemapLayer
+        {
+            get { return radCheckedListBoxTilemapLayers.SelectedItem; }
+        }
+
+        public RadCheckedListBox TilemapLayersListBox
+        {
+            get { return radCheckedListBoxTilemapLayers; }
+        }
+
+        public RadPageView TilesetsPages
+        {
+            get { return radPageViewTilesets; }
+        }
+
         public TilemapToolboxView(IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
 
             InitializeComponent();
 
-            this.txtTilemapID.Text = ID.ToString();
+            this.dropDownTilesets.SelectedIndex = 0;
+
+           
 
             // Dont let tabbed windows be closed
             this.radDock.DockWindowClosing += (sender, e) =>
             {
-                e.Cancel = false;
-            };      
+                e.Cancel = true;
+            };                
 
             txtTilemapName.Validated += (sender, e) =>
             {              
@@ -115,11 +139,15 @@ namespace oEditor.Views
             {
                 eventAggregator.Publish(new OnTilemapHeightChanged() { Height = (int)txtTilemapHeight.Value });
             };
+         
         }
 
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TilemapToolboxView));
+            Telerik.WinControls.UI.RadListDataItem radListDataItem1 = new Telerik.WinControls.UI.RadListDataItem();
+            Telerik.WinControls.UI.RadListDataItem radListDataItem2 = new Telerik.WinControls.UI.RadListDataItem();
             this.radDock = new Telerik.WinControls.UI.Docking.RadDock();
             this.toolboxTilemapLayers = new Telerik.WinControls.UI.Docking.DocumentWindow();
             this.radCheckedListBoxTilemapLayers = new Telerik.WinControls.UI.RadCheckedListBox();
@@ -131,6 +159,7 @@ namespace oEditor.Views
             this.btnMoveTilemapLayerUp = new Telerik.WinControls.UI.CommandBarButton();
             this.btnMoveTilemapLayerDown = new Telerik.WinControls.UI.CommandBarButton();
             this.btnMergeTilemapLayer = new Telerik.WinControls.UI.CommandBarButton();
+            this.btnRenameTilemapLayer = new Telerik.WinControls.UI.CommandBarButton();
             this.documentContainer1 = new Telerik.WinControls.UI.Docking.DocumentContainer();
             this.documentTabStrip1 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
             this.toolboxTilesets = new Telerik.WinControls.UI.Docking.DocumentWindow();
@@ -140,23 +169,22 @@ namespace oEditor.Views
             this.commandBarStripElement1 = new Telerik.WinControls.UI.CommandBarStripElement();
             this.btnAddTileset = new Telerik.WinControls.UI.CommandBarButton();
             this.btnRemoveTileset = new Telerik.WinControls.UI.CommandBarButton();
+            this.dropDownTilesets = new Telerik.WinControls.UI.CommandBarDropDownList();
             this.toolboxCollisionLayer = new Telerik.WinControls.UI.Docking.DocumentWindow();
+            this.radioPassable = new Telerik.WinControls.UI.RadRadioButton();
+            this.radioImpassable = new Telerik.WinControls.UI.RadRadioButton();
             this.toolboxProperties = new Telerik.WinControls.UI.Docking.DocumentWindow();
-            this.radGroupBox1 = new Telerik.WinControls.UI.RadGroupBox();
             this.txtTilemapHeight = new Telerik.WinControls.UI.RadSpinEditor();
             this.txtTilemapWidth = new Telerik.WinControls.UI.RadSpinEditor();
-            this.radLabel5 = new Telerik.WinControls.UI.RadLabel();
-            this.radLabel4 = new Telerik.WinControls.UI.RadLabel();
-            this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
-            this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
-            this.txtTilemapID = new Telerik.WinControls.UI.RadTextBox();
-            this.txtTilemapDescription = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel5 = new Telerik.WinControls.UI.RadLabel();
             this.txtTilemapName = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel4 = new Telerik.WinControls.UI.RadLabel();
+            this.txtTilemapDescription = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
+            this.txtTilemapID = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.radGroupBox2 = new Telerik.WinControls.UI.RadGroupBox();
-            this.radioImpassable = new Telerik.WinControls.UI.RadRadioButton();
-            this.radioPassable = new Telerik.WinControls.UI.RadRadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.radDock)).BeginInit();
             this.radDock.SuspendLayout();
             this.toolboxTilemapLayers.SuspendLayout();
@@ -170,30 +198,25 @@ namespace oEditor.Views
             ((System.ComponentModel.ISupportInitialize)(this.radPageViewTilesets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBarTilesets)).BeginInit();
             this.toolboxCollisionLayer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radioPassable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radioImpassable)).BeginInit();
             this.toolboxProperties.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radGroupBox1)).BeginInit();
-            this.radGroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtTilemapHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTilemapWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapID)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapDescription)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTilemapName)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapDescription)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapID)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radGroupBox2)).BeginInit();
-            this.radGroupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radioImpassable)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radioPassable)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // radDock
             // 
-            this.radDock.ActiveWindow = this.toolboxCollisionLayer;
+            this.radDock.ActiveWindow = this.toolboxTilemapLayers;
             this.radDock.Controls.Add(this.documentContainer1);
             this.radDock.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radDock.IsCleanUpTarget = true;
@@ -242,30 +265,38 @@ namespace oEditor.Views
             // 
             // commandBarRowElement2
             // 
+            this.commandBarRowElement2.DisabledTextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.commandBarRowElement2.MinSize = new System.Drawing.Size(25, 25);
             this.commandBarRowElement2.Strips.AddRange(new Telerik.WinControls.UI.CommandBarStripElement[] {
             this.commandBarStripElement2});
+            this.commandBarRowElement2.Text = "";
+            this.commandBarRowElement2.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             // 
             // commandBarStripElement2
             // 
+            this.commandBarStripElement2.DisabledTextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.commandBarStripElement2.DisplayName = "commandBarStripElement2";
             this.commandBarStripElement2.Items.AddRange(new Telerik.WinControls.UI.RadCommandBarBaseItem[] {
             this.commandBarButton1,
             this.btnRemoveTilemapLayer,
             this.btnMoveTilemapLayerUp,
             this.btnMoveTilemapLayerDown,
-            this.btnMergeTilemapLayer});
+            this.btnMergeTilemapLayer,
+            this.btnRenameTilemapLayer});
             this.commandBarStripElement2.Name = "commandBarStripElement2";
+            this.commandBarStripElement2.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             // 
             // commandBarButton1
             // 
             this.commandBarButton1.AccessibleDescription = "commandBarButton1";
             this.commandBarButton1.AccessibleName = "commandBarButton1";
+            this.commandBarButton1.DisabledTextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.commandBarButton1.DisplayName = "commandBarButton1";
             this.commandBarButton1.Image = global::oEditor.Properties.Resources.AddMark_10580;
             this.commandBarButton1.Name = "commandBarButton1";
             this.commandBarButton1.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.commandBarButton1.Text = "commandBarButton1";
+            this.commandBarButton1.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.commandBarButton1.ToolTipText = "Add Layer";
             this.commandBarButton1.Click += new System.EventHandler(this.btnAddTilemapLayer_Click);
             // 
@@ -273,11 +304,13 @@ namespace oEditor.Views
             // 
             this.btnRemoveTilemapLayer.AccessibleDescription = "commandBarButton2";
             this.btnRemoveTilemapLayer.AccessibleName = "commandBarButton2";
+            this.btnRemoveTilemapLayer.DisabledTextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.btnRemoveTilemapLayer.DisplayName = "commandBarButton2";
             this.btnRemoveTilemapLayer.Image = global::oEditor.Properties.Resources.Clearallrequests_8816;
             this.btnRemoveTilemapLayer.Name = "btnRemoveTilemapLayer";
             this.btnRemoveTilemapLayer.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnRemoveTilemapLayer.Text = "commandBarButton2";
+            this.btnRemoveTilemapLayer.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.btnRemoveTilemapLayer.ToolTipText = "Remove Layer";
             this.btnRemoveTilemapLayer.Click += new System.EventHandler(this.btnRemoveTilemapLayer_Click);
             // 
@@ -285,11 +318,13 @@ namespace oEditor.Views
             // 
             this.btnMoveTilemapLayerUp.AccessibleDescription = "commandBarButton3";
             this.btnMoveTilemapLayerUp.AccessibleName = "commandBarButton3";
+            this.btnMoveTilemapLayerUp.DisabledTextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.btnMoveTilemapLayerUp.DisplayName = "commandBarButton3";
             this.btnMoveTilemapLayerUp.Image = global::oEditor.Properties.Resources.arrow_Up_16xLG;
             this.btnMoveTilemapLayerUp.Name = "btnMoveTilemapLayerUp";
             this.btnMoveTilemapLayerUp.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnMoveTilemapLayerUp.Text = "commandBarButton3";
+            this.btnMoveTilemapLayerUp.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.btnMoveTilemapLayerUp.ToolTipText = "Move Layer Up";
             this.btnMoveTilemapLayerUp.Click += new System.EventHandler(this.btnMoveTilemapLayerUp_Click);
             // 
@@ -297,11 +332,13 @@ namespace oEditor.Views
             // 
             this.btnMoveTilemapLayerDown.AccessibleDescription = "commandBarButton4";
             this.btnMoveTilemapLayerDown.AccessibleName = "commandBarButton4";
+            this.btnMoveTilemapLayerDown.DisabledTextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.btnMoveTilemapLayerDown.DisplayName = "commandBarButton4";
             this.btnMoveTilemapLayerDown.Image = global::oEditor.Properties.Resources.arrow_Down_16xLG;
             this.btnMoveTilemapLayerDown.Name = "btnMoveTilemapLayerDown";
             this.btnMoveTilemapLayerDown.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnMoveTilemapLayerDown.Text = "commandBarButton4";
+            this.btnMoveTilemapLayerDown.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.btnMoveTilemapLayerDown.ToolTipText = "Move Layer Down";
             this.btnMoveTilemapLayerDown.Click += new System.EventHandler(this.btnMoveTilemapLayerDown_Click);
             // 
@@ -309,13 +346,27 @@ namespace oEditor.Views
             // 
             this.btnMergeTilemapLayer.AccessibleDescription = "commandBarButton5";
             this.btnMergeTilemapLayer.AccessibleName = "commandBarButton5";
+            this.btnMergeTilemapLayer.DisabledTextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.btnMergeTilemapLayer.DisplayName = "commandBarButton5";
             this.btnMergeTilemapLayer.Image = global::oEditor.Properties.Resources.Merge_13256;
             this.btnMergeTilemapLayer.Name = "btnMergeTilemapLayer";
             this.btnMergeTilemapLayer.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnMergeTilemapLayer.Text = "commandBarButton5";
+            this.btnMergeTilemapLayer.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.btnMergeTilemapLayer.ToolTipText = "Merge Layer";
             this.btnMergeTilemapLayer.Click += new System.EventHandler(this.btnMergeTilemapLayer_Click);
+            // 
+            // btnRenameTilemapLayer
+            // 
+            this.btnRenameTilemapLayer.AccessibleDescription = "commandBarButton2";
+            this.btnRenameTilemapLayer.AccessibleName = "commandBarButton2";
+            this.btnRenameTilemapLayer.DisplayName = "commandBarButton2";
+            this.btnRenameTilemapLayer.Image = ((System.Drawing.Image)(resources.GetObject("btnRenameTilemapLayer.Image")));
+            this.btnRenameTilemapLayer.Name = "btnRenameTilemapLayer";
+            this.btnRenameTilemapLayer.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnRenameTilemapLayer.Text = "commandBarButton2";
+            this.btnRenameTilemapLayer.ToolTipText = "Rename";
+            this.btnRenameTilemapLayer.Click += new System.EventHandler(this.btnRenameTilemapLayer_Click);
             // 
             // documentContainer1
             // 
@@ -340,7 +391,7 @@ namespace oEditor.Views
             // 
             // 
             this.documentTabStrip1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.documentTabStrip1.SelectedIndex = 2;
+            this.documentTabStrip1.SelectedIndex = 1;
             this.documentTabStrip1.Size = new System.Drawing.Size(530, 465);
             this.documentTabStrip1.TabIndex = 0;
             this.documentTabStrip1.TabStop = false;
@@ -364,6 +415,8 @@ namespace oEditor.Views
             this.radPageViewTilesets.Size = new System.Drawing.Size(518, 400);
             this.radPageViewTilesets.TabIndex = 2;
             this.radPageViewTilesets.Text = "radPageView1";
+            ((Telerik.WinControls.UI.RadPageViewStripElement)(this.radPageViewTilesets.GetChildAt(0))).StripButtons = Telerik.WinControls.UI.StripViewButtons.ItemList;
+            ((Telerik.WinControls.UI.RadPageViewStripElement)(this.radPageViewTilesets.GetChildAt(0))).StripAlignment = Telerik.WinControls.UI.StripViewAlignment.Bottom;
             // 
             // radCommandBarTilesets
             // 
@@ -387,7 +440,8 @@ namespace oEditor.Views
             this.commandBarStripElement1.DisplayName = "commandBarStripElement1";
             this.commandBarStripElement1.Items.AddRange(new Telerik.WinControls.UI.RadCommandBarBaseItem[] {
             this.btnAddTileset,
-            this.btnRemoveTileset});
+            this.btnRemoveTileset,
+            this.dropDownTilesets});
             this.commandBarStripElement1.Name = "commandBarStripElement1";
             // 
             // btnAddTileset
@@ -414,9 +468,24 @@ namespace oEditor.Views
             this.btnRemoveTileset.ToolTipText = "Remove Tileset";
             this.btnRemoveTileset.Click += new System.EventHandler(this.btnRemoveTileset_Click);
             // 
+            // dropDownTilesets
+            // 
+            this.dropDownTilesets.DisplayName = "commandBarDropDownList1";
+            this.dropDownTilesets.DropDownAnimationEnabled = true;
+            this.dropDownTilesets.DropDownStyle = Telerik.WinControls.RadDropDownStyle.DropDownList;
+            radListDataItem1.Text = "Isometric";
+            radListDataItem2.Text = "Orthogonal";
+            this.dropDownTilesets.Items.Add(radListDataItem1);
+            this.dropDownTilesets.Items.Add(radListDataItem2);
+            this.dropDownTilesets.MaxDropDownItems = 0;
+            this.dropDownTilesets.Name = "dropDownTilesets";
+            this.dropDownTilesets.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.dropDownTilesets.Text = "";
+            // 
             // toolboxCollisionLayer
             // 
-            this.toolboxCollisionLayer.Controls.Add(this.radGroupBox2);
+            this.toolboxCollisionLayer.Controls.Add(this.radioPassable);
+            this.toolboxCollisionLayer.Controls.Add(this.radioImpassable);
             this.toolboxCollisionLayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolboxCollisionLayer.Location = new System.Drawing.Point(6, 29);
             this.toolboxCollisionLayer.Name = "toolboxCollisionLayer";
@@ -424,9 +493,36 @@ namespace oEditor.Views
             this.toolboxCollisionLayer.Size = new System.Drawing.Size(518, 430);
             this.toolboxCollisionLayer.Text = "Collision Layer";
             // 
+            // radioPassable
+            // 
+            this.radioPassable.Location = new System.Drawing.Point(3, 27);
+            this.radioPassable.Name = "radioPassable";
+            this.radioPassable.Size = new System.Drawing.Size(63, 18);
+            this.radioPassable.TabIndex = 3;
+            this.radioPassable.Text = "Passable";
+            // 
+            // radioImpassable
+            // 
+            this.radioImpassable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.radioImpassable.Location = new System.Drawing.Point(3, 3);
+            this.radioImpassable.Name = "radioImpassable";
+            this.radioImpassable.Size = new System.Drawing.Size(76, 18);
+            this.radioImpassable.TabIndex = 2;
+            this.radioImpassable.Text = "Impassable";
+            this.radioImpassable.ToggleState = Telerik.WinControls.Enumerations.ToggleState.On;
+            // 
             // toolboxProperties
             // 
-            this.toolboxProperties.Controls.Add(this.radGroupBox1);
+            this.toolboxProperties.Controls.Add(this.txtTilemapHeight);
+            this.toolboxProperties.Controls.Add(this.txtTilemapWidth);
+            this.toolboxProperties.Controls.Add(this.radLabel1);
+            this.toolboxProperties.Controls.Add(this.radLabel5);
+            this.toolboxProperties.Controls.Add(this.txtTilemapName);
+            this.toolboxProperties.Controls.Add(this.radLabel4);
+            this.toolboxProperties.Controls.Add(this.txtTilemapDescription);
+            this.toolboxProperties.Controls.Add(this.radLabel3);
+            this.toolboxProperties.Controls.Add(this.txtTilemapID);
+            this.toolboxProperties.Controls.Add(this.radLabel2);
             this.toolboxProperties.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolboxProperties.Location = new System.Drawing.Point(6, 29);
             this.toolboxProperties.Name = "toolboxProperties";
@@ -434,29 +530,9 @@ namespace oEditor.Views
             this.toolboxProperties.Size = new System.Drawing.Size(518, 430);
             this.toolboxProperties.Text = "Properties";
             // 
-            // radGroupBox1
-            // 
-            this.radGroupBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
-            this.radGroupBox1.Controls.Add(this.txtTilemapHeight);
-            this.radGroupBox1.Controls.Add(this.txtTilemapWidth);
-            this.radGroupBox1.Controls.Add(this.radLabel5);
-            this.radGroupBox1.Controls.Add(this.radLabel4);
-            this.radGroupBox1.Controls.Add(this.radLabel3);
-            this.radGroupBox1.Controls.Add(this.radLabel2);
-            this.radGroupBox1.Controls.Add(this.radLabel1);
-            this.radGroupBox1.Controls.Add(this.txtTilemapID);
-            this.radGroupBox1.Controls.Add(this.txtTilemapDescription);
-            this.radGroupBox1.Controls.Add(this.txtTilemapName);
-            this.radGroupBox1.HeaderText = "Tilemap Properties";
-            this.radGroupBox1.Location = new System.Drawing.Point(0, 0);
-            this.radGroupBox1.Name = "radGroupBox1";
-            this.radGroupBox1.Size = new System.Drawing.Size(434, 394);
-            this.radGroupBox1.TabIndex = 0;
-            this.radGroupBox1.Text = "Tilemap Properties";
-            // 
             // txtTilemapHeight
             // 
-            this.txtTilemapHeight.Location = new System.Drawing.Point(108, 215);
+            this.txtTilemapHeight.Location = new System.Drawing.Point(98, 197);
             this.txtTilemapHeight.Minimum = new decimal(new int[] {
             1,
             0,
@@ -474,7 +550,7 @@ namespace oEditor.Views
             // 
             // txtTilemapWidth
             // 
-            this.txtTilemapWidth.Location = new System.Drawing.Point(108, 189);
+            this.txtTilemapWidth.Location = new System.Drawing.Point(98, 171);
             this.txtTilemapWidth.Minimum = new decimal(new int[] {
             1,
             0,
@@ -490,60 +566,9 @@ namespace oEditor.Views
             0,
             0});
             // 
-            // radLabel5
-            // 
-            this.radLabel5.Location = new System.Drawing.Point(13, 217);
-            this.radLabel5.Name = "radLabel5";
-            // 
-            // 
-            // 
-            this.radLabel5.RootElement.ToolTipText = "Sets the number of tiles vertically on tilemap";
-            this.radLabel5.Size = new System.Drawing.Size(42, 18);
-            this.radLabel5.TabIndex = 12;
-            this.radLabel5.Text = "Height:";
-            // 
-            // radLabel4
-            // 
-            this.radLabel4.Location = new System.Drawing.Point(13, 190);
-            this.radLabel4.Name = "radLabel4";
-            // 
-            // 
-            // 
-            this.radLabel4.RootElement.ToolTipText = "Sets the number of tiles horizontally on tilemap";
-            this.radLabel4.Size = new System.Drawing.Size(39, 18);
-            this.radLabel4.TabIndex = 11;
-            this.radLabel4.Text = "Width:";
-            // 
-            // radLabel3
-            // 
-            this.radLabel3.Location = new System.Drawing.Point(13, 74);
-            this.radLabel3.Name = "radLabel3";
-            // 
-            // 
-            // 
-            this.radLabel3.RootElement.ToolTipText = "Set the description of the tilemap that will be seen on the loading of the tilema" +
-    "p";
-            this.radLabel3.Size = new System.Drawing.Size(66, 18);
-            this.radLabel3.TabIndex = 10;
-            this.radLabel3.Text = "Description:";
-            // 
-            // radLabel2
-            // 
-            this.radLabel2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.radLabel2.Location = new System.Drawing.Point(13, 47);
-            this.radLabel2.Name = "radLabel2";
-            // 
-            // 
-            // 
-            this.radLabel2.RootElement.ToolTipText = "Sets the name of the tilemap";
-            this.radLabel2.Size = new System.Drawing.Size(39, 18);
-            this.radLabel2.TabIndex = 9;
-            this.radLabel2.Text = "Name:";
-            // 
             // radLabel1
             // 
-            this.radLabel1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.radLabel1.Location = new System.Drawing.Point(13, 21);
+            this.radLabel1.Location = new System.Drawing.Point(3, 3);
             this.radLabel1.Name = "radLabel1";
             // 
             // 
@@ -553,23 +578,45 @@ namespace oEditor.Views
             this.radLabel1.TabIndex = 8;
             this.radLabel1.Text = "ID:";
             // 
-            // txtTilemapID
+            // radLabel5
             // 
-            this.txtTilemapID.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtTilemapID.Location = new System.Drawing.Point(108, 21);
-            this.txtTilemapID.Name = "txtTilemapID";
-            this.txtTilemapID.ReadOnly = true;
+            this.radLabel5.Location = new System.Drawing.Point(3, 199);
+            this.radLabel5.Name = "radLabel5";
             // 
             // 
             // 
-            this.txtTilemapID.RootElement.ToolTipText = "Unique identiciation number";
-            this.txtTilemapID.Size = new System.Drawing.Size(218, 20);
-            this.txtTilemapID.TabIndex = 6;
+            this.radLabel5.RootElement.ToolTipText = "Sets the number of tiles vertically on tilemap";
+            this.radLabel5.Size = new System.Drawing.Size(42, 18);
+            this.radLabel5.TabIndex = 12;
+            this.radLabel5.Text = "Height:";
+            // 
+            // txtTilemapName
+            // 
+            this.txtTilemapName.Location = new System.Drawing.Point(98, 29);
+            this.txtTilemapName.Name = "txtTilemapName";
+            // 
+            // 
+            // 
+            this.txtTilemapName.RootElement.ToolTipText = "Sets the name of the tilemap";
+            this.txtTilemapName.Size = new System.Drawing.Size(218, 20);
+            this.txtTilemapName.TabIndex = 1;
+            // 
+            // radLabel4
+            // 
+            this.radLabel4.Location = new System.Drawing.Point(3, 172);
+            this.radLabel4.Name = "radLabel4";
+            // 
+            // 
+            // 
+            this.radLabel4.RootElement.ToolTipText = "Sets the number of tiles horizontally on tilemap";
+            this.radLabel4.Size = new System.Drawing.Size(39, 18);
+            this.radLabel4.TabIndex = 11;
+            this.radLabel4.Text = "Width:";
             // 
             // txtTilemapDescription
             // 
             this.txtTilemapDescription.AutoSize = false;
-            this.txtTilemapDescription.Location = new System.Drawing.Point(108, 73);
+            this.txtTilemapDescription.Location = new System.Drawing.Point(98, 55);
             this.txtTilemapDescription.Multiline = true;
             this.txtTilemapDescription.Name = "txtTilemapDescription";
             // 
@@ -580,54 +627,46 @@ namespace oEditor.Views
             this.txtTilemapDescription.Size = new System.Drawing.Size(218, 110);
             this.txtTilemapDescription.TabIndex = 2;
             // 
-            // txtTilemapName
+            // radLabel3
             // 
-            this.txtTilemapName.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtTilemapName.Location = new System.Drawing.Point(108, 47);
-            this.txtTilemapName.Name = "txtTilemapName";
-            // 
+            this.radLabel3.Location = new System.Drawing.Point(3, 56);
+            this.radLabel3.Name = "radLabel3";
             // 
             // 
-            this.txtTilemapName.RootElement.ToolTipText = "Sets the name of the tilemap";
-            this.txtTilemapName.Size = new System.Drawing.Size(218, 20);
-            this.txtTilemapName.TabIndex = 1;
+            // 
+            this.radLabel3.RootElement.ToolTipText = "Set the description of the tilemap that will be seen on the loading of the tilema" +
+    "p";
+            this.radLabel3.Size = new System.Drawing.Size(66, 18);
+            this.radLabel3.TabIndex = 10;
+            this.radLabel3.Text = "Description:";
+            // 
+            // txtTilemapID
+            // 
+            this.txtTilemapID.Location = new System.Drawing.Point(98, 3);
+            this.txtTilemapID.Name = "txtTilemapID";
+            this.txtTilemapID.ReadOnly = true;
+            // 
+            // 
+            // 
+            this.txtTilemapID.RootElement.ToolTipText = "Unique identiciation number";
+            this.txtTilemapID.Size = new System.Drawing.Size(218, 20);
+            this.txtTilemapID.TabIndex = 6;
+            // 
+            // radLabel2
+            // 
+            this.radLabel2.Location = new System.Drawing.Point(3, 29);
+            this.radLabel2.Name = "radLabel2";
+            // 
+            // 
+            // 
+            this.radLabel2.RootElement.ToolTipText = "Sets the name of the tilemap";
+            this.radLabel2.Size = new System.Drawing.Size(39, 18);
+            this.radLabel2.TabIndex = 9;
+            this.radLabel2.Text = "Name:";
             // 
             // errorProvider
             // 
             this.errorProvider.ContainerControl = this;
-            // 
-            // radGroupBox2
-            // 
-            this.radGroupBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
-            this.radGroupBox2.Controls.Add(this.radioPassable);
-            this.radGroupBox2.Controls.Add(this.radioImpassable);
-            this.radGroupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radGroupBox2.HeaderText = "Collision";
-            this.radGroupBox2.Location = new System.Drawing.Point(0, 0);
-            this.radGroupBox2.Name = "radGroupBox2";
-            this.radGroupBox2.Size = new System.Drawing.Size(518, 430);
-            this.radGroupBox2.TabIndex = 0;
-            this.radGroupBox2.Text = "Collision";
-            // 
-            // radioImpassable
-            // 
-            this.radioImpassable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.radioImpassable.Location = new System.Drawing.Point(30, 31);
-            this.radioImpassable.Name = "radioImpassable";
-            this.radioImpassable.Size = new System.Drawing.Size(76, 18);
-            this.radioImpassable.TabIndex = 0;
-            this.radioImpassable.Text = "Impassable";
-            this.radioImpassable.ToggleState = Telerik.WinControls.Enumerations.ToggleState.On;
-            this.radioImpassable.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radioImpassable_ToggleStateChanged);
-            // 
-            // radioPassable
-            // 
-            this.radioPassable.Location = new System.Drawing.Point(30, 55);
-            this.radioPassable.Name = "radioPassable";
-            this.radioPassable.Size = new System.Drawing.Size(63, 18);
-            this.radioPassable.TabIndex = 1;
-            this.radioPassable.Text = "Passable";
-            this.radioPassable.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radioPassable_ToggleStateChanged);
             // 
             // TilemapToolboxView
             // 
@@ -637,7 +676,6 @@ namespace oEditor.Views
             // 
             // 
             // 
-            this.RootElement.ApplyShapeToControl = true;
             this.Text = "Toolbox";
             ((System.ComponentModel.ISupportInitialize)(this.radDock)).EndInit();
             this.radDock.ResumeLayout(false);
@@ -654,27 +692,22 @@ namespace oEditor.Views
             ((System.ComponentModel.ISupportInitialize)(this.radPageViewTilesets)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBarTilesets)).EndInit();
             this.toolboxCollisionLayer.ResumeLayout(false);
+            this.toolboxCollisionLayer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radioPassable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radioImpassable)).EndInit();
             this.toolboxProperties.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.radGroupBox1)).EndInit();
-            this.radGroupBox1.ResumeLayout(false);
-            this.radGroupBox1.PerformLayout();
+            this.toolboxProperties.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtTilemapHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTilemapWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapID)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapDescription)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTilemapName)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapDescription)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapID)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radGroupBox2)).EndInit();
-            this.radGroupBox2.ResumeLayout(false);
-            this.radGroupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radioImpassable)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radioPassable)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -686,48 +719,54 @@ namespace oEditor.Views
 
         private void btnAddTileset_Click(object sender, EventArgs e)
         {
-
+            eventAggregator.Publish(new OnAddTileset() { Args = e });
         }
 
         private void btnRemoveTileset_Click(object sender, EventArgs e)
         {
-
+            eventAggregator.Publish(new OnRemoveTileset() { Page = SelectedTilesetPage });
         }
 
 
         private void btnRemoveTilemapLayer_Click(object sender, EventArgs e)
         {
-
+            eventAggregator.Publish(new OnRemoveTilemapLayer() { Item = SelectedTilemapLayer });
         }
 
         private void btnAddTilemapLayer_Click(object sender, EventArgs e)
         {
-
+            eventAggregator.Publish(new OnAddTilemapLayer() { Args = e });
         }
 
         private void btnMoveTilemapLayerUp_Click(object sender, EventArgs e)
         {
-
+            eventAggregator.Publish(new OnMoveTilemapLayerUp() { Item = SelectedTilemapLayer });
         }
 
         private void btnMoveTilemapLayerDown_Click(object sender, EventArgs e)
         {
-
+            eventAggregator.Publish(new OnMoveTilemapLayerDown() { Item = SelectedTilemapLayer });
         }
 
         private void btnMergeTilemapLayer_Click(object sender, EventArgs e)
         {
-
+            RadMessageBox.Show("Merge layer is under construction...");
         }
 
-        private void radioImpassable_ToggleStateChanged(object sender, StateChangedEventArgs args)
+        public void HideCloseButtonForPage(RadPageViewPage page)
         {
-
+            var pageViewStripElement = ((Telerik.WinControls.UI.RadPageViewContentAreaElement)((radPageViewTilesets.ViewElement).ContentArea)).Owner as RadPageViewStripElement;
+            var stripItem = ((Telerik.WinControls.UI.RadPageViewElement)(pageViewStripElement)).Items.Where(item => item.Page == page).FirstOrDefault();
+            if (stripItem != null)
+            {
+                stripItem.ButtonsPanel.SetValue(LightVisualElement.VisibilityProperty, Telerik.WinControls.ElementVisibility.Collapsed);
+                stripItem.ButtonsPanel.SetDefaultValueOverride(LightVisualElement.VisibilityProperty, Telerik.WinControls.ElementVisibility.Collapsed);
+            }
         }
 
-        private void radioPassable_ToggleStateChanged(object sender, StateChangedEventArgs args)
+        private void btnRenameTilemapLayer_Click(object sender, EventArgs e)
         {
-
-        }
+            eventAggregator.Publish(new OnRenameTilemapLayer() { Item = SelectedTilemapLayer });
+        }       
     }
 }

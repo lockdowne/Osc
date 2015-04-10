@@ -1,5 +1,4 @@
 ﻿using oEditor.Aggregators;
-using oEditor.Factories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,9 +27,8 @@ namespace oEditor.Views
 
             InitializeComponent();
 
-            TilemapToolboxView v = new TilemapToolboxView(eventAggregator);
-            v.Show();
-            
+            this.WindowState = FormWindowState.Maximized;
+                  
          
             this.Load += (sender, e) =>
             {

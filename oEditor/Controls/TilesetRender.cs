@@ -16,8 +16,6 @@ namespace oEditor.Controls
     {
         private SpriteBatch spriteBatch;
 
-        private Color backgroundColor;
-
         private Camera camera;
 
         private Vector2 cameraPosition;
@@ -35,7 +33,8 @@ namespace oEditor.Controls
         private Texture2D pixel;
         private Texture2D tileOverlay;
 
-        private Rectangle SelectionBoxBounds
+        // Will need this for orthogonal
+        private Rectangle SelectionOrthogonalBox
         {
             get
             {
@@ -53,13 +52,15 @@ namespace oEditor.Controls
             }
         }
 
+        private IList<Vector2> SelectionIsometricBox { get; set; }
+
         public Tileset Tileset { get; set; }
+
+        public Enums.SelectionModes SelectionMode { get; set; }
 
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            backgroundColor = Configuration.Settings.TilesetBackground;
 
             camera = new Camera()
             {
@@ -73,15 +74,33 @@ namespace oEditor.Controls
             pixel = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             pixel.SetData<Color>(new Color[] { Color.White });
 
+            tileOverlay = XnaHelper.Instance.LoadTexture(global::oEditor.Properties.Resources.tile_overlay);
+
+            SelectionIsometricBox = new List<Vector2>();
+
+            SelectionMode = Enums.SelectionModes.Isometric;
             
 
             MouseDown += (sender, e) =>
             {
-            
-
                 switch (e.Button)
                 {
                     case MouseButtons.Left:
+                        // Clear box
+                        selectionBoxStart = null;
+                        selectionBoxEnd = null;
+
+                        SelectionIsometricBox.Clear();
+
+                        selectionBoxStart = new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
+                            MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height));
+
+                        selectionBoxEnd = new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
+                           MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height));
+
+                        SelectionIsometricBox = MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Tileset.Texture.Width, Tileset.Texture.Height).ToList();
+
+                        isMouseLeftDown = true;
 
                         break;
                     case MouseButtons.Right:
@@ -95,23 +114,34 @@ namespace oEditor.Controls
 
             MouseUp += (sender, e) =>
             {
-           
-
                 if (isMouseRightDown)
                     isMouseRightDown = false;
+
+                if (isMouseLeftDown)
+                    isMouseLeftDown = false;
             };
 
             MouseMove += (sender, e) =>
             {
-            
+                if(isMouseLeftDown)
+                {
+                    selectionBoxEnd = new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
+                           MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height));
 
-                if (isMouseRightDown)
+                    SelectionIsometricBox = MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Tileset.Texture.Width, Tileset.Texture.Height).ToList();
+                }
+                else if (isMouseRightDown)
                 {
                     currentMousePosition = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
 
                     Vector2 difference = currentMousePosition - previousMousePosition;
 
+                    if (Tileset == null)
+                        return;
+
                     cameraPosition += -difference;
+                    
+                    camera.UpdatePosition(cameraPosition, Vector2.Zero, new Vector2(Tileset.Texture.Width, Tileset.Texture.Height));
 
                     //camera.UpdatePosition(cameraPosition,
                     //    new Vector2(-(Tilemap.Width * Tilemap.TileWidth), -(Tilemap.Height * Tilemap.TileHeight)),
@@ -148,7 +178,7 @@ namespace oEditor.Controls
 
         protected override void Draw()
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Configuration.Settings.TilesetBackground);
 
             if (Tileset == null)
                 return;
@@ -160,7 +190,18 @@ namespace oEditor.Controls
 
             spriteBatch.Draw(Tileset.Texture, Vector2.Zero, null, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);
 
+            switch (SelectionMode)
+            {
+                case Enums.SelectionModes.Orthogonal:
+                    break;
+                case Enums.SelectionModes.Isometric:
+                    SelectionIsometricBox.ForEach(position => spriteBatch.Draw(tileOverlay, position, null, Configuration.Settings.SelectionBoxColor * Configuration.Settings.SelectionBoxOpacity));
+                    break;
+            }
+
             spriteBatch.End();
         }
+
+       
     }
 }

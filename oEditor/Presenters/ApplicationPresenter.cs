@@ -13,7 +13,7 @@ using Telerik.WinControls.UI;
 
 namespace oEditor.Presenters
 {
-    public class ApplicationPresenter
+    public class ApplicationPresenter : IPresenter
     {
         private readonly IEventAggregator eventAggregator;
 

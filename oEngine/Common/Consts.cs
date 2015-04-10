@@ -10,6 +10,7 @@ namespace oEngine.Common
     {
         public static class OscPaths
         {
+            public static readonly string TilesetTexturesDirectory = Directory.GetCurrentDirectory() + @"\Textures\Tilesets";
             public static readonly string TexturesDirectory = Directory.GetCurrentDirectory() + @"\Textures";
             public static readonly string MainDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Osc\Game";
             public static readonly string ExceptionLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Osc\Game\Log.txt";
@@ -30,9 +31,22 @@ namespace oEngine.Common
 
         public static class AlertMessages
         {
-            public const string DeleteConfirmation = "Are you sure you want to delete this entity?";
-            public const string DeleteConfirmationCaption = "Warning";
-            public const string ImageAlreadyExists = "An image with the same name already exists do you want to overwrite it?";
+            public static class Messages
+            {
+                public const string DeleteEntity = "Are you sure you want to delete this entity?";
+                public const string ImageAlreadyExists = "An image with the same name already exists";
+                public const string SelectTilesetImage = "Select a tileset";
+                public const string RemoveTileset = "Are you sure you want to delete the selected tileset?";
+
+            }
+
+            public static class Captions
+            {
+                public const string DeleteEntity = "Hey Listen";
+                public const string ImageAlreadyExists = "Hey Listen";
+                public const string SelectTilesetImage = "Hey Listen";
+                public const string RemoveTileset = "Hey Listen";
+            }
         }
 
 

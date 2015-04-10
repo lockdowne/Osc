@@ -57,5 +57,11 @@ namespace oEngine.Common
             Movement,
             Placement,
         }
+
+        public enum SelectionModes
+        {
+            Orthogonal,
+            Isometric,
+        }
     }
 }

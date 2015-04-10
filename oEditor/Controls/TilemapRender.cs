@@ -16,8 +16,6 @@ namespace oEditor.Controls
     {
         private SpriteBatch spriteBatch;
 
-        private Color backgroundColor;
-
         private Camera camera;
 
         private Vector2 cameraPosition;
@@ -41,8 +39,6 @@ namespace oEditor.Controls
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            backgroundColor = Configuration.Settings.TilemapBackground;
 
             camera = new Camera()
             {
@@ -126,7 +122,7 @@ namespace oEditor.Controls
 
         protected override void Draw()
         {
-            GraphicsDevice.Clear(backgroundColor);
+            GraphicsDevice.Clear(Configuration.Settings.TilemapBackground);
 
             if (Tilemap == null)
                 return;

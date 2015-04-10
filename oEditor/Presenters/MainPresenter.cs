@@ -14,9 +14,11 @@ using Telerik.WinControls.UI.Docking;
 
 namespace oEditor.Presenters 
 {
-    public class MainPresenter : ISubscriber<OnMainLoaded>,
+    // TODO: Add command manager 
+    public class MainPresenter : IPresenter, ISubscriber<OnMainLoaded>,
         ISubscriber<OnCreateEmptyTilemap>, ISubscriber<OnTilemapNodeDoubleClicked>,
-        ISubscriber<OnDeleteTilemap>
+        ISubscriber<OnDeleteTilemap>, ISubscriber<OnMainDockWindowAdded>,
+        ISubscriber<OnMainDockWindowClosed>, ISubscriber<OnMainDockWindowClosing>
         
     {
         private readonly IEventAggregator eventAggregator;
@@ -27,6 +29,8 @@ namespace oEditor.Presenters
         private readonly IEntitiesView entitiesView;
 
         private readonly IRepository<Tilemap> tilemapRepository;
+
+        private Dictionary<Guid, IPresenter> container = new Dictionary<Guid, IPresenter>();
 
         public MainPresenter(IEventAggregator eventAggregator, IMainView mainView)
         {
@@ -43,10 +47,27 @@ namespace oEditor.Presenters
             this.view.DockManager.DockWindow((DockWindow)entitiesView, DockPosition.Right);
      
         }
+        public void OnEvent(OnMainDockWindowClosed e)
+        {
+          
+        }
+
+        public void OnEvent(OnMainDockWindowAdded e)
+        {
+           
+        }
+
+        public void OnEvent(OnMainDockWindowClosing e)
+        {
+          
+        }
+
         public void OnEvent(OnTilemapNodeDoubleClicked e)
         { 
             // Prevent creating a new instance of the views when the tabbed view is currently open
             // Need to decide how toolbox will interact with this functionality
+            if (container.ContainsKey(e.Node.ID))
+                return;
 
             DockWindow window = view.DockManager.DockWindows.Where(w => w.GetType() == typeof(TilemapDocumentView)).FirstOrDefault(w => ((ITilemapDocumentView)w).ID == e.Node.ID);
 
@@ -55,22 +76,28 @@ namespace oEditor.Presenters
                 window.Select();
                 return;
             }
-            
 
             Tilemap tilemap = tilemapRepository.FindEntities(t => t.ID == e.Node.ID).FirstOrDefault();
-
             
             if (tilemap == null)
-                throw new Exception("Tilemap does not exist in file, the file is corrupt or missing");
+                throw new Exception("Tilemap does not exist, the file is corrupt or missing... what did you do?");
 
-            ITilemapDocumentView tilemapView = new TilemapDocumentView(eventAggregator);
-            tilemapView.ID = tilemap.ID;
-            ITilemapToolboxView tilemapToolbox = new TilemapToolboxView(eventAggregator);
-            tilemapToolbox.ID = tilemap.ID;
+            // Need to add this somewhere to keep a reference so it isnt disposed
+            ITilemapDocumentView tilemapView = new TilemapDocumentView(eventAggregator) { ID = tilemap.ID, Tilemap = tilemap };
+            ITilemapToolboxView tilemapToolbox = new TilemapToolboxView(eventAggregator) { ID = tilemap.ID };
+           
             TilemapPresenter tilemapPresenter = new TilemapPresenter(eventAggregator, tilemapToolbox, tilemapView, tilemap);
+
+            // Adding it to this so we can keep a reference of it until closed
+            // Real question is how do we handle the tool box
+            container.Add(tilemap.ID, tilemapPresenter);
 
             view.DockManager.DockWindow((ToolWindow)tilemapToolbox, DockPosition.Left);
             view.DockManager.DockWindow((DocumentWindow)tilemapView, DockPosition.Fill);
+
+            // Must be docked first
+            tilemapToolbox.TabStrip.SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
+            tilemapToolbox.TabStrip.SizeInfo.AbsoluteSize = new System.Drawing.Size(500, 0);
         }
 
         public void OnEvent(OnMainLoaded e)
