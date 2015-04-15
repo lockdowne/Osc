@@ -26,7 +26,8 @@ namespace oEditor.Presenters
         ISubscriber<OnAddTilemapLayer>, ISubscriber<OnRemoveTilemapLayer>,
         ISubscriber<OnMoveTilemapLayerUp>, ISubscriber<OnMoveTilemapLayerDown>,
         ISubscriber<OnAddTilesetTexture>, ISubscriber<OnSelectTilesetTexture>,
-        ISubscriber<OnRenameTilemapLayer>, ISubscriber<OnRenameTilemapLayerOK>
+        ISubscriber<OnRenameTilemapLayer>, ISubscriber<OnRenameTilemapLayerOK>,
+        ISubscriber<OnPaintModeClicked>
 
     {
         private readonly ITilemapToolboxView toolbox;
@@ -36,6 +37,10 @@ namespace oEditor.Presenters
         private readonly IEventAggregator eventAggregator;
         
         private readonly CommandManager commandManager;
+
+        private Enums.PaintModes paintMode;
+
+        private int[,] tilemapValues;
 
         public Tilemap Tilemap { get; set; }
 
@@ -54,10 +59,13 @@ namespace oEditor.Presenters
 
             this.commandManager = new CommandManager();
 
-            
+            this.paintMode = Enums.PaintModes.Draw;
 
             RefreshTilemap();
         }
+
+
+      
 
         public void OnEvent(OnRenameTilemapLayerOK e)
         {
@@ -264,9 +272,7 @@ namespace oEditor.Presenters
         
         }
 
-        public void OnEvent(OnTilemapMouseDown e)
-        {
-        }
+     
 
         public void OnEvent(OnTilemapDescriptionChanged e)
         {
@@ -287,6 +293,11 @@ namespace oEditor.Presenters
         {
            
         }
+        
+        public void OnEvent(OnTilemapMouseDown e)
+        {
+
+        }
 
         public void OnEvent(OnTilemapMouseUp e)
         {
@@ -301,6 +312,11 @@ namespace oEditor.Presenters
         public void OnEvent(OnTilemapNameChanged e)
         {
           
+        }
+
+        public void OnEvent(OnPaintModeClicked e)
+        {
+            this.paintMode = e.PaintMode;
         }
 
         private void RefreshTilemap()

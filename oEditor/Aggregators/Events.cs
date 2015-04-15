@@ -1,5 +1,6 @@
 ﻿using oEditor.Controls;
 using oEditor.Views;
+using oEngine.Common;
 using oEngine.Entities;
 using System;
 using System.Collections.Generic;
@@ -160,7 +161,12 @@ namespace oEditor.Aggregators
     {
         public string LayerName { get; set; }
     }
-    
+
+    public class OnPaintModeClicked
+    {
+        public Enums.PaintModes PaintMode { get; set; }
+    }
+
     #endregion
 
 #region TilesetListView

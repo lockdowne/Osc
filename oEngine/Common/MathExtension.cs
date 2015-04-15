@@ -74,6 +74,20 @@ namespace oEngine.Common
         }
 
         /// <summary>
+        /// Rounds vector to align with orthogonal grid
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="tileWidth"></param>
+        /// <param name="tileHeight"></param>
+        /// <returns></returns>
+        public static Vector2 OrthogonalSnap(Vector2 vector, int tileWidth, int tileHeight)
+        {
+            Point toCoordinate = new Point((int)vector.X / tileWidth, (int)vector.Y / tileHeight);
+
+            return new Vector2(toCoordinate.X * tileWidth, toCoordinate.Y * tileHeight);
+        }
+
+        /// <summary>
         /// Selects all tile locations in pixels between two vectors
         /// </summary>
         /// <param name="startVector"></param>

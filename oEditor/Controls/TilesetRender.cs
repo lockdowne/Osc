@@ -41,14 +41,14 @@ namespace oEditor.Controls
                 if (selectionBoxStart == null || selectionBoxEnd == null)
                     return Rectangle.Empty;
 
-                return new Rectangle((int)Math.Min(MathExtension.IsoSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X,
-                    MathExtension.IsoSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X),
-                    (int)Math.Min(MathExtension.IsoSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y,
-                    MathExtension.IsoSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y),
-                    (int)Math.Abs(MathExtension.IsoSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X
-                    - MathExtension.IsoSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X),
-                    (int)Math.Abs(MathExtension.IsoSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y
-                    - MathExtension.IsoSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y));
+                return new Rectangle((int)Math.Min(MathExtension.OrthogonalSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X,
+                    MathExtension.OrthogonalSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X),
+                    (int)Math.Min(MathExtension.OrthogonalSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y,
+                    MathExtension.OrthogonalSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y),
+                    (int)Math.Abs(MathExtension.OrthogonalSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X
+                    - MathExtension.OrthogonalSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).X),
+                    (int)Math.Abs(MathExtension.OrthogonalSnap(selectionBoxStart.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y
+                    - MathExtension.OrthogonalSnap(selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).Y));
             }
         }
 
@@ -78,7 +78,7 @@ namespace oEditor.Controls
 
             SelectionIsometricBox = new List<Vector2>();
 
-            SelectionMode = Enums.SelectionModes.Isometric;
+            SelectionMode = Enums.SelectionModes.Orthogonal;
             
 
             MouseDown += (sender, e) =>
@@ -92,11 +92,11 @@ namespace oEditor.Controls
 
                         SelectionIsometricBox.Clear();
 
-                        selectionBoxStart = new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
-                            MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height));
+                        selectionBoxStart = MathExtension.InvertMatrixAtVector(new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
+                            MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height)), camera.CameraTransformation);
 
-                        selectionBoxEnd = new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
-                           MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height));
+                        selectionBoxEnd = MathExtension.InvertMatrixAtVector(new Vector2(MathHelper.Clamp(e.Location.X + Configuration.Settings.TileWidth, 0, Tileset.Texture.Width),
+                           MathHelper.Clamp(e.Location.Y + Configuration.Settings.TileHeight, 0, Tileset.Texture.Height)), camera.CameraTransformation);
 
                         SelectionIsometricBox = MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Tileset.Texture.Width, Tileset.Texture.Height).ToList();
 
@@ -125,8 +125,8 @@ namespace oEditor.Controls
             {
                 if(isMouseLeftDown)
                 {
-                    selectionBoxEnd = new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
-                           MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height));
+                    selectionBoxEnd = MathExtension.InvertMatrixAtVector(new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
+                           MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height)), camera.CameraTransformation);
 
                     SelectionIsometricBox = MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Tileset.Texture.Width, Tileset.Texture.Height).ToList();
                 }
@@ -193,6 +193,7 @@ namespace oEditor.Controls
             switch (SelectionMode)
             {
                 case Enums.SelectionModes.Orthogonal:
+                    spriteBatch.Draw(pixel, SelectionOrthogonalBox, Configuration.Settings.SelectionBoxColor * Configuration.Settings.SelectionBoxOpacity);
                     break;
                 case Enums.SelectionModes.Isometric:
                     SelectionIsometricBox.ForEach(position => spriteBatch.Draw(tileOverlay, position, null, Configuration.Settings.SelectionBoxColor * Configuration.Settings.SelectionBoxOpacity));

@@ -63,5 +63,12 @@ namespace oEngine.Common
             Orthogonal,
             Isometric,
         }
+
+        public enum PaintModes
+        {
+            Draw,
+            Erase,
+            Copy,
+        }
     }
 }
