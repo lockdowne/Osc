@@ -108,12 +108,12 @@ namespace oEngine.Common
           
             int startX = Math.Min(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).X, IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).X);
             int startY = Math.Min(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).Y, IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).Y);
-            int width = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).X - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).X);
-            int height = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).Y - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).Y);         
+            int width = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).X - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).X) ;
+            int height = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).Y - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).Y) ;         
 
-            for (int x = startX; x < startX + width; x++)
+            for (int x = startX - 1; x < startX + width; x++)
             {
-                for(int y = startY; y < startY + height; y++)
+                for(int y = startY; y <= startY + height; y++)
                 {                    
                     yield return IsoCoordinateToPixels(x, y, tileWidth, tileHeight);
                 }

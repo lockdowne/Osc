@@ -55,7 +55,7 @@ namespace oEditor.Controls
             pixel = new Texture2D(GraphicsDevice, 2, 2, false, SurfaceFormat.Color);
             pixel.SetData<Color>(new Color[] { Color.White, Color.White, Color.White, Color.White });
 
-            tileOverlay = XnaHelper.Instance.LoadTexture(global::oEditor.Properties.Resources.tile_outline);
+            tileOverlay = XnaHelper.Instance.LoadTexture(global::oEditor.Properties.Resources.tile_overlay);
 
             Tilemap.Pixel = pixel;
             Tilemap.IsGridVisible = true;
@@ -67,7 +67,7 @@ namespace oEditor.Controls
                     case MouseButtons.Left:
                         isMouseLeftDown = true;
                         selectionBoxStart = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
-                        selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2() + new Vector2(Configuration.Settings.TileWidth, 0), camera.CameraTransformation);
+                        selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
                         break;
                     case MouseButtons.Right:
                         isMouseRightDown = true;

@@ -226,7 +226,7 @@ namespace oEngine.Entities
 
            for(int x = 0; x < Width; x++)
            {
-               for (int y = 0; y < Height; y++)
+               for (int y = -1; y < Height; y++)
                {
                    spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight, 50, 0), Color.White);
                }
