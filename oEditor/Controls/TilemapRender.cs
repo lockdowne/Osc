@@ -21,6 +21,8 @@ namespace oEditor.Controls
         private Vector2 cameraPosition;
         private Vector2 currentMousePosition;
         private Vector2 previousMousePosition;
+        private Vector2? selectionBoxStart;
+        private Vector2? selectionBoxEnd;
 
         private float cameraZoom;
 
@@ -28,6 +30,7 @@ namespace oEditor.Controls
         private bool isMouseRightDown;
 
         private Texture2D pixel;
+        private Texture2D tileOverlay;
 
         /// <summary>
         /// Gets or sets the current render controls tilemap data
@@ -49,27 +52,42 @@ namespace oEditor.Controls
 
             cameraZoom = camera.Zoom;
 
-            pixel = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            pixel.SetData<Color>(new Color[] { Color.White });
+            pixel = new Texture2D(GraphicsDevice, 2, 2, false, SurfaceFormat.Color);
+            pixel.SetData<Color>(new Color[] { Color.White, Color.White, Color.White, Color.White });
+
+            tileOverlay = XnaHelper.Instance.LoadTexture(global::oEditor.Properties.Resources.tile_outline);
 
             Tilemap.Pixel = pixel;
             Tilemap.IsGridVisible = true;
 
             MouseDown += (sender, e) =>
             {
-              
-
-                if (e.Button == System.Windows.Forms.MouseButtons.Right)
+                switch (e.Button)
                 {
-                    isMouseRightDown = true;
-
-                    previousMousePosition = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                    case MouseButtons.Left:
+                        isMouseLeftDown = true;
+                        selectionBoxStart = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                        selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2() + new Vector2(Configuration.Settings.TileWidth, 0), camera.CameraTransformation);
+                        break;
+                    case MouseButtons.Right:
+                        isMouseRightDown = true;
+                        previousMousePosition = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                        break;
+                    case MouseButtons.Middle:
+#if DEBUG
+                        Console.WriteLine("Pixels: {0}", e.Location.ToString());
+                        Console.WriteLine("Rounded: {0}", MathExtension.IsoSnap(e.Location.ToVector2(), Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ToString());
+                        MathExtension.IsoSelector(e.Location.ToVector2(), e.Location.ToVector2() + new Vector2(Configuration.Settings.TileWidth, 0), Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ForEach(t =>  Console.WriteLine("IsoSelector: {0}", t));
+                        Console.WriteLine("Coord: {0}", MathExtension.IsoPixelsToCoordinate(MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation), Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ToString());
+#endif
+                        break;
                 }
             };
 
             MouseUp += (sender, e) =>
             {
-              
+                if (isMouseLeftDown)
+                    isMouseLeftDown = false;
 
                 if (isMouseRightDown)
                     isMouseRightDown = false;
@@ -78,6 +96,10 @@ namespace oEditor.Controls
             MouseMove += (sender, e) =>
             {
              
+                if(isMouseLeftDown)
+                {
+                    selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                }
 
                 if (isMouseRightDown && Tilemap != null)
                 {
@@ -131,7 +153,21 @@ namespace oEditor.Controls
 
             Tilemap.Draw(spriteBatch);
 
+            DrawTileOverlay(spriteBatch);
+            
             spriteBatch.End();
+        }
+
+        private void DrawTileOverlay(SpriteBatch spriteBatch)
+        {
+            if (selectionBoxEnd == null || selectionBoxStart == null)
+                return;
+
+            MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ForEach(position =>
+            {
+                spriteBatch.Draw(tileOverlay, position, Configuration.Settings.SelectionBoxColor * Configuration.Settings.SelectionBoxOpacity);
+            });
+
         }
     }
 }

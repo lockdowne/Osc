@@ -220,13 +220,13 @@ namespace oEngine.Entities
             if (!IsGridVisible || Pixel == null)
                 return;
 
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight), Color.White);
-                }
-            }
+           for(int x = 0; x < Width; x++)
+           {
+               for (int y = 0; y < Height; y++)
+               {
+                   spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight), Color.White);
+               }
+           }
         }
     }   
 }

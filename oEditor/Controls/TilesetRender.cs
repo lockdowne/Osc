@@ -98,7 +98,7 @@ namespace oEditor.Controls
                         selectionBoxEnd = MathExtension.InvertMatrixAtVector(new Vector2(MathHelper.Clamp(e.Location.X + Configuration.Settings.TileWidth, 0, Tileset.Texture.Width),
                            MathHelper.Clamp(e.Location.Y + Configuration.Settings.TileHeight, 0, Tileset.Texture.Height)), camera.CameraTransformation);
 
-                        SelectionIsometricBox = MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Tileset.Texture.Width, Tileset.Texture.Height).ToList();
+                        SelectionIsometricBox = MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ToList();
 
                         isMouseLeftDown = true;
 
@@ -128,7 +128,7 @@ namespace oEditor.Controls
                     selectionBoxEnd = MathExtension.InvertMatrixAtVector(new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
                            MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height)), camera.CameraTransformation);
 
-                    SelectionIsometricBox = MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Tileset.Texture.Width, Tileset.Texture.Height).ToList();
+                    SelectionIsometricBox = MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ToList();
                 }
                 else if (isMouseRightDown)
                 {
@@ -183,7 +183,7 @@ namespace oEditor.Controls
             if (Tileset == null)
                 return;
 
-            if (Tileset.Texture == null)
+            if (Tileset.Texture == null) 
                 return;
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
@@ -201,6 +201,21 @@ namespace oEditor.Controls
             }
 
             spriteBatch.End();
+        }
+
+        public int[,] SelectionBoxValues()
+        {
+            if (Tileset == null)
+                return null;
+
+            if (Tileset.Texture == null)
+                return null;
+
+            int textureWidth = Tileset.Texture.Width;
+            int textureHeight = Tileset.Texture.Height;
+
+            
+            return null;
         }
 
        
