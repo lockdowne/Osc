@@ -42,8 +42,13 @@ namespace oEngine.Common
         /// <returns></returns>
         public static Vector2 IsoCoordinateToPixels(int x, int y, int tileWidth, int tileHeight)
         {
-            return new Vector2(((x - y) * (tileWidth / 2)) - (tileWidth / 2), (x + y) * (tileHeight / 2));
+            return IsoCoordinateToPixels(x, y, tileWidth, tileHeight, 0, 0);
         }        
+
+        public static Vector2 IsoCoordinateToPixels(int x, int y, int tileWidth, int tileHeight, int offsetX, int offsetY)
+        {
+            return new Vector2((x - y) * (tileWidth / 2) - (offsetX), (x + y) * (tileHeight / 2) - (offsetY));
+        }
 
         /// <summary>
         /// Converts pixels into matrix coordinate
@@ -94,7 +99,7 @@ namespace oEngine.Common
         /// <param name="endVector"></param>
         /// <param name="tileWidth"></param>
         /// <param name="tileHeight"></param>
-        /// <returns>Collection of all pixel locations</returns>
+        /// <returns>Collection of all pixel locations represented as the center</returns>
         public static IEnumerable<Vector2> IsoSelector(Vector2 startVector, Vector2 endVector, int tileWidth, int tileHeight)
         {
             // Prevent division by zero instead of throwing exception

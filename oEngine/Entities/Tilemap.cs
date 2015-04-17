@@ -189,6 +189,8 @@ namespace oEngine.Entities
                 {
                     for (int y = 0; y < Height; y++)
                     {
+
+
                         TileVisual tile = TilemapLayers[z].Columns[x].Rows[y];
 
                         if (!string.IsNullOrEmpty(tile.TilesetName))
@@ -200,6 +202,8 @@ namespace oEngine.Entities
                                 if (tileset != null)
                                 {
                                     Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight);
+
+                                    spriteBatch.Draw(Pixel, position, Color.Red);
                                     // TODO: Apply height decimal places to the alignment of Y axis
                                     spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
                                         tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
@@ -224,7 +228,7 @@ namespace oEngine.Entities
            {
                for (int y = 0; y < Height; y++)
                {
-                   spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight), Color.White);
+                   spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight, 50, 0), Color.White);
                }
            }
         }
