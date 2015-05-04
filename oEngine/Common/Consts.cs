@@ -38,5 +38,7 @@ namespace oEngine.Common
 
         public const int MaxSounds = 16;
         public const int LogWidth = 128;
+
+        public const int TurnReady = 100;
     }
 }

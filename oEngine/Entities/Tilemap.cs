@@ -17,8 +17,13 @@ namespace oEngine.Entities
         [DataMember(Name = "Tilesets")]
         private List<Tileset> Tilesets { get; set; }
 
-        [DataMember(Name = "Layers")]
+        [DataMember(Name = "TilemapLayers")]
         private List<Layer<TileVisual>> TilemapLayers { get; set; }
+
+        [DataMember(Name = "CollisionLayer")] //TODO: need to actually set 
+        private Layer<TileCollision> CollisionLayers { get; set; }
+
+        //TODO: put trigger layer
 
 
         /// <summary>
