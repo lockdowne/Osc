@@ -201,9 +201,6 @@
     <None Include="Resources\Merge_13256.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\tile-overlay.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Rename_6779.png" />
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +214,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\tile-outline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tile-overlay.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

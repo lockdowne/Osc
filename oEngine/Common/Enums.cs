@@ -70,5 +70,12 @@ namespace oEngine.Common
             Erase,
             Copy,
         }
+
+        public enum LogTypes
+        {
+            Error,
+            Debug,
+            Info,
+        }
     }
 }

@@ -9,6 +9,7 @@ using System.Xml;
 using Microsoft.Xna.Framework.Graphics;
 using System.Reflection;
 using System.Collections;
+using System.Threading.Tasks;
 
 namespace oEngine.Common
 {    
@@ -42,15 +43,18 @@ namespace oEngine.Common
         /// <param name="path">The location of xml file</param>
         public static void Serialize<T>(T obj, string path)
         {
-            DataContractSerializer xml = new DataContractSerializer(typeof(T));
+            Task.Factory.StartNew(() =>
+                {
+                    DataContractSerializer xml = new DataContractSerializer(typeof(T));
 
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
+                    XmlWriterSettings settings = new XmlWriterSettings();
+                    settings.Indent = true;
 
-            using (XmlWriter writer = XmlWriter.Create(path, settings))
-            {
-                xml.WriteObject(writer, obj);
-            }
+                    using (XmlWriter writer = XmlWriter.Create(path, settings))
+                    {
+                        xml.WriteObject(writer, obj);
+                    }
+                });
         }
     }
 }

@@ -224,11 +224,11 @@ namespace oEngine.Entities
             if (!IsGridVisible || Pixel == null)
                 return;
 
-           for(int x = 0; x < Width; x++)
+           for(int x = 0; x < Width + 1; x++)
            {
                for (int y = -1; y < Height; y++)
                {
-                   spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight, 50, 0), Color.White);
+                   spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight, TileWidth / 2, 0), Color.White);
                }
            }
         }
