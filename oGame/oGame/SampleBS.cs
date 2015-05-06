@@ -17,16 +17,35 @@ namespace oGame
 {
     public class SampleBS : GameScreen
     {
+        #region test const
+        int mapWidth = 5;
+        int mapHeight = 5;
+        int tileWidth = 128;
+        int tileHeight = 64;
+        #endregion
+
+        #region Fields
+
         private Camera camera;
 
-        private CharacterCollection charCollection;
+        private CharacterCollection characterCollection;
+        private CharacterCollection playerCharacterCollection;
+        private CharacterCollection enemyCharacterCollection;
+
+
         private Character jon, david, andy, nick, osc;
-        private Character currentlySelected;
+        private Character inPlay;
 
         private Texture2D textureTest;
         private Texture2D pixel;
 
         private Tilemap tilemap;
+
+        private Vector2 previousMousePosition;
+        private Vector2 currentMousePosition;
+        private Vector2 cameraPosition;
+
+        #endregion 
 
         public SampleBS()
             :base()
@@ -40,14 +59,17 @@ namespace oGame
             try
             {
                 base.LoadContent();
+
                 ContentManager content = new ContentManager(ScreenFactory.Game.Services, "Content");
 
+                tilemap = new Tilemap();
+
+                #region Test tilemap / character collections
 
                 pixel = new Texture2D(ScreenFactory.GraphicsDevice, 2, 2, false, SurfaceFormat.Color);
                 pixel.SetData<Color>(new Color[] { Color.White, Color.White, Color.White, Color.White });
 
-                tilemap = new Tilemap();
-                tilemap.Initialize("blah", "blah", 128, 64, 20, 20);
+                tilemap.Initialize("testName", "testDescription", tileWidth, tileHeight, mapWidth, mapHeight);
                 tilemap.IsGridVisible = true;
                 tilemap.Pixel = pixel;
 
@@ -65,13 +87,15 @@ namespace oGame
                 Animation fireball = new Animation();
                 fireball.Initialize("test-animation", textureTest, 6 * 32, 7 * 32, 32, 32, 3, 5);
 
-                charCollection = new CharacterCollection();
+                characterCollection = new CharacterCollection();
+                playerCharacterCollection = new CharacterCollection();
+                enemyCharacterCollection = new CharacterCollection();
 
-                jon = new Character(20, "John20", new Vector2(0, 0));
-                david = new Character(30, "David30", new Vector2(0, 0));
-                andy = new Character(40, "Andy40", new Vector2(0, 0));
-                nick = new Character(35, "Nick35", new Vector2(0, 0));
-                osc = new Character(40, "OSC40", new Vector2(0, 0));
+                jon = new Character(20, "John20");
+                david = new Character(30, "David30");
+                andy = new Character(40, "Andy40");
+                nick = new Character(35, "Nick35");
+                osc = new Character(40, "OSC40");
 
                 jon.AnimationInitialize(walkingDown);
                 david.AnimationInitialize(walkingLeft);
@@ -79,13 +103,40 @@ namespace oGame
                 nick.AnimationInitialize(walkingUp);
                 osc.AnimationInitialize(fireball);
 
-                charCollection.Populate<Character>(jon, david, andy, nick, osc);
-                
+                characterCollection.Populate<Character>(jon, david, andy, nick, osc);
+                //playerCharacterCollection.Populate<Character>(jon, david, andy, nick);
+                //enemyCharacterCollection.Populate<Character>(osc);
+                //characterCollection.AddRange(playerCharacterCollection);
+                //characterCollection.AddRange(enemyCharacterCollection);
+
+                //List<int> t1 = new List<int>();
+                //List<int> t2 = new List<int>();
+                //List<int> t3 = new List<int>();
+
+                //t1.Populate<int>(1, 2, 5);
+                //t2.Populate<int>(3, 4);
+                //t3 = t1;
+
+                //t3.AddRange(t1);
+                //t3[1] = 99;
+
+                //foreach (int blah in t3)
+                //{
+                //    Console.Write(blah);
+                //}
+                //Console.WriteLine();
+                //foreach (int blah in t1)
+                //{
+                //    Console.Write(blah);
+                //}
+                //Console.WriteLine();
+
+                #endregion
 
                 camera = new Camera() { Name = "MainCamera", Zoom = 1.0f, LerpAmount = 0.1f, Position = Vector2.Zero };
 
-                currentlySelected = charCollection.GetNext();
-                Console.WriteLine("Moving: " + currentlySelected.Name);
+                inPlay = characterCollection.GetNext();
+                Console.WriteLine("Moving: " + inPlay.Name);
             }
             catch (Exception exception)
             {
@@ -102,17 +153,59 @@ namespace oGame
         {
             base.HandleInput(input);
 
+            Vector2 inputPosition = MathExtension.InvertMatrixAtVector(input.Position, camera.CameraTransformation);
+
             if(input.LeftClick)
             {
-                currentlySelected.Position = input.Position;
+                Point inputPoint = MathExtension.IsoPixelsToCoordinate(inputPosition, tilemap.TileWidth, tilemap.TileHeight);
+
+                if (MathExtension.CoordinateWithinBounds(inputPoint.X, inputPoint.Y, tilemap.Width, tilemap.Height))
+                {
+                    inPlay.Position = MathExtension.IsoSnap(inputPosition, tileWidth, tileHeight);
+                    inPlay.Position -= (Extensions.GetBottomCenter(inPlay.Bounds) - inPlay.Position);
+                }
+                else
+                {
+                    Console.WriteLine("Unacceptable Location: " + inputPosition);
+                }
+
+                previousMousePosition = inputPosition;
             }
 
             if(input.RightClick)
             {
                 //end turn 
-                currentlySelected = charCollection.GetNext();
-                Console.WriteLine("Moving: " + currentlySelected.Name);
+                inPlay = characterCollection.GetNext();
+                Console.WriteLine("Moving: " + inPlay.Name);
                 
+            }
+
+            if(input.MiddleClick)
+            {
+#if DEBUG
+                Console.WriteLine("Pixels: {0}", input.Position.ToString());
+                Console.WriteLine("Rounded: {0}", MathExtension.IsoSnap(input.Position, tileWidth, tileHeight).ToString());
+                MathExtension.IsoSelector(input.Position, input.Position + new Vector2(tileWidth, 0), tileWidth, tileHeight).ForEach(t => Console.WriteLine("IsoSelector: {0}", t));
+                Console.WriteLine("Coord: {0}", MathExtension.IsoPixelsToCoordinate(inputPosition, tileWidth, tileHeight).ToString());
+#endif
+            }
+
+            if(input.Move)
+            {
+                if(input.LeftDown && tilemap != null)
+                {
+                    currentMousePosition = inputPosition;
+
+                    Vector2 difference = currentMousePosition - previousMousePosition;
+                    cameraPosition += -difference;
+
+                    camera.UpdatePosition(cameraPosition,
+                        new Vector2(-(mapWidth * tileWidth), -(mapHeight * tileHeight)),
+                        new Vector2(mapWidth * tileWidth, mapHeight * tileHeight));
+
+                    // Used to remove pixels beyond bounds
+                    cameraPosition = camera.Position;
+                }
             }
         }
 
@@ -120,7 +213,7 @@ namespace oGame
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
-            charCollection.Update(gameTime);
+            characterCollection.Update(gameTime);
             //TODO: update charcollection's sprite animations
         }
 
@@ -130,12 +223,11 @@ namespace oGame
 
             ScreenFactory.GraphicsDevice.Clear(Color.Black);
 
-            ScreenFactory.SpriteBatch.Begin();
+            ScreenFactory.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
 
-            //spriteTest.Draw(ScreenFactory.SpriteBatch);
             tilemap.Draw(ScreenFactory.SpriteBatch);
-            charCollection.Draw(ScreenFactory.SpriteBatch);
-            //TODO: draw charCollection's sprite animations
+
+            characterCollection.Draw(ScreenFactory.SpriteBatch);
 
             ScreenFactory.SpriteBatch.End();
         }

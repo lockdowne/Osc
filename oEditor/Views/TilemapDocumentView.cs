@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Telerik.WinControls;
+using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
 
 namespace oEditor.Views
@@ -14,7 +16,9 @@ namespace oEditor.Views
     {
         private readonly IEventAggregator eventAggregator;
 
-        private TilemapRender tilemapRender;
+        private TilemapRender tilemapRender;       
+
+        public Guid ID { get; set; }
 
         public Tilemap Tilemap
         {
@@ -31,17 +35,18 @@ namespace oEditor.Views
 
         private void InitializeComponent()
         {
-            this.tilemapRender = new oEditor.Controls.TilemapRender();
-            this.SuspendLayout();
+            this.tilemapRender = new oEditor.Controls.TilemapRender();         
+
+
             // 
             // tilemapRender
             // 
+            this.tilemapRender.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tilemapRender.Location = new System.Drawing.Point(0, 0);
             this.tilemapRender.Name = "tilemapRender";
-            this.tilemapRender.Size = new System.Drawing.Size(150, 150);
+            this.tilemapRender.Size = new System.Drawing.Size(200, 200);
             this.tilemapRender.TabIndex = 0;
             this.tilemapRender.Tilemap = null;
-            this.tilemapRender.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tilemapRender.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tilemapRender_MouseDown);
             this.tilemapRender.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tilemapRender_MouseMove);
             this.tilemapRender.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tilemapRender_MouseUp);
@@ -49,7 +54,7 @@ namespace oEditor.Views
             // 
             // TilemapDocumentView
             // 
-            this.Controls.Add(this.tilemapRender);
+            this.Controls.Add(tilemapRender);
             this.ResumeLayout(false);
 
         }

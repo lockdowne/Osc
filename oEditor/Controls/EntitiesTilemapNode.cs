@@ -10,7 +10,7 @@ namespace oEditor.Controls
 {
     public class EntitiesTilemapNode : RadTreeNode
     {
-        public Enums.EditorEntities EntityType { get { return Enums.EditorEntities.Tilemaps; } }
+        public Enums.EntityTypes EntityType { get { return Enums.EntityTypes.Tilemaps; } }
 
         /// <summary>
         /// Assign this ID to a new empty tilemap

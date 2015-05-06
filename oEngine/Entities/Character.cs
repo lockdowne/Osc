@@ -158,14 +158,15 @@ namespace oEngine.Entities
         /// </summary>
         public bool IsReady { get { return (TurnCounter > Consts.TurnReady); } }
 
+        public bool isVisible { get; set; }
+
         #endregion
 
         #region Initialization 
-        public Character(int charSpeed, string characterName, Vector2 charPosition)
+        public Character(int charSpeed, string characterName)
         {
             Speed = charSpeed;
             Name = characterName;
-            Position = charPosition; //POSSILECHANGE: contructor "Position" is most likely going to be moved out when we get a character placement menu
         }
         #endregion
 
@@ -201,11 +202,13 @@ namespace oEngine.Entities
         {
             this.AddAnimation("default", animation);
             this.PlayAnimation("default");
-            this.Position = new Vector2(100, 100);
+            this.Position = new Vector2(float.NaN, float.NaN);
             this.IsActive = true;
             this.IsVisible = true;
             this.Scale = 1.0f;
             this.Tint = Color.White;
         }
+
+
     }
 }

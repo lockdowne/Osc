@@ -2,9 +2,8 @@
 //------------------------------
 //  CharacterCollection.cs
 //
-//  Game object that will handle characters in play
+//  Game object that will handle characters
 
-//TODO: need a check if anycharacter in list has been clicked/selected
 
 //------------------------------
 #endregion
@@ -153,8 +152,6 @@ namespace oGame.GameObjects
                 character.Draw(spriteBatch);
             }
         }
-
-        //TODO: need a check if anycharacter in list has been clicked/selected
         #endregion
     }
 }

@@ -51,9 +51,9 @@ namespace oGame
                 //charCollection = new CharacterCollection();
 
                 charCollection = new CharacterCollection();
-                char1 = new Character(30, "David20", new Vector2(0,0));
-                char2 = new Character(30, "John30", new Vector2(0, 0));
-                char3 = new Character(40, "Andy40", new Vector2(0, 0));
+                char1 = new Character(30, "David20");
+                char2 = new Character(30, "John30");
+                char3 = new Character(40, "Andy40");
 
                 charCollection.Add(char1);
                 charCollection.Add(char2);

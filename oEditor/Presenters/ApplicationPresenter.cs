@@ -13,7 +13,7 @@ using Telerik.WinControls.UI;
 
 namespace oEditor.Presenters
 {
-    public class ApplicationPresenter
+    public class ApplicationPresenter : IPresenter
     {
         private readonly IEventAggregator eventAggregator;
 
@@ -31,8 +31,6 @@ namespace oEditor.Presenters
             // Create main view
             IMainView mainView = new MainView(eventAggregator);
             MainPresenter mainPresenter = new MainPresenter(eventAggregator, mainView);
-            
-            RepositoryPresenter repositories = new RepositoryPresenter(eventAggregator);
 
             Application.Run((RadForm)mainView);
 

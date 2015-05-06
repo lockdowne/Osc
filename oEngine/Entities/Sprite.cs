@@ -177,7 +177,10 @@ namespace oEngine.Entities
                 return;
 
             if (CurrentAnimation == null)
-                return;          
+                return;
+
+            if (Position == null)
+                return;
 
             spriteBatch.Draw(CurrentAnimation.Texture, Position, CurrentAnimation.FrameBounds, Tint, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0.0f);
         }

@@ -99,6 +99,7 @@
     <Compile Include="Factories\ScreenFactory.cs" />
     <Compile Include="Factories\TextureFactory.cs" />
     <Compile Include="Inputs\InputState.cs" />
+    <Compile Include="Managers\CommandManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\BattleScene.cs" />
     <Compile Include="Screens\GameScreen.cs" />

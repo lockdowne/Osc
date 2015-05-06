@@ -46,5 +46,18 @@ namespace oEditor.Controls
                 return Texture2D.FromStream(GraphicsDevice, stream); 
             }
         }
+
+        public Texture2D LoadTexture(Bitmap image)
+        {
+            Bitmap bitmap = image; // Must be .png type
+            // Need a universal graphics device
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                return Texture2D.FromStream(GraphicsDevice, stream);
+            }
+        }
     }
 }

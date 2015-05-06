@@ -64,10 +64,12 @@
     <Compile Include="Common\Settings.cs" />
     <Compile Include="Controls\EntitiesRootNode.cs" />
     <Compile Include="Controls\EntitiesTilemapNode.cs" />
+    <Compile Include="Controls\TilesetPage.cs" />
+    <Compile Include="Presenters\IPresenter.cs" />
+    <Compile Include="Presenters\TilemapPresenter.cs" />
     <Compile Include="Views\ITilemapDocumentView.cs" />
-    <Compile Include="Views\TilemapDocumentView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Views\ITilemapToolboxView.cs" />
+    <Compile Include="Views\TilemapDocumentView.cs" />
     <Compile Include="Controls\TilemapRender.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -82,27 +84,30 @@
     <Compile Include="Controls\Xna\XnaHelper.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Factories\ViewFactory.cs" />
     <Compile Include="Presenters\ApplicationPresenter.cs" />
     <Compile Include="Presenters\EntitiesPresenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
-    <Compile Include="Presenters\RepositoryPresenter.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\TilemapRepository.cs" />
-    <Compile Include="Views\EntitiesView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Views\EntitiesView.cs" />
     <Compile Include="Views\IEntitiesView.cs" />
     <Compile Include="Views\IMainView.cs" />
-    <Compile Include="Views\MainView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Views\MainView.cs" />
     <Compile Include="Views\MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\TilemapToolboxView.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Views\TilemapLayerRenameView.cs" />
+    <Compile Include="Views\TilemapLayerRenameView.Designer.cs">
+      <DependentUpon>TilemapLayerRenameView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\TilemapToolboxView.cs" />
+    <Compile Include="Views\TilesetListView.cs" />
+    <Compile Include="Views\TilesetListView.Designer.cs">
+      <DependentUpon>TilesetListView.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Controls\TilesetPage.resx">
+      <DependentUpon>TilesetPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -125,8 +130,14 @@
     <EmbeddedResource Include="Views\TilemapDocumentView.resx">
       <DependentUpon>TilemapDocumentView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\TilemapLayerRenameView.resx">
+      <DependentUpon>TilemapLayerRenameView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\TilemapToolboxView.resx">
       <DependentUpon>TilemapToolboxView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TilesetListView.resx">
+      <DependentUpon>TilesetListView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -159,6 +170,39 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\osc_logo_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddMark_10580.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Clearallrequests_8816.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_Down_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_Up_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Merge_13256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tile-overlay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rename_6779.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\edit-2-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\erase-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\copy-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tile-outline.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
