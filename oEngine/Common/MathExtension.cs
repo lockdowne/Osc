@@ -139,5 +139,9 @@ namespace oEngine.Common
             }
         }
 
+        public static bool CoordinateWithinBounds(int x, int y, int width, int height)
+        {
+            return x >= 0 && y >= 0 && x < width && y < height;
+        }
     }
 }

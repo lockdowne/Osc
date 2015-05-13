@@ -116,8 +116,6 @@ namespace oEditor.Controls
                     // Used to remove pixels beyond bounds
                     cameraPosition = camera.Position;
                 }
-
-
             };
 
             MouseWheel += (sender, e) =>

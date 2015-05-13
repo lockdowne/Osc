@@ -17,8 +17,13 @@ namespace oEngine.Entities
         [DataMember(Name = "Tilesets")]
         private List<Tileset> Tilesets { get; set; }
 
-        [DataMember(Name = "Layers")]
-        private List<Layer<TileVisual>> TilemapLayers { get; set; }
+        [DataMember(Name = "TilemapLayers")]
+        public List<Layer<TileVisual>> TilemapLayers { get; set; }
+
+        [DataMember(Name = "CollisionLayer")] //TODO: need to actually set 
+        private Layer<TileCollision> CollisionLayers { get; set; }
+
+        //TODO: put trigger layer
 
 
         /// <summary>
@@ -73,6 +78,28 @@ namespace oEngine.Entities
         /// Gets or sets whether the grid should be drawn
         /// </summary>
         public bool IsGridVisible;
+
+        /// <summary>
+        /// Gets the largest X coordinate that the tilemap contains 
+        /// </summary>
+        public int MaxMapX { get { return Width * TileHeight; } }
+
+        /// <summary>
+        /// Gets the smallest X coordinate that the tilemap contains
+        /// </summary>
+        public int MinMapX { get { return Width * -TileHeight; } }
+
+        /// <summary>
+        /// Gets the largest Y coordinate that the tilemap contains
+        /// </summary>
+        public int MaxMapY { get { return (Height - 1) * TileHeight; } }
+
+        /// <summary>
+        /// Gets the smallest Y coordinate that the tilemap contains
+        /// </summary>
+        public int MinMapY { get { return 0 - TileHeight; } }
+
+        public Vector2 MapCenterPosition { get { return new Vector2(0, (MaxMapY / 2) - TileHeight); } }
 
         public void Initialize(string name, string description, int tileWidth, int tileHeight, int tilemapWidth, int tilemapHeight)
         {    
@@ -228,9 +255,27 @@ namespace oEngine.Entities
            {
                for (int y = -1; y < Height; y++)
                {
-                   spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight, TileWidth / 2, 0), Color.White);
+                   spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight, TileWidth/2, 0), Color.White);
+
                }
            }
+        }
+
+        /// <summary>
+        /// Returns True if the input position that is aligned to grid is within the tilemap, else false.
+        /// </summary>
+        /// <param name="inputLocation"></param>
+        public bool withinBounds(Vector2 inputLocation)
+        {
+            if ((inputLocation.X <= MaxMapX) && (inputLocation.X >= MinMapX) && (inputLocation.Y <= MaxMapY) && (inputLocation.Y >= MinMapY))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }   
 }

@@ -286,7 +286,6 @@ namespace oEngine.Common
                         if (property.PropertyType.Assembly == objType.Assembly)
                         {
                             LoadXnaContent(propValue, content);
-
                         }
                     }
                 }

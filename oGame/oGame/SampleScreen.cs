@@ -9,19 +9,20 @@ using System.Text;
 using oEngine.Common;
 using oEngine.Entities;
 using Microsoft.Xna.Framework.Content;
-
+using oGame.GameObjects;
 
 namespace oGame
 {
     public class SampleScreen : GameScreen
     {
         private Camera camera;
-        private TestCharacterClass charA;
-        private TestCharacterClass charB;
-        private TestCharacterClass charC;
 
-        private List<TestCharacterClass> charList;
         private CharacterCollection charCollection;
+        private Character char1;
+        private Character char2;
+        private Character char3;
+        //private Character char4;
+        //private Character char5;
 
         private Texture2D testTexture;
         private Sprite testSprite;
@@ -46,21 +47,18 @@ namespace oGame
                 // Most of the time we will want local copies 
                 ContentManager content = new ContentManager(ScreenFactory.Game.Services, "Content");
 
-                charList = new List<TestCharacterClass>();
-                charA = new TestCharacterClass(2, "charA");
-                charB = new TestCharacterClass(3, "charB");
-                charC = new TestCharacterClass(4, "charC");
-                charList.Add(charA);
-                charList.Add(charB);
-                charList.Add(charC);
+                //charList = new List<TestCharacterClass>();
+                //charCollection = new CharacterCollection();
 
                 charCollection = new CharacterCollection();
+                char1 = new Character(30, "David20");
+                char2 = new Character(30, "John30");
+                char3 = new Character(40, "Andy40");
 
-                charCollection.Add(charA);
-                charCollection.Add(charB);
-                charCollection.Add(charC);
+                charCollection.Add(char1);
+                charCollection.Add(char2);
+                charCollection.Add(char3);
 
-                                
                 testTexture = content.Load<Texture2D>("test-animation");
                 Animation animation = new Animation();
                 animation.Initialize("test-animation", content.Load<Texture2D>("test-animation"), 0, 0, 32, 32, 3, 10); 
@@ -77,7 +75,7 @@ namespace oGame
                 testSprite.AddAnimation("Animation01", new List<Animation>().Populate(animation, animation2));
                 testSprite.AddAnimation("Animation02", animation3);
 
-                testSprite.PlayAnimation("Animation02"); // Plays immediatly since there is no current animation
+                //testSprite.PlayAnimation("Animation02"); // Plays immediatly since there is no current animation
                 testSprite.PlayAnimation("Animation01"); // Gets queued up to play after previous animation is done (This gets repeated until you call play animation again)
                 
                 testSprite.Position = new Vector2(100, 100);
@@ -138,18 +136,20 @@ namespace oGame
             if(input.LeftClick)
             {
                 //ExitScreen();
-                Console.WriteLine(charCollection.GetNext().Name);
+                //Console.WriteLine(charCollection.GetNext().Name);
+                //Console.WriteLine("hello world");
             }
             
             if(input.LeftDown)
             {
                 // While mouse left is held down move camera to that position
-               // camera.UpdatePosition(input.Position, new Vector2(-1000, -1000), new Vector2(1000, 1000));
+                camera.UpdatePosition(input.Position, new Vector2(-1000, -1000), new Vector2(1000, 1000));
             }
 
             if(input.RightClick)
             {
-                charCollection.debugGetSpeed();
+                ExitScreen();
+                ScreenFactory.AddScreen(new SampleBS());
             }
         }
 
@@ -170,8 +170,8 @@ namespace oGame
             ScreenFactory.GraphicsDevice.Clear(Color.CornflowerBlue);
                         
             // We use screen factories spritebatch as it shared among screens
-           // ScreenFactory.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
-            ScreenFactory.SpriteBatch.Begin();
+            ScreenFactory.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
+            //ScreenFactory.SpriteBatch.Begin();
 
             testSprite.Draw(ScreenFactory.SpriteBatch);
 

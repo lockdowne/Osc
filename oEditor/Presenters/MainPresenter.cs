@@ -82,6 +82,9 @@ namespace oEditor.Presenters
             if (tilemap == null)
                 throw new Exception("Tilemap does not exist, the file is corrupt or missing... what did you do?");
 
+            tilemap.TilemapLayers = new List<Layer<TileVisual>>();
+            
+
             // Need to add this somewhere to keep a reference so it isnt disposed
             ITilemapDocumentView tilemapView = new TilemapDocumentView(eventAggregator) { ID = tilemap.ID, Tilemap = tilemap };
             ITilemapToolboxView tilemapToolbox = new TilemapToolboxView(eventAggregator) { ID = tilemap.ID };
