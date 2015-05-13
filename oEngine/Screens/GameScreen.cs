@@ -136,43 +136,18 @@ namespace oEngine.Screens
         /// <summary>
         /// Gets the manager that this screen belongs to.
         /// </summary>
-        public ScreenFactory ScreenFactory
+        public ScreenManager ScreenFactory
         {
             get { return screenManager; }
             internal set { screenManager = value; }
         }
 
-        ScreenFactory screenManager;
-
-        AudioFactory audioFactory;
-        FontFactory fontFactory;
-        TextureFactory textureFactory;
-
-        public AudioFactory AudioFactory
-        {
-            get { return audioFactory; }
-        }
-
-        public FontFactory FontFactory
-        {
-            get { return fontFactory; }
-        }
-
-        public TextureFactory TextureFactory
-        {
-            get { return textureFactory; }
-        }
+        ScreenManager screenManager;
 
 
         #endregion
 
         #region Initialization
-        public GameScreen()
-        {
-            audioFactory = new AudioFactory();
-            fontFactory = new FontFactory();
-            textureFactory = new TextureFactory();
-        }
 
         /// <summary>
         /// Load graphics content for the screen.
@@ -186,9 +161,7 @@ namespace oEngine.Screens
         /// </summary>
         public virtual void UnloadContent()
         {
-            audioFactory.UnloadContent();
-            fontFactory.UnloadContent();
-            textureFactory.UnloadContent();
+
         }
 
 

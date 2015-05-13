@@ -33,27 +33,49 @@ namespace oEngine.Common
             Hidden,
         }
 
-        /// <summary>
-        /// Enum describes possible windows in oEditor
-        /// </summary>
-        public enum EditorWindows
-        {
-            Console,
-            Entities,
-            Project,
-            Toolbox,
-        }
+
 
         /// <summary>
         /// Enum describes entity types in oEditor
         /// </summary>
-        public enum EditorEntities
+        public enum EntityTypes
         {
             Characters,
             Items,
             Quests,
-            Scenes,
+            Tilemaps,
             Nodes,
+            BattleScenes,
+            FreeRoamScenes,
+            RandomBattleScenes,
+        }
+
+        public enum LayerTypes
+        {
+            Visual,
+            Trigger,
+            Movement,
+            Placement,
+        }
+
+        public enum SelectionModes
+        {
+            Orthogonal,
+            Isometric,
+        }
+
+        public enum PaintModes
+        {
+            Draw,
+            Erase,
+            Copy,
+        }
+
+        public enum LogTypes
+        {
+            Error,
+            Debug,
+            Info,
         }
     }
 }

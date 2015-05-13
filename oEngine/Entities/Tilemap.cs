@@ -11,18 +11,16 @@ using System.Xml.Serialization;
 
 namespace oEngine.Entities
 {
-    [DataContract]
+    [DataContract(Name = Consts.Nodes.Tilemap, Namespace = "")]
     public class Tilemap : IEntity
     {
-        [DataMember(Name="Initialized")]
-        private bool isInitialized;
+        [DataMember(Name = "Tilesets")]
+        private List<Tileset> Tilesets { get; set; }
 
-        [DataMember(Name="Tilesets")]
-        private List<Tileset> tilesets = new List<Tileset>();
+        [DataMember(Name = "Layers")]
+        private List<Layer<TileVisual>> TilemapLayers { get; set; }
 
-        [DataMember(Name="Layers")]
-        private List<Layer> layers = new List<Layer>();
-        
+
         /// <summary>
         /// Gets the unique ID of entity
         /// </summary>
@@ -45,46 +43,52 @@ namespace oEngine.Entities
         /// Gets the width of the tilemap in tiles
         /// </summary>
         [DataMember]
-        public int Width { get; private set; }
+        public int Width { get; set; }
 
         /// <summary>
         /// Gets the height of the tilemap in tiles
         /// </summary>
         [DataMember]
-        public int Height { get; private set; }
+        public int Height { get; set; }
 
         /// <summary>
         /// Gets the tile width of the tilemap in pixels
         /// </summary>
         [DataMember]
-        public int TileWidth { get; private set; }
+        public int TileWidth { get; set; }
 
         /// <summary>
         /// Gets the tile height of the tilemap in pixels
         /// </summary>
         [DataMember]
-        public int TileHeight { get; private set; }
+        public int TileHeight { get; set; }
 
         /// <summary>
         /// Gets or sets the pixel to draw grid
         /// </summary>
+        [IgnoreDataMember]
         public Texture2D Pixel { get; set; }
 
         /// <summary>
         /// Gets or sets whether the grid should be drawn
         /// </summary>
-        public bool IsGridVisible;
+        public bool IsGridVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets to draw the tilemap data 
+        /// </summary>
+        public bool IsDrawInformationData { get; set; }
 
         public void Initialize(string name, string description, int tileWidth, int tileHeight, int tilemapWidth, int tilemapHeight)
         {
-            // Prevent this method from being called more than once
-            if (isInitialized)
-                throw new Exception("Tilemap has already been initialized");
-
             if (tileWidth <= 0 || tileHeight <= 0 || tilemapWidth <= 0 || tilemapHeight <= 0)
                 throw new ArgumentOutOfRangeException("Tile and Tilemap dimensions should be greater than zero");
 
-            ID = Guid.NewGuid();
+            //ID = Guid.NewGuid();
+
+            TilemapLayers = new List<Layer<TileVisual>>();
+
+            Tilesets = new List<Tileset>();
 
             Name = name;
             Description = description;
@@ -95,66 +99,64 @@ namespace oEngine.Entities
             Width = tilemapWidth;
             Height = tilemapHeight;
 
-            isInitialized = true;
-
         }
 
-        public void AddLayer(string name, string description)
+        public void AddTilemapLayer(Guid id, string name, string description)
         {
-            if (!isInitialized)
-                throw new Exception("Tilemap must be initialized first before adding layer");
-
-            Layer layer = new Layer();
-            layer.Initialize(TileWidth, TileHeight);
+            Layer<TileVisual> layer = new Layer<TileVisual>();
+            layer.Initialize(Width, Height);
             layer.Name = name;
             layer.Description = description;
             layer.IsVisble = true;
             layer.Alpha = 1.0f;
+            layer.ID = id;
 
-            layers.Add(layer);           
+            TilemapLayers.Add(layer);
         }
 
-        public void RemoveLayer(Guid id)
+        public void RemoveTilemapLayer(Guid id)
         {
-            layers.RemoveAll(layer => layer.ID == id);
+            TilemapLayers.RemoveAll(layer => layer.ID == id);
         }
 
-        public IEnumerable<Layer> FindLayers(Func<Layer, bool> predicate)
+        public IEnumerable<Layer<TileVisual>> FindTilemapLayers(Func<Layer<TileVisual>, bool> predicate)
         {
-            return layers.Where(layer => predicate(layer));
+            return TilemapLayers.Where(layer => predicate(layer));
         }
 
-        public int FindLayerIndex(Layer layer)
+        public int FindLayerIndex(Layer<TileVisual> layer)
         {
-            return layers.IndexOf(layer);
+            return TilemapLayers.IndexOf(layer);
+        }
+
+        public void AddTileset(Tileset tileset)
+        {
+            if (Tilesets.Any(set => set.Name == tileset.Name))
+                throw new Exception("Tileset with that name already exists");
+
+            Tilesets.Add(tileset);
         }
 
         public void AddTileset(string name, string description, Texture2D texture)
         {
-            if (!isInitialized)
-                throw new Exception("Tilemap must be initialized first before adding tileset");
-
-            if (tilesets.Any(set => set.Name == name))
+            if (Tilesets.Any(set => set.Name == name))
                 throw new Exception("Tileset with that name already exists");
 
             Tileset tileset = new Tileset();
-            tileset.Initialize(texture);
+            tileset.Initialize(name, texture);
             tileset.Name = name;
             tileset.Description = description;
-
-          
-
-            tilesets.Add(tileset);            
+            Tilesets.Add(tileset);
         }
 
         public void RemoveTileset(Guid id)
         {
-            Tileset removeTileset = tilesets.FirstOrDefault(tileset => tileset.ID == id);
+            Tileset removeTileset = Tilesets.FirstOrDefault(tileset => tileset.ID == id);
 
-            if(removeTileset == null)
+            if (removeTileset == null)
                 return;
 
-            layers.ForEach(layer =>
+            TilemapLayers.ForEach(layer =>
             {
                 for (int x = 0; x < Width; x++)
                 {
@@ -168,70 +170,46 @@ namespace oEngine.Entities
                 }
             });
 
-            tilesets.Remove(removeTileset);
+            Tilesets.Remove(removeTileset);
         }
 
         public IEnumerable<Tileset> FindTilesets(Func<Tileset, bool> predicate)
         {
-            return tilesets.Where(tileset => predicate(tileset));
+            return Tilesets.Where(tileset => predicate(tileset));
         }
 
         public int FindTilesetIndex(Tileset tileset)
         {
-            return tilesets.IndexOf(tileset);
-        }
-
-        public Tile FindTile(int x, int y, int z)
-        {
-            if (z < 0)
-                return null;
-
-            if (z >= layers.Count)
-                return null;
-
-            return layers[z].FindTile(x, y);
-        }
-
-        public IEnumerable<Tile> FindTiles(Func<Tile, bool> predicate)        
-        {
-            for(int z = 0; z < layers.Count; z++)
-            {
-                for(int x = 0; x < Width; x++)
-                {
-                    for(int y = 0; y < Height; y++)
-                    {
-                        if (predicate(layers[z].Columns[x].Rows[y]))
-                            yield return layers[z].Columns[x].Rows[y];
-                    }
-                }
-            }
+            return Tilesets.IndexOf(tileset);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (spriteBatch == null || !isInitialized)
+            if (spriteBatch == null)
                 return;
 
-            for (int z = 0; z < layers.Count; z++)
+            for (int z = 0; z < TilemapLayers.Count; z++)
             {
                 for (int x = Width - 1; x >= 0; x--)
                 {
                     for (int y = 0; y < Height; y++)
                     {
-                        Tile tile = layers[z].Columns[x].Rows[y];
+                        TileVisual tile = TilemapLayers[z].Columns[x].Rows[y];
 
-                        if(!string.IsNullOrEmpty(tile.TilesetName))
-                        {                            
-                            if(tile.TilesetIndex >= 0)
+                        if (!string.IsNullOrEmpty(tile.TilesetName))
+                        {
+                            if (tile.TilesetIndex >= 0)
                             {
-                                Tileset tileset = tilesets.FirstOrDefault(set => set.Name == tile.TilesetName);
-       
-                                if(tileset != null)
+                                Tileset tileset = Tilesets.FirstOrDefault(set => set.Name == tile.TilesetName);
+
+                                if (tileset != null)
                                 {
                                     Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight);
+
+                                    spriteBatch.Draw(Pixel, position, Color.Red);
                                     // TODO: Apply height decimal places to the alignment of Y axis
                                     spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
-                                        tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * layers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
+                                        tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
                                 }
                             }
                         }
@@ -249,13 +227,18 @@ namespace oEngine.Entities
             if (!IsGridVisible || Pixel == null)
                 return;
 
-            for(int x = 0; x < Width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for(int y = 0; y < Height; y++)
+                for (int y = -1; y < Height; y++)
                 {
-                    spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight), Color.White);
+                    spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight, TileWidth / 2, 0), Color.White);
                 }
             }
+        }
+
+        public void DrawInformationData(SpriteBatch spriteBatch)
+        {
+
         }
     }
 }

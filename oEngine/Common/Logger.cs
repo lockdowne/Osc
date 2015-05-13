@@ -2,69 +2,110 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace oEngine.Common
 {
-    public static class Logger
+    public class Logger : ILogger
     {
-        public static void Log(string classes, string method, Exception exception = null, string description = "")
+        public class LogEntry
         {
-            DateTime dateTime = DateTime.Now;
-            StringBuilder builder = new StringBuilder();
+            public int ID { get; set; }
 
-            string status = exception == null ? "OK" : exception.ToString();
+            public string Message { get; set; }
 
-            builder.AppendLine(LineBreak());
-            builder.AppendLine(dateTime.ToString());
-            builder.AppendLine("Location: " + classes + "." + method);
-            if (!string.IsNullOrEmpty(description))
-                builder.AppendLine("Description: " + description);
-            builder.AppendLine("Status: " + status);
+            public string MethodName { get; set; }
 
-            try
+            public string ClassName { get; set; }
+            
+            public int LineNumber { get; set; }
+
+            public string DateTime { get; set; }            
+        }
+
+        private List<LogEntry> Logs { get; set; }
+
+        public event Action<LogEntry> OnLogged;
+
+        public Logger()
+        {
+            Logs = new List<LogEntry>();
+
+            if(CheckPath())
             {
-                if (!Directory.Exists(Consts.OSC_DIRECTORY))
-                    Directory.CreateDirectory(Consts.OSC_DIRECTORY);
-
-                File.AppendAllText(Consts.OSC_FILE, builder.ToString());
-            }
-            catch(Exception e)
-            {
-
+                if (File.Exists(Consts.OscPaths.Log))
+                {
+                    Logs = Serializer.Deserialize<LogEntry[]>(Consts.OscPaths.Log).ToList();
+                }
             }
         }
 
-        public static void Log(string classes, string method, string description = "", Exception exception = null)
+        public bool CheckPath()
         {
-            DateTime dateTime = DateTime.Now;
-            StringBuilder builder = new StringBuilder();
-
-            string status = exception == null ? "OK" : exception.ToString();
-
-            builder.AppendLine(LineBreak());
-            builder.AppendLine(dateTime.ToString());
-            builder.AppendLine("Location: " + classes + "." + method);
-            if (!string.IsNullOrEmpty(description))
-                builder.AppendLine("Description: " + description);
-            builder.AppendLine("Status: " + status);
-
             try
             {
-                if (!Directory.Exists(Consts.OSC_DIRECTORY))
-                    Directory.CreateDirectory(Consts.OSC_DIRECTORY);
+                if (!Directory.Exists(Consts.OscPaths.MainDirectory))
+                {
+                    Directory.CreateDirectory(Consts.OscPaths.MainDirectory);
+                }
 
-                File.AppendAllText(Consts.OSC_FILE, builder.ToString());
+                System.Security.AccessControl.DirectorySecurity directory = Directory.GetAccessControl(Consts.OscPaths.MainDirectory);
+
+                return true;
             }
-            catch (Exception e)
+            catch(UnauthorizedAccessException)
             {
-
+                return false;
             }
         }
 
-        private static string LineBreak()
+        public Task Log(string message, string methodName = "", string filePath = "", int line = 0)
         {
-            return string.Empty.PadRight(Consts.LOG_WIDTH, '-');
+            return Task.Run(() =>
+                {
+                    try
+                    {    
+                        LogEntry logEntry = new LogEntry()
+                        {
+                            Message = message,
+                            MethodName = methodName,
+                            ClassName = Path.GetFileNameWithoutExtension(filePath),
+                            LineNumber = line,
+                            DateTime = DateTime.Now.ToString("f"),
+                            ID = Logs.Count,
+                        };
+
+                        Logs.Add(logEntry);
+                        
+                        Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
+
+                        if (OnLogged != null)
+                            OnLogged(logEntry);
+
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                });
+        }
+        public Task Save()
+        {
+            return Task.Run(() =>
+                {
+                    try
+                    {
+                        Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
+                    }
+                    catch(Exception)
+                    {
+
+                    }
+                });
         }
     }
 }

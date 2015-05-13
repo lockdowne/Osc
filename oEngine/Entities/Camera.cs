@@ -60,13 +60,13 @@ namespace oEngine.Entities
         public void UpdatePosition(Vector2 position, Vector2 min, Vector2 max)
         {
             Position = Vector2.Clamp(new Vector2((int)Vector2.Lerp(Position, position, LerpAmount).X, (int)Vector2.Lerp(Position, position, LerpAmount).Y), min, max);
-            
+
         }
 
         public void UpdateZoom(float zoom, float min, float max)
         {
             Zoom = MathHelper.Clamp(MathHelper.Lerp(Zoom, zoom, LerpAmount), min, max);
         }
-       
+
     }
 }

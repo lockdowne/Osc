@@ -3,34 +3,43 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace oEngine.Entities
 {
-    public class Tileset : IEntity
+    [DataContract(Namespace = "")]
+    public class Tileset : IEntity, ITexture
     {
         /// <summary>
         /// Gets the unique ID of entity
         /// </summary>
+        [DataMember]
         public Guid ID { get; set; }
 
         /// <summary>
         /// Gets or sets the name of entity
         /// </summary>
+        [DataMember]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description of Entity
         /// </summary>
+        [DataMember]
         public string Description { get; set; }
+
+        [DataMember]
+        public string TextureName { get; set; }
 
         /// <summary>
         /// Gets or sets the image of the tileset
         /// </summary>
-        public Texture2D Texture { get; private set; }
-        
+        [IgnoreDataMember]
+        public Texture2D Texture { get; set; }
 
-        public void Initialize(Texture2D texture)
+
+        public void Initialize(string textureName, Texture2D texture)
         {
             if (Texture != null)
                 throw new Exception("Tileset has already been initialized");
@@ -38,7 +47,7 @@ namespace oEngine.Entities
             if (texture == null)
                 throw new ArgumentNullException("Tileset texture cannot be null");
 
-            ID = Guid.NewGuid();
+            TextureName = textureName;
 
             Texture = texture;
         }
@@ -52,7 +61,7 @@ namespace oEngine.Entities
         public Rectangle GetSourceRectangle(int tileIndex, int tileWidth, int tileHeight)
         {
             if (Texture == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Must set texture to a value");
 
             int tileY = tileIndex / (Texture.Width / tileWidth);
             int tileX = tileIndex % (Texture.Width / tileWidth);
