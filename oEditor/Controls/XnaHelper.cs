@@ -60,8 +60,9 @@ namespace oEditor.Controls
             }
         }
 
-        public SpriteFont LoadFont()
+        public SpriteFont LoadFont(string path)
         {
+            
             return null;
         }
     }

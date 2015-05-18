@@ -32,8 +32,6 @@ namespace oEditor.Controls
         private Texture2D pixel;
         private Texture2D tileOverlay;
 
-        private SpriteFont font;
-
         /// <summary>
         /// Gets or sets the current render controls tilemap data
         /// </summary>
@@ -56,7 +54,6 @@ namespace oEditor.Controls
             pixel.SetData<Color>(new Color[] { Color.White, Color.White, Color.White, Color.White });
 
             tileOverlay = XnaHelper.Instance.LoadTexture(global::oEditor.Properties.Resources.tile_overlay);
-             
 
             Tilemap.Pixel = pixel;
             Tilemap.IsGridVisible = true;

@@ -13,7 +13,7 @@ using oEditor.Events;
 
 namespace oEditor.Views
 {
-    public class TilemapDocumentView : DocumentWindow, ITilemapDocumentView
+    public class TilemapDocumentView : RadForm, ITilemapDocumentView
     {
 
         private TilemapRender tilemapRender;
