@@ -61,13 +61,17 @@ namespace oGame
             {
                 base.LoadContent();
 
+
                 ContentManager content = new ContentManager(ScreenManager.Game.Services, "Content");
+
 
                 tilemap = new Tilemap();
 
                 #region Test tilemap / character collections
 
+
                 pixel = new Texture2D(ScreenManager.GraphicsDevice, 2, 2, false, SurfaceFormat.Color);
+
                 pixel.SetData<Color>(new Color[] { Color.White, Color.White, Color.White, Color.White });
 
                 tilemap.Initialize("testName", "testDescription", tileWidth, tileHeight, mapWidth, mapHeight);
@@ -222,6 +226,7 @@ namespace oGame
         {
             base.Draw(gameTime);
 
+
             ScreenManager.GraphicsDevice.Clear(Color.Black);
 
             ScreenManager.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
@@ -231,6 +236,7 @@ namespace oGame
             characterCollection.Draw(ScreenManager.SpriteBatch);
 
             ScreenManager.SpriteBatch.End();
+
         }
     }
 }

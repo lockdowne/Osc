@@ -45,7 +45,9 @@ namespace oGame
                 // Create a local copy of content when we have large amounts of data to load
                 // Use the shared ScreenFactory.Content when content is shared between screens
                 // Most of the time we will want local copies 
+
                 ContentManager content = new ContentManager(ScreenManager.Game.Services, "Content");
+
 
                 //charList = new List<TestCharacterClass>();
                 //charCollection = new CharacterCollection();
@@ -149,7 +151,9 @@ namespace oGame
             if (input.RightClick)
             {
                 ExitScreen();
+
                 ScreenManager.AddScreen(new SampleBS());
+
             }
         }
 
@@ -167,6 +171,7 @@ namespace oGame
             base.Draw(gameTime);
 
             // Clears screen
+
             ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // We use screen factories spritebatch as it shared among screens
@@ -175,14 +180,17 @@ namespace oGame
 
             testSprite.Draw(ScreenManager.SpriteBatch);
 
+
             //ScreenFactory.SpriteBatch.Draw(testTexture, Vector2.Zero, Color.White);
             //helloButton.Draw(ScreenFactory.SpriteBatch);
+
 
             ScreenManager.SpriteBatch.End();
 
             // This will tell the screen to fade in/out
             if (TransitionPosition > 0)
                 ScreenManager.FadeBackBufferToBlack(255 - TransitionAlpha);
+
         }
 
         //public TestCharacterClass whoNext(List<TestCharacterClass> charList)
