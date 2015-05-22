@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using oEngine.Common;
-using oEngine.Factories;
 using oEngine.Inputs;
+using oEngine.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -136,7 +136,7 @@ namespace oEngine.Screens
         /// <summary>
         /// Gets the manager that this screen belongs to.
         /// </summary>
-        public ScreenManager ScreenFactory
+        public ScreenManager ScreenManager
         {
             get { return screenManager; }
             internal set { screenManager = value; }
@@ -188,7 +188,7 @@ namespace oEngine.Screens
                 if (!UpdateTransition(gameTime, transitionOffTime, 1))
                 {
                     // When the transition finishes, remove the screen.
-                    ScreenFactory.RemoveScreen(this);
+                    ScreenManager.RemoveScreen(this);
                 }
             }
             else if (coveredByOtherScreen)
@@ -281,7 +281,7 @@ namespace oEngine.Screens
             if (TransitionOffTime == TimeSpan.Zero)
             {
                 // If the screen has a zero transition time, remove it immediately.
-                ScreenFactory.RemoveScreen(this);
+                ScreenManager.RemoveScreen(this);
             }
             else
             {

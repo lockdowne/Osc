@@ -17,10 +17,9 @@ using Microsoft.Xna.Framework.Graphics;
 using oEngine.Screens;
 using oEngine.Inputs;
 using oEngine.Common;
-using oEngine.Factories;
 #endregion
 
-namespace oEngine.Factories
+namespace oEngine.Managers
 {
     /// <summary>
     /// The screen factory is a component which manages one or more GameScreen
@@ -299,7 +298,7 @@ namespace oEngine.Factories
         /// </summary>
         public void AddScreen(GameScreen screen)
         {
-            screen.ScreenFactory = this;
+            screen.ScreenManager = this;
 
             // If we have a graphics device, tell the screen to load content.
             if ((graphicsDeviceService != null) &&

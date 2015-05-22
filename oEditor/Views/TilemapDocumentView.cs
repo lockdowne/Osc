@@ -34,15 +34,15 @@ namespace oEditor.Views
         private void InitializeComponent()
         {
             this.tilemapRender = new oEditor.Controls.TilemapRender();
-
-
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
+            this.SuspendLayout();
             // 
             // tilemapRender
             // 
             this.tilemapRender.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tilemapRender.Location = new System.Drawing.Point(0, 0);
             this.tilemapRender.Name = "tilemapRender";
-            this.tilemapRender.Size = new System.Drawing.Size(200, 200);
+            this.tilemapRender.Size = new System.Drawing.Size(292, 270);
             this.tilemapRender.TabIndex = 0;
             this.tilemapRender.Tilemap = null;
             this.tilemapRender.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tilemapRender_MouseDown);
@@ -52,7 +52,14 @@ namespace oEditor.Views
             // 
             // TilemapDocumentView
             // 
-            this.Controls.Add(tilemapRender);
+            this.ClientSize = new System.Drawing.Size(292, 270);
+            this.Controls.Add(this.tilemapRender);
+            this.Name = "TilemapDocumentView";
+            // 
+            // 
+            // 
+            this.RootElement.ApplyShapeToControl = true;
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
         }
