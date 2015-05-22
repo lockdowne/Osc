@@ -71,11 +71,10 @@ namespace oEngine.Common
             Copy,
         }
 
-        public enum LogTypes
+        public enum BattleScreenSequences
         {
-            Error,
-            Debug,
-            Info,
+            PlacementSequence,
+            BattleSequence,
         }
     }
 }

@@ -19,7 +19,6 @@ namespace oEngine.Common
             builder.AppendLine(LineBreak());
             builder.AppendLine(dateTime.ToString());
             builder.AppendLine("Location: " + className + "." + method);
-
             if (!string.IsNullOrEmpty(description))
                 builder.AppendLine("Description: " + description);
             builder.AppendLine("Status: " + status);

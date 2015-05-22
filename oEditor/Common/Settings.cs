@@ -58,10 +58,10 @@ namespace oEditor.Common
                 MaxCameraZoom = 2.0f,
                 MinCameraZoom = 0.5f,
                 SelectionBoxOpacity = 0.2f,
-                TileWidth = 128,
-                TileHeight = 64,
-                SceneWidth = 3,
-                SceneHeight = 3,
+                TileWidth = 100,
+                TileHeight = 50,
+                SceneWidth = 25,
+                SceneHeight = 25,
             };
         }
     }

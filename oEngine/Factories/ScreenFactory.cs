@@ -168,13 +168,18 @@ namespace oEngine.Factories
             }
 
             // update the title-safe area
+            //titleSafeArea = new Rectangle(
+            //    (int)Math.Floor(GraphicsDevice.Viewport.X +
+            //       GraphicsDevice.Viewport.Width * 0.05f),
+            //    (int)Math.Floor(GraphicsDevice.Viewport.Y +
+            //       GraphicsDevice.Viewport.Height * 0.05f),
+            //    (int)Math.Floor(GraphicsDevice.Viewport.Width * 0.9f),
+            //    (int)Math.Floor(GraphicsDevice.Viewport.Height * 0.9f));
             titleSafeArea = new Rectangle(
-                (int)Math.Floor(GraphicsDevice.Viewport.X +
-                   GraphicsDevice.Viewport.Width * 0.05f),
-                (int)Math.Floor(GraphicsDevice.Viewport.Y +
-                   GraphicsDevice.Viewport.Height * 0.05f),
-                (int)Math.Floor(GraphicsDevice.Viewport.Width * 0.9f),
-                (int)Math.Floor(GraphicsDevice.Viewport.Height * 0.9f));
+                GraphicsDevice.Viewport.X,
+                GraphicsDevice.Viewport.Y,
+                GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height);
         }
 
 
@@ -239,7 +244,10 @@ namespace oEngine.Factories
                     {
                         screen.HandleInput(input);
 
-                        otherScreenHasFocus = true;
+                        if (!screen.IsSoftPopup)
+                        {
+                            otherScreenHasFocus = true;
+                        }
                     }
 
                     // If this is an active non-popup, inform any subsequent

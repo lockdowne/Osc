@@ -64,16 +64,12 @@
     <Compile Include="Common\Settings.cs" />
     <Compile Include="Controls\EntitiesRootNode.cs" />
     <Compile Include="Controls\EntitiesTilemapNode.cs" />
-    <Compile Include="Controls\TilesetPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Controls\TilesetPage.cs" />
     <Compile Include="Presenters\IPresenter.cs" />
     <Compile Include="Presenters\TilemapPresenter.cs" />
     <Compile Include="Views\ITilemapDocumentView.cs" />
     <Compile Include="Views\ITilemapToolboxView.cs" />
-    <Compile Include="Views\TilemapDocumentView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Views\TilemapDocumentView.cs" />
     <Compile Include="Controls\TilemapRender.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -93,29 +89,19 @@
     <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\TilemapRepository.cs" />
-    <Compile Include="Views\EntitiesView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Views\EntitiesView.cs" />
     <Compile Include="Views\IEntitiesView.cs" />
     <Compile Include="Views\IMainView.cs" />
-    <Compile Include="Views\MainView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Views\MainView.cs" />
     <Compile Include="Views\MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\TilemapLayerRenameView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Views\TilemapLayerRenameView.cs" />
     <Compile Include="Views\TilemapLayerRenameView.Designer.cs">
       <DependentUpon>TilemapLayerRenameView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\TilemapToolboxView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Views\TilesetListView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Views\TilemapToolboxView.cs" />
+    <Compile Include="Views\TilesetListView.cs" />
     <Compile Include="Views\TilesetListView.Designer.cs">
       <DependentUpon>TilesetListView.cs</DependentUpon>
     </Compile>
@@ -201,6 +187,9 @@
     <None Include="Resources\Merge_13256.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\tile-overlay.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\Rename_6779.png" />
   </ItemGroup>
   <ItemGroup>
@@ -214,9 +203,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\tile-outline.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tile-overlay.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

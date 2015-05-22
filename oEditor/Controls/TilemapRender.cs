@@ -165,6 +165,7 @@ namespace oEditor.Controls
             {
                 spriteBatch.Draw(tileOverlay, position, Configuration.Settings.SelectionBoxColor * Configuration.Settings.SelectionBoxOpacity);
             });
+
         }
     }
 }

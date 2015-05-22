@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using oEngine.Aggregators;
 using oEngine.Entities;
 using System;
 using System.Collections;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -18,6 +20,8 @@ namespace oEngine.Common
 {
     public static class Extensions
     {
+        private static readonly EventAggregatorAsync EventAggregatorAsync = new EventAggregatorAsync();
+
         public static Vector2 InvertMatrixAtVector(this Matrix matrix, int x, int y)
         {
             return Vector2.Transform(new Vector2(x, y), Matrix.Invert(matrix));
@@ -123,7 +127,7 @@ namespace oEngine.Common
 
             return result;
         }
-              
+
         /// <summary>
         /// Iterates through collection
         /// </summary>
@@ -131,7 +135,7 @@ namespace oEngine.Common
         /// <param name="source"></param>
         /// <param name="action"></param>
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
-        {            
+        {
             foreach (var item in source)
                 action(item);
         }
@@ -149,104 +153,6 @@ namespace oEngine.Common
                 collection.Add(obj);
 
             return collection;
-        }
-
-        /// <summary>
-        /// Serializes object into an xelement node used to append to a xml file
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static XElement ToXElement<T>(this T obj)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                using (var streamWriter = new StreamReader(memoryStream))
-                {
-                    DataContractSerializer xml = new DataContractSerializer(typeof(T));
-
-                    xml.WriteObject(memoryStream, obj);
-
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-
-                    return XElement.Parse(streamWriter.ReadToEnd());
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deserializes an xelement node into object
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="xElement"></param>
-        /// <returns></returns>
-        public static T FromXElement<T>(this XElement xElement)
-        {
-            using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(xElement.ToString())))
-            {
-                DataContractSerializer xml = new DataContractSerializer(typeof(T));
-                return (T)xml.ReadObject(memoryStream);
-            }
-        }
-
-        /// <summary>
-        /// Serializes object and writes xml to path
-        /// </summary>
-        /// <typeparam name="T">Object type</typeparam>
-        /// <param name="obj">The object object</param>
-        /// <param name="path">The location of xml file</param>
-        public static void Serialize<T>(this T obj, string path)
-        {
-            DataContractSerializer xml = new DataContractSerializer(typeof(T));
-
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-
-            using (XmlWriter writer = XmlWriter.Create(path, settings))
-            {
-                xml.WriteObject(writer, obj);
-            }
-        }
-
-        /// <summary>
-        /// Deserialize xml file at path into object
-        /// </summary>
-        /// <typeparam name="T">Object type</typeparam>
-        /// <param name="path">The location of xml file</param>
-        /// <returns>Object</returns>
-        public static T Deserialize<T>(this T obj, string path)
-        {
-            DataContractSerializer xml = new DataContractSerializer(typeof(T));
-
-            using (XmlReader reader = XmlReader.Create(path))
-            {
-
-                return (T)xml.ReadObject(reader);
-            }
-        }
-        
-
-        /// <summary>
-        /// Deserialize objects with Texture2D and other xna pipeline contents
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="content"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static T Deserialize<T>(this ContentManager content, string path)
-        {
-            DataContractSerializer xml = new DataContractSerializer(typeof(T));
-
-            using (XmlReader reader = XmlReader.Create(path))
-            {
-                T obj = (T)xml.ReadObject(reader);
-
-                // Once object is created we pass it through LoadXnaContent to find Textures that need to be loaded by content manager
-                // TODO: Load audio and fonts                
-                LoadXnaContent(obj, content);
-
-                return obj;
-            }
         }
 
         private static void LoadXnaContent(object obj, ContentManager content)
@@ -286,6 +192,7 @@ namespace oEngine.Common
                         if (property.PropertyType.Assembly == objType.Assembly)
                         {
                             LoadXnaContent(propValue, content);
+
                         }
                     }
                 }
@@ -296,5 +203,41 @@ namespace oEngine.Common
                 }
             }
         }
+
+        public static Task<T> AsTask<T>(this T value)
+        {
+            var taskCompletionSource = new TaskCompletionSource<T>();
+            taskCompletionSource.SetResult(value);
+            return taskCompletionSource.Task;
+        }
+
+        /// <summary>Creates a Task that has completed in the Faulted state with the specified exception.</summary>
+        /// <typeparam name="TResult">Specifies the type of payload for the new Task.</typeparam>
+        /// <param name="factory">The target TaskFactory.</param>
+        /// <param name="exception">The exception with which the Task should fault.</param>
+        /// <returns>The completed Task.</returns>
+        public static Task<TResult> FromException<TResult>(this TaskFactory factory, Exception exception)
+        {
+            var tcs = new TaskCompletionSource<TResult>(factory.CreationOptions);
+            tcs.SetException(exception);
+            return tcs.Task;
+        }
+
+        public static Task<Task[]> Publish<TEvent>(this object sender, Task<TEvent> eventData)
+        {
+            return EventAggregatorAsync.Publish(sender, eventData);
+        }
+
+        public static Task Subscribe<TEvent>(this object sender, Func<Task<TEvent>, Task> eventHandlerTaskFactory)
+        {
+            return EventAggregatorAsync.Subscribe(sender, eventHandlerTaskFactory);
+        }
+
+        public static Task Unsubscribe<TEvent>(this object sender)
+        {
+            return EventAggregatorAsync.Unsubscribe<TEvent>(sender);
+        }
+
+
     }
 }

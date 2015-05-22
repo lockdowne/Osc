@@ -38,6 +38,11 @@ namespace oEngine.Inputs
             get { return (currentMouseState.MiddleButton == ButtonState.Pressed) && (previousMouseState.MiddleButton == ButtonState.Released); }
         }
 
+        public bool MiddleDown
+        {
+            get { return (currentMouseState.MiddleButton == ButtonState.Pressed) && (previousMouseState.MiddleButton == ButtonState.Pressed); }
+        }
+
         public bool LeftDown
         {
             get { return (currentMouseState.LeftButton == ButtonState.Pressed) && (previousMouseState.LeftButton == ButtonState.Pressed); }

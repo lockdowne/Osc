@@ -150,6 +150,7 @@ namespace oGame
             {
                 ExitScreen();
                 ScreenFactory.AddScreen(new SampleBS());
+                //ScreenFactory.AddScreen(new MenuTest());
             }
         }
 
@@ -158,8 +159,6 @@ namespace oGame
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
             testSprite.Update(gameTime);
-            
-            
         }
 
         public override void Draw(Microsoft.Xna.Framework.GameTime gameTime)

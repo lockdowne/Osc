@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace oEngine.Common
 {
@@ -59,8 +58,6 @@ namespace oEngine.Common
 
             return null;
         }
-
-      
 
         public static string Encrypt(string text)
         {

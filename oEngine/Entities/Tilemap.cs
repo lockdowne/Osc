@@ -256,7 +256,6 @@ namespace oEngine.Entities
                for (int y = -1; y < Height; y++)
                {
                    spriteBatch.Draw(Pixel, MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight, TileWidth/2, 0), Color.White);
-
                }
            }
         }
