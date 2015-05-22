@@ -59,6 +59,7 @@
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Entities\Animation.cs" />
     <Compile Include="Entities\Camera.cs" />
+    <Compile Include="Entities\Character.cs" />
     <Compile Include="Entities\Command.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\ISoundEffect.cs" />
