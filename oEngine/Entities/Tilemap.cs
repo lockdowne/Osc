@@ -129,6 +129,22 @@ namespace oEngine.Entities
             return TilemapLayers.IndexOf(layer);
         }
 
+        public void MoveLayerUp(int index)
+        {
+            if (index < 0 || index >= TilemapLayers.Count || (index - 1) <= 0)
+                return;
+
+            TilemapLayers.Swap(index, index - 1);
+        }
+
+        public void MoveLayerDown(int index)
+        {
+            if (index < 0 || index >= TilemapLayers.Count || (index + 1) >= TilemapLayers.Count)
+                return;
+
+            TilemapLayers.Swap(index, index + 1);
+        }
+
         public void AddTileset(Tileset tileset)
         {
             if (Tilesets.Any(set => set.Name == tileset.Name))
@@ -148,6 +164,8 @@ namespace oEngine.Entities
             tileset.Description = description;
             Tilesets.Add(tileset);
         }
+
+        
 
         public void RemoveTileset(Guid id)
         {

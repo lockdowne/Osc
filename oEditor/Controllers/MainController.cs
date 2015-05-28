@@ -57,7 +57,7 @@ namespace oEditor.Controllers
                         {
                             Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
 
-                            view.DockManager.Invoke(new Action(() => DockWindow((DockWindow)new TilemapDocumentView() { Tilemap = tilemap }, DockPosition.Fill)));
+                            //view.DockManager.Invoke(new Action(() => DockWindow((DockWindow)new TilemapDocumentView() { Tilemap = tilemap }, DockPosition.Fill)));
                         },
                         UnExecute = () =>
                         {

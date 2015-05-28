@@ -155,6 +155,13 @@ namespace oEngine.Common
             return collection;
         }
 
+        public static void Swap<T>(this IList<T> list, int startIndex, int endIndex)
+        {
+            T item = list[startIndex];
+            list[startIndex] = list[endIndex];
+            list[endIndex] = item;            
+        }
+
         private static void LoadXnaContent(object obj, ContentManager content)
         {
             if (obj == null) return;

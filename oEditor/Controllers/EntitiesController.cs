@@ -31,9 +31,9 @@ namespace oEditor.Controllers
 
             this.Subscribe<OnCreateTilemapNode>(async obj =>
             {
-                string name = "OnCreateTilemapNode";
-
                 var item = await obj;
+
+                string name = item.GetType().Name;
 
                 await commandManager.ExecuteCommand(new Command()
                 {
@@ -64,6 +64,7 @@ namespace oEditor.Controllers
                         tilemapRepository.SaveAsync();
 
                         // Add node to tree
+                        //item.Root.Nodes.Add(item.Node);
                         view.TreeView.Invoke(new Action(() => item.Root.Nodes.Add(item.Node)));                        
                     },
                     UnExecute = () =>

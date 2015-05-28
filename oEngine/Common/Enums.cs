@@ -64,18 +64,20 @@ namespace oEngine.Common
             Isometric,
         }
 
-        public enum PaintModes
-        {
-            Draw,
-            Erase,
-            Copy,
-        }
-
         public enum LogTypes
         {
             Error,
             Debug,
             Info,
+        }
+
+        public enum TilemapStates
+        {
+            Selection,
+            Draw,
+            Fill,
+            Erase,
+            Collision,
         }
     }
 }

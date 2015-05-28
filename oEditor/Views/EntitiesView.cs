@@ -56,23 +56,20 @@ namespace oEditor.Views
 
             radTreeView.NodeMouseDoubleClick += (sender, e) =>
             {
-                if (SelectedNode == null)
+                EntitiesTilemapNode selectedNode = SelectedNode as EntitiesTilemapNode;
+
+                if (selectedNode == null)
                     return;
 
-                if (SelectedNode.GetType() == typeof(EntitiesTilemapNode))
-                {
-                    this.Publish(new OnTilemapNodeDoubleClicked() { Node = (EntitiesTilemapNode)SelectedNode }.AsTask());
-                }
-
+                this.Publish(new OnTilemapNodeDoubleClicked() { Node = selectedNode }.AsTask());
             };
 
             this.contextMenuRootAddEntity.Click += (sender, e) =>
             {
-                // This shouldn't be possibru
-                if (SelectedNode == null)
-                    return;
+                EntitiesRootNode root = SelectedNode as EntitiesRootNode;
 
-                EntitiesRootNode root = (EntitiesRootNode)SelectedNode;
+                if (root == null)
+                    return;
 
                 switch (root.EntityType)
                 {

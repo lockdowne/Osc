@@ -25,11 +25,15 @@ namespace oEngine.Common
 
         public static class Nodes
         {
-            // Not really a good pattern to have root here
             public const string Root = "Root";
             public const string Tilemap = "Tilemap";
             public const string Character = "Character";
             public const string EmptyTilemap = "EmptyTilemap";
+        }
+
+        public static class Editor
+        {
+            public const string TilemapLayerName = "Tilemap Layer";
         }
 
         public static class AlertMessages

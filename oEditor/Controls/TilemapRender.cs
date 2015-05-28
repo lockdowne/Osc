@@ -32,6 +32,8 @@ namespace oEditor.Controls
         private Texture2D pixel;
         private Texture2D tileOverlay;
 
+        private Enums.TilemapStates states = Enums.TilemapStates.Selection;
+
         /// <summary>
         /// Gets or sets the current render controls tilemap data
         /// </summary>
@@ -54,9 +56,9 @@ namespace oEditor.Controls
             pixel.SetData<Color>(new Color[] { Color.White, Color.White, Color.White, Color.White });
 
             tileOverlay = XnaHelper.Instance.LoadTexture(global::oEditor.Properties.Resources.tile_overlay);
-
+           
             Tilemap.Pixel = pixel;
-            Tilemap.IsGridVisible = true;
+            Tilemap.IsGridVisible = true;            
 
             MouseDown += (sender, e) =>
             {
@@ -151,7 +153,21 @@ namespace oEditor.Controls
 
             Tilemap.Draw(spriteBatch);
 
-            DrawTileOverlay(spriteBatch);
+            switch (states)
+            {
+                case Enums.TilemapStates.Selection:
+                    DrawTileOverlay(spriteBatch);
+                    break;
+                case Enums.TilemapStates.Draw:
+                    break;
+                case Enums.TilemapStates.Fill:
+                    break;
+                case Enums.TilemapStates.Erase:
+                    break;
+                case Enums.TilemapStates.Collision:
+                    break;
+            }
+            
 
             spriteBatch.End();
         }
@@ -165,6 +181,10 @@ namespace oEditor.Controls
             {
                 spriteBatch.Draw(tileOverlay, position, Configuration.Settings.SelectionBoxColor * Configuration.Settings.SelectionBoxOpacity);
             });
+        }
+
+        private void DrawPattern(SpriteBatch spriteBatch)
+        {
 
         }
     }
