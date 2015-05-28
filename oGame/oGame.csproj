@@ -42,13 +42,23 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Aggregators\EventAggregator.cs" />
+    <Compile Include="Aggregators\IEventAggregator.cs" />
+    <Compile Include="Aggregators\ISubscriber.cs" />
+    <Compile Include="Events\BattleScreenEvents.cs" />
+    <Compile Include="Events\BottomLeftEvents.cs" />
+    <Compile Include="Events\BottomRightEvents.cs" />
+    <Compile Include="Events\CharacterPlacementEvents.cs" />
     <Compile Include="GameObjects\CharacterCollection.cs" />
     <Compile Include="oGame.cs" />
+    <Compile Include="Popup\TestActionMenuPopup.cs" />
+    <Compile Include="Popup\TestBottomLeftPopup.cs" />
+    <Compile Include="Popup\TestBottomRight.cs" />
+    <Compile Include="Popup\TestCharacterPlacementPopup.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleBS.cs" />
     <Compile Include="SampleScreen.cs" />
-    <Compile Include="TestCharacterClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

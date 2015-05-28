@@ -36,6 +36,21 @@ namespace oEngine.Screens
 
         bool isPopup = false;
 
+        public bool IsSoftPopup
+        {
+            get { return isSoftPopup; }
+            protected set
+            {
+                isSoftPopup = value;
+                if (isPopup != true)
+                {
+                    isPopup = true;
+                }
+            }
+        }
+
+        bool isSoftPopup = false;
+
 
         /// <summary>
         /// Indicates how long the screen takes to

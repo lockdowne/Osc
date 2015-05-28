@@ -77,5 +77,11 @@ namespace oEngine.Common
             Debug,
             Info,
         }
+
+        public enum BattleScreenSequences
+        {
+            PlacementSequence,
+            BattleSequence,
+        }
     }
 }

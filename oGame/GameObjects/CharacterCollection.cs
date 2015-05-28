@@ -1,4 +1,4 @@
-﻿﻿#region File Descrption
+﻿#region File Descrption
 //------------------------------
 //  CharacterCollection.cs
 //
@@ -137,6 +137,72 @@ namespace oGame.GameObjects
             }
         }
 
+        /// <summary>
+        /// Returns the name of the character that is on the coordinate if it exists
+        /// </summary>
+        /// <param name="coordinate"></param>
+        /// <returns></returns>
+        public bool ContainsAtCoordinate(Point coordinate)
+        {
+            foreach (Character character in this)
+            {
+                if ((character.Coordinate == coordinate) && character.IsActive)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public Character GetCharacterAtCoordinate(Point coordinate)
+        {
+            foreach (Character character in this)
+            {
+                if ((character.Coordinate == coordinate) && character.IsActive)
+                {
+                    return character;
+                }
+            }
+
+            return null;
+        }
+
+        public Character GetCharacterContainingPosition(Vector2 position)
+        {
+            foreach (Character character in this)
+            {
+                if (character.Bounds.Contains(new Point(Convert.ToInt32(position.X), Convert.ToInt32(position.Y))))
+                {
+                    return character;
+                }
+            }
+
+            return null;
+        }
+
+        public void SetAllActiveAndVisible()
+        {
+            foreach (Character character in this)
+            {
+                character.IsActive = true;
+                character.IsVisible = true;
+            }
+        }
+
+        public Character GetCharacterWithName(string name) // most likely need to change to entityid 
+        {
+            foreach (Character character in this)
+            {
+                if (character.CharacterName == name)
+                {
+                    return character;
+                }
+            }
+
+            return null;
+        }
+
         public void Update(GameTime gameTime)
         {
             foreach (Character character in this)
@@ -152,6 +218,16 @@ namespace oGame.GameObjects
                 character.Draw(spriteBatch);
             }
         }
+
         #endregion
+
+        public void SetTempValues()
+        {
+            foreach (Character character in this)
+            {
+                character.HealthPool = 100;
+                character.Health = 100;
+            }
+        }
     }
 }
