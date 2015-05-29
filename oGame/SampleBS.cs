@@ -25,14 +25,17 @@ using oGame.Aggregators;
 namespace oGame
 {
     public class SampleBS : GameScreen, 
+        ISubscriber<ButtonPopupStartBattleClicked>, ISubscriber<ButtonPopupExecuteClicked>, ISubscriber<ButtonPopupCancelClicked>,
         ISubscriber<CharacterPlacementIsExiting>, ISubscriber<CharacterPlacementCharacterIsSelected>,
-        ISubscriber<BottomLeftIsExiting>,
+        ISubscriber<ActionMenuIsExiting>, ISubscriber<ActionMenuActionClicked>, ISubscriber<ActionMenuMoveClicked>, ISubscriber<ActionMenuWaitClicked>,
+        ISubscriber<BottomLeftIsExiting>, 
         ISubscriber<BottomRightIsExiting>
+
     {
         #region test const
 
-        int mapWidth = 5;
-        int mapHeight = 5;
+        int mapWidth = 8;
+        int mapHeight = 8;
         int tileWidth = 128;
         int tileHeight = 64;
 
@@ -68,28 +71,20 @@ namespace oGame
         private bool isTileSelected;
         private bool IsTargeted;
 
-        private bool isCharPlacementPopedUp;
-        private bool isBottomRightPopedUp;
-        private bool isBottomLeftPopedUp;
-        private bool isActionMenuPopedUp;
+        private bool isCharPlacementPoppedUp;
+        private bool isBottomRightPoppedUp;
+        private bool isBottomLeftPoppedUp;
+        private bool isActionMenuPoppedUp;
+        private bool isButtonPoppedUp;
 
         private readonly IEventAggregator eventAggregator;
-        #endregion
 
-        #region Properties
-
-        /// <summary>
-        /// Gets the current sequence state.
-        /// </summary>
-        public Enums.BattleScreenSequences ScreenSequence
-        {
-            get { return screenSequence; }
-            protected set { screenSequence = value; }
-        }
-
-        Enums.BattleScreenSequences screenSequence = Enums.BattleScreenSequences.PlacementSequence;
+        private Enums.BattleScreenSequences screenSequence;
+        private Enums.BattlePhases battlePhase;
+        private Enums.CurrentOperation currentOperation;
 
         #endregion
+
         public SampleBS()
             : base()
         {
@@ -100,6 +95,7 @@ namespace oGame
 
             eventAggregator = new EventAggregator();
             eventAggregator.Subscribe(this);
+
         }
 
         public override void LoadContent()
@@ -107,7 +103,6 @@ namespace oGame
             try
             {
                 base.LoadContent();
-
                 ContentManager content = new ContentManager(ScreenManager.Game.Services, "Content");
 
                 tilemap = new Tilemap();
@@ -133,15 +128,17 @@ namespace oGame
                 walkingUp.Initialize("test-animation", textureTest, 0, 3 * 32, 32, 32, 3, 5);
                 Animation fireball = new Animation();
                 fireball.Initialize("test-animation", textureTest, 6 * 32, 7 * 32, 32, 32, 3, 5);
+                Animation youDead = new Animation();
+                youDead.Initialize("test-animation", textureTest, 3 * 32, 7 * 32, 32, 32, 3, 5);
 
                 characterCollection = new CharacterCollection(); // most likely already carry the enemies or add enemies after char placement
                 playerCharacterCollection = new CharacterCollection();
 
-                jon = new Character(20, "John20");
-                david = new Character(30, "David30");
-                andy = new Character(40, "Andy40");
-                nick = new Character(35, "Nick35");
-                osc = new Character(40, "OSC40");
+                jon = new Character(20, "John20") { deadAnimation = youDead };
+                david = new Character(30, "David30") { deadAnimation = youDead };
+                andy = new Character(40, "Andy40") { deadAnimation = youDead };
+                nick = new Character(35, "Nick35") { deadAnimation = youDead };
+                osc = new Character(40, "OSC40") { deadAnimation = youDead };
 
                 jon.AnimationInitialize(walkingDown);
                 david.AnimationInitialize(walkingLeft);
@@ -156,10 +153,11 @@ namespace oGame
 
                 #endregion
 
+                screenSequence = Enums.BattleScreenSequences.Placement;
+                battlePhase = Enums.BattlePhases.Selecting;
+
                 camera = new Camera() { Name = "MainCamera", Zoom = 1.0f, LerpAmount = 1f, Position = Vector2.Zero };
 
-                //inPlay = characterCollection.GetNext();
-                //Console.WriteLine("Moving: " + inPlay.CharacterName);
             }
             catch (Exception exception)
             {
@@ -170,8 +168,6 @@ namespace oGame
         public override void UnloadContent()
         {
             base.UnloadContent();
-
-            BattleScreenUnsubscribe();
         }
 
 
@@ -184,7 +180,7 @@ namespace oGame
 
             #region Placement Sequence
 
-            if (ScreenSequence == Enums.BattleScreenSequences.PlacementSequence)
+            if (screenSequence == Enums.BattleScreenSequences.Placement)
             {
                 if (input.LeftClick)
                 {
@@ -201,8 +197,11 @@ namespace oGame
 
                 if (input.RightClick)
                 {
-                    UnselectAll();
-                //    ScreenSequence = Enums.BattleScreenSequences.BattleSequence;
+                    Character tempCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
+                    if(tempCharacter != null)
+                    {
+                        characterCollection.Remove(tempCharacter);
+                    }
                 }
             }
 
@@ -210,181 +209,73 @@ namespace oGame
 
             #region BattleSequence
 
-            if (ScreenSequence == Enums.BattleScreenSequences.BattleSequence)
+            if (screenSequence == Enums.BattleScreenSequences.Battle)
             {
-
-                if (input.LeftClick)
+                //if Selecting
+                if (battlePhase == Enums.BattlePhases.Selecting)
                 {
-                    #region old select
-                    //if (MathExtension.CoordinateWithinBounds(inputPoint.X, inputPoint.Y, tilemap.Width, tilemap.Height))
-                    //{
-                    //    if (somethingFocused) //is something focused?
-                    //    {
-                    //        //is the one in focus, the one taking turn
-                    //        if (focusedCharacter == inPlay)
-                    //        {
-                    //            ////bring up menu with actions
-                    //            //inPlay.Position = MathExtension.IsoSnap(inputPosition, tileWidth, tileHeight);
-                    //            //inPlay.Position -= (Extensions.GetBottomCenter(inPlay.Bounds) - inPlay.Position);
-                    //            inPlay.SetCoordinate(inputPoint, tileWidth, tileHeight);
-                    //        }
-                    //        else
-                    //        {
-                    //            //change focus to point if its not the same
-                    //            if (inputPoint != focusedTile)
-                    //            {
-                    //                focusedTile = inputPoint;
-                    //                if (characterCollection.ContainsAtCoordinate(inputPoint))
-                    //                {
-                    //                    focusedCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
-                    //                    Console.WriteLine(focusedCharacter.Name + " is selected");
-                    //                }
-                    //                else
-                    //                {
-                    //                    somethingFocused = false;
-                    //                    Console.WriteLine("de-selected");
-                    //                }
-                    //                //display
-                    //            }
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        //make the point your focus
-                    //        focusedTile = inputPoint;
-                    //        //is there a character at the coordinate?
-                    //        if (characterCollection.ContainsAtCoordinate(inputPoint))
-                    //        {
-                    //            focusedCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
-                    //            somethingFocused = true;
-                    //            Console.WriteLine(focusedCharacter.Name + " is selected");
-                    //        }
-                    //        //display
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if(somethingFocused)
-                    //    {
-                    //        if (focusedCharacter == inPlay)
-                    //        {
-                    //            inPlay.SetCoordinate(focusedTile, tileWidth, tileHeight);
-                    //        }
-                    //        somethingFocused = false;
-                    //        Console.WriteLine("Out of Bounds, Deselected");
-                    //    }
-                    //}
-
-                    #endregion
-
-                    #region old select 2
-                    if (MathExtension.CoordinateWithinBounds(inputPoint.X, inputPoint.Y, tilemap.Width, tilemap.Height))
+                    if (input.LeftClick)
                     {
-                        if (isCharacterSelected) //is something Selected?
+                        //Selecting phase, nothing set yet, selecting random shit, if inplay is selected bring up actionmenu then let it listen
+                        if (MathExtension.CoordinateWithinBounds(inputPoint.X, inputPoint.Y, tileWidth, tileHeight))
+                        {  
+                            Select(inputPoint);
+                        }
+                        else
                         {
-                            //is the one in focus, the one taking turn
-                            if (SelectedCharacter == inPlay)
+                            //if during phase one, unselect
+                            UnselectAll();
+                        }
+                    }
+
+                    if (input.RightClick)
+                    {
+                        UnselectAll();
+                    }
+                }
+
+                //if targetting
+                if (battlePhase == Enums.BattlePhases.Targetting)
+                {
+                    if (input.LeftClick)
+                    {
+                        if (MathExtension.CoordinateWithinBounds(inputPoint.X, inputPoint.Y, tileWidth, tileHeight))
+                        {   //assuming that we only allow possible moves, else cancel
+                            if (currentOperation == Enums.CurrentOperation.Move)
                             {
-                                //need to wait for action
-                                inPlay.SetCoordinateToGrid(inputPoint, tileWidth, tileHeight);
-                            }
-                            else
-                            {
-                                //change focus to point if its not the same
-                                if (inputPoint != SelectedTile)
+                                if (!characterCollection.ContainsAtCoordinate(inputPoint)) //is it empty tile?
                                 {
-                                    SelectedTile = inputPoint;
+                                    inPlay.SetCoordinateToGrid(inputPoint, tileWidth, tileHeight);
+                                    ProgressBattlePhase();
+                                }
+                            }
 
-                                    if (characterCollection.ContainsAtCoordinate(inputPoint)) // is there a character at this coordinate?
-                                    {
-                                        SelectedCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
-                                        Console.WriteLine(SelectedCharacter.CharacterName + " is selected");
-
-                                        if (SelectedCharacter == inPlay)
-                                        {
-                                            //XXScreenManager.AddScreen(testaction);
-                                            Console.WriteLine("action");
-                                        }
-                                        //XXScreenManager.AddScreen(new zTestFocusMenuBL());
-                                        Console.WriteLine("BL");
-                                    }
-                                    else // no, so deselect 
-                                    {
-                                        isCharacterSelected = false;
-                                        Console.WriteLine("de-selected");
-                                    }
-                                    //display
+                            if (currentOperation == Enums.CurrentOperation.Action)
+                            {
+                                if (IsAdjacentCoordinate(inPlay.Coordinate, inputPoint) && characterCollection.ContainsAtCoordinate(inputPoint))
+                                {
+                                    //IsTargeted = true;
+                                    ProgressBattlePhase();
+                                    TargettedCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
                                 }
                             }
                         }
-                        else // something is not focused yet
+                        else
                         {
-                            ////make the point your focus
-                            //SelectedTile = inputPoint;
-                            ////is there a character at the coordinate?
-                            //if (characterCollection.ContainsAtCoordinate(inputPoint))
-                            //{
-                            //    SelectedCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
-                            //    isCharacterSelected = true;
-                            //    Console.WriteLine(SelectedCharacter.CharacterName + " is selected");
-
-                            //    if (SelectedCharacter == inPlay)
-                            //    {
-                            //        ScreenFactory.AddScreen(new zTestActionMenu());
-                            //        Console.WriteLine("action");
-                            //    }
-                            //    ScreenFactory.AddScreen(new zTestFocusMenuBL());
-                            //    Console.WriteLine("BL");
-                            //}
-                            ////display tile?
-
-                            //make 
-                            Select(inputPoint);
+                            CancelOperation();
                         }
                     }
-                    else //clicked out of bounds
+
+                    if (input.RightClick)
                     {
-                        if (isCharacterSelected)
-                        {
-                            if (SelectedCharacter == inPlay)
-                            {
-                                inPlay.SetCoordinateToGrid(SelectedTile, tileWidth, tileHeight);
-                            }
-                            isCharacterSelected = false;
-                            Console.WriteLine("Out of Bounds, Deselected");
-                        }
+                        CancelOperation();
                     }
-
-                    #endregion
-
-                    //Phase one, nothing set yet, selecting random shit, if inplay is selected bring up actionmenu then let it listen
-                    if (MathExtension.CoordinateWithinBounds(inputPoint.X, inputPoint.Y, tileWidth, tileHeight))
-                    {   //phase one, selecting
-                        Select(inputPoint);
-                        if (SelectedCharacter == inPlay)
-                        {
-                            //XXScreenManager.AddScreen(new zTestActionMenu());
-                            isActionMenuPopedUp = true;
-                        }
-
-                    }
-                    else
-                    {
-                        //if during phase one, unselect
-                        UnselectAll();
-                    }
-
-                    //phase two, confirming the action 
-                    //depending on action, check if valid, if not keep waiting
                 }
 
-                if (input.RightClick)
+                // if confirming 
+                if (battlePhase == Enums.BattlePhases.Confirming)
                 {
-                    //end turn 
-                    inPlay = characterCollection.GetNext();
-                    Console.WriteLine(inPlay.CharacterName + "'s turn");
-
-                    isCharacterSelected = false;
+                    
                 }
             }
 
@@ -394,7 +285,7 @@ namespace oGame
 
             if (input.MiddleClick)
             {
-
+                Console.WriteLine("Sequence: {0} | phase: {1}", screenSequence, battlePhase);
 #if DEBUG
                 //Console.WriteLine("Pixels: {0}", input.Position.ToString());
                 //Console.WriteLine("Rounded: {0}", MathExtension.IsoSnap(input.Position, tileWidth, tileHeight).ToString());
@@ -429,15 +320,18 @@ namespace oGame
 
             #region Hovering
 
-            if (characterCollection.ContainsAtCoordinate(inputPoint) && !IsTargeted)
+            if (!(screenSequence == Enums.BattleScreenSequences.Battle) || !(battlePhase == Enums.BattlePhases.Confirming))
             {
-                Hover(inputPoint);
-            }
-            else
-            {
-                if (isCharacterHovered)
+                if (characterCollection.ContainsAtCoordinate(inputPoint))
                 {
-                    UnHover();
+                    Hover(inputPoint);
+                }
+                else
+                {
+                    if (isCharacterHovered)
+                    {
+                        UnHover();
+                    }
                 }
             }
 
@@ -448,7 +342,7 @@ namespace oGame
         {
             isTileSelected = false;
             UnselectCharacter();
-
+            UnHover();
             //notify that object has been unselected
             //this.Publish(new BattleScreenDeselectedAll() { }.AsTask());
             eventAggregator.Publish(new BattleScreenDeselectedAll() { });
@@ -467,19 +361,19 @@ namespace oGame
         {
             SelectedTile = inputPoint;
             isTileSelected = true;
-            //notify that something selectable has been selected
+            // notify that something selectable has been selected
             this.Publish(new BattleScreenSomethingSelected() { }.AsTask());
 
             if (isCharacterSelected) // character is already selected 
             {
                 if (characterCollection.ContainsAtCoordinate(inputPoint)) // is there a character on selected tile?
                 {
-                    //change if different 
+                    // change if different 
                     if (SelectedCharacter.Coordinate != SelectedTile)
                     {
                         SelectedCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
-                        //notify that new selected object has CHANGED with character info characterCollection.GetCharacterAtCoordinate
-                        //this.Publish(new BattleScreenCharacterIsSelected() { character = SelectedCharacter }.AsTask());
+                        // notify that new selected object has CHANGED with character info characterCollection.GetCharacterAtCoordinate
+                        // this.Publish(new BattleScreenCharacterIsSelected() { character = SelectedCharacter }.AsTask());
                         eventAggregator.Publish(new BattleScreenCharacterIsSelected() { character = SelectedCharacter });
                     }
                 }
@@ -500,6 +394,12 @@ namespace oGame
                     eventAggregator.Publish(new BattleScreenCharacterIsSelected() { character = SelectedCharacter });
                 }
             }
+
+            if (screenSequence == Enums.BattleScreenSequences.Battle && battlePhase == Enums.BattlePhases.Selecting && SelectedCharacter == inPlay && !isActionMenuPoppedUp)
+            {
+                ScreenManager.AddScreen(new TestActionMenuPopup(SelectedCharacter, eventAggregator) { });
+                isActionMenuPoppedUp = true;
+            }
         }
 
         public void UnHover()
@@ -509,10 +409,7 @@ namespace oGame
                 isCharacterHovered = false;
             }
             //notify that character is no longer focused
-            //this.Publish(new BattleScreenCharacterNotHovered() { }.AsTask());
             eventAggregator.Publish(new BattleScreenCharacterNotHovered() { });
-
-            Console.WriteLine("trying to Not hover");
         }
 
         public void Hover(Point inputPoint)
@@ -521,12 +418,10 @@ namespace oGame
             {
                 if (TargettedCharacter != characterCollection.GetCharacterAtCoordinate(inputPoint)) //did focus shift to different object?
                 {
-                    //Notify the fact that character focus has been changed 
-                    TargettedCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
-                    //this.Publish(new BattleScreenCharacterIsHovered() { character = characterCollection.GetCharacterAtCoordinate(inputPoint) }.AsTask());
-                    eventAggregator.Publish(new BattleScreenCharacterIsHovered() { character = TargettedCharacter });
+                    //clear and destory hover to remake
+                    UnHover();
 
-                    Console.WriteLine("trying to hover");
+                    TargettedCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
                 }
             }
             else // focus a character
@@ -534,10 +429,7 @@ namespace oGame
                 TargettedCharacter = characterCollection.GetCharacterAtCoordinate(inputPoint);
             }
 
-            if (!isCharacterHovered)
-            {
-                isCharacterHovered = true;
-            }
+            isCharacterHovered = true;
         }  
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -546,57 +438,61 @@ namespace oGame
 
             characterCollection.Update(gameTime);
 
-            #region Chararacter Placement Sequence
+            #region Character Placement Sequence
 
-            if (ScreenSequence == Enums.BattleScreenSequences.PlacementSequence)
+            if (screenSequence == Enums.BattleScreenSequences.Placement)
             {
-                if (isTileSelected && !isCharPlacementPopedUp)
+                if (isTileSelected && !isCharPlacementPoppedUp)
                 {
                     ScreenManager.AddScreen(new TestCharacterPlacementPopup(eventAggregator));
-                    isCharPlacementPopedUp = true;
-                }                
+                    isCharPlacementPoppedUp = true;
+                }    
+
+                if (characterCollection.Count >= 1)
+                {
+                    if (!isButtonPoppedUp)
+                    {
+                        ScreenManager.AddScreen(new TestButtonPopup(eventAggregator));
+                        isButtonPoppedUp = true;
+                    }
+                    eventAggregator.Publish(new BattleScreenCharacterCollectionNotEmpty() { });
+                }
+                else if (!characterCollection.Any() && isButtonPoppedUp)
+                {
+                    //If no chars are selected for play
+                        eventAggregator.Publish(new BattleScreenCharacterCollectionNowEmpty() { });
+                }
             }
-
-            #endregion
-
-            #region ActionMenuPopup
-
-            if (screenSequence == Enums.BattleScreenSequences.BattleSequence && !isActionMenuPopedUp)
-            {
-                //XXScreenManager.AddScreen(new zTestActionMenu());
-                isActionMenuPopedUp = true;
-            }
-
-            //TODO: LISTEN IF actionmenu gets closed, change actionmenupopup to false, as well as change to phase2
 
             #endregion
 
             #region BottomRight hovered/targetted Popup
 
-            if ((isCharacterHovered || IsTargeted) && !isBottomRightPopedUp)
+            if ((isCharacterHovered || (battlePhase == Enums.BattlePhases.Confirming && currentOperation == Enums.CurrentOperation.Action)) && !isBottomRightPoppedUp)
             {
                 ScreenManager.AddScreen(new TestBottomRight(TargettedCharacter, eventAggregator));
-                isBottomRightPopedUp = true;
-
-                Console.WriteLine("trying to hover");
+                isBottomRightPoppedUp = true;
             }
-
-            //TODO: LISTEN IF FOCUSMENU gets closed to SET FOCUSMENUPOPPEDUP TO FALSE
 
             #endregion
 
             #region BottomLeft Selected Popup
 
-            if (isCharacterSelected && !isBottomLeftPopedUp)
+            if (isCharacterSelected && !isBottomLeftPoppedUp)
             {
                 ScreenManager.AddScreen(new TestBottomLeftPopup(SelectedCharacter, eventAggregator));
-                isBottomLeftPopedUp = true;
+                isBottomLeftPoppedUp = true;
             }
 
             //TODO: LISTEN IF BL GETS CLOSED TO SET ISSELECTEDMENUPOPED UP TO FALSE AND TO DESELECT SHIT
             #endregion
 
-
+            if (screenSequence == Enums.BattleScreenSequences.Battle && CheckEnd())
+            {
+                ScreenManager.AddScreen(new SampleScreen());
+                ExitScreen();
+            }
+            
         }
 
         public override void Draw(GameTime gameTime)
@@ -614,84 +510,133 @@ namespace oGame
             ScreenManager.SpriteBatch.End();
         }
 
-        private void BattleScreenSubscriptions()
+        public void ProgressBattlePhase()
         {
-            //TODO: listen if a charSelectionPopup gets closed if so change tileSelected to false (unselect maybe) AND ischarselectionpopuped ; 
-            this.Subscribe<CharacterPlacementCharacterIsSelected>(async obj =>
+            switch(battlePhase)
             {
-                if (screenSequence == Enums.BattleScreenSequences.PlacementSequence)
+                case Enums.BattlePhases.Selecting:
+                    battlePhase = Enums.BattlePhases.Targetting;
+                    break;
+                case Enums.BattlePhases.Targetting:
+                    battlePhase = Enums.BattlePhases.Confirming;
+                    eventAggregator.Publish(new BattleScreenConfirming() { });
+                    UnHover();
+                    break;
+                case Enums.BattlePhases.Confirming:
+                    ResetBattlePhase();
+                    break;
+            }
+        }
+
+        public void ResetBattlePhase()
+        {
+            battlePhase = Enums.BattlePhases.Selecting;
+            eventAggregator.Publish(new BattleScreenNotConfirming() { });
+            UnselectAll();
+        }
+
+        public bool IsAdjacentCoordinate(Point targetPoint, Point inputPoint)
+        {
+            if(inputPoint == new Point(targetPoint.X + 1, targetPoint.Y) || inputPoint == new Point(targetPoint.X - 1, targetPoint.Y) ||
+                inputPoint == new Point(targetPoint.X, targetPoint.Y + 1) || inputPoint == new Point(targetPoint.X, targetPoint.Y - 1))
+            {
+                return true;
+            }
+            return false;
+        }
+        public void CancelOperation()
+        {
+            if (currentOperation == Enums.CurrentOperation.Move)
+            {
+                inPlay.SetCoordinateToGrid(SelectedTile, tileWidth, tileHeight);
+            }
+
+            ResetBattlePhase();
+        }
+
+        public void ExecuteOperation()
+        {
+            if (currentOperation == Enums.CurrentOperation.Move)
+            {
+                inPlay.MoveToken--;
+            }
+            
+            if (currentOperation == Enums.CurrentOperation.Action)
+            {
+                TargettedCharacter.Health -= 25;
+                inPlay.ActionToken--;
+            }
+
+            if (inPlay.MoveToken == 0 && inPlay.ActionToken == 0)
+            {
+                EndTurn();
+            }
+            else
+            {
+                ResetBattlePhase();
+            }
+        }
+
+        public void EndTurn()
+        {
+            characterCollection.EndTurn(inPlay);
+            ResetBattlePhase();
+            inPlay = characterCollection.GetNext();
+            Console.WriteLine("It is: " + inPlay.CharacterName + "'s turn");
+        }
+
+        public bool CheckEnd()
+        {
+            int counter = 0;
+
+            foreach (Character character in characterCollection)
+            {
+                if (!character.isDead)
                 {
-                    var item = await obj;
-
-                    UnselectAll();
-
-                    Character tempCharacter = characterCollection.GetCharacterAtCoordinate(SelectedTile);
-                    //Is a character already on the selected tile, if so remove
-                    if (tempCharacter != null)
-                    {
-                        tempCharacter.IsVisible = false;
-                        tempCharacter.IsActive = false;
-                        characterCollection.Remove(tempCharacter);
-                    }
-
-                    tempCharacter = characterCollection.GetCharacterWithName(item.character.CharacterName);
-                    //Does selected character exist already
-                    if (tempCharacter == null)
-                    {
-                        //Does not exist, add
-                        tempCharacter = playerCharacterCollection.GetCharacterWithName(item.character.CharacterName);
-                        tempCharacter.IsActive = true;
-                        tempCharacter.IsVisible = true;
-                        characterCollection.Add(tempCharacter);
-                    }
-
-                    tempCharacter.SetCoordinateToGrid(SelectedTile, tileWidth, tileHeight);
-
-                    //isCharPlacementPopedUp = false;
+                    counter++;
                 }
-            });
-
-            this.Subscribe<CharacterPlacementIsExiting>(async obj =>
-            {
-                var item = await obj;
-
-                isCharPlacementPopedUp = false;
-            });
-
-            this.Subscribe<BottomLeftIsExiting>(async obj =>
-            {
-                var item = await obj;
-
-                isBottomLeftPopedUp = false;
-            });
-
-            this.Subscribe<BottomRightIsExiting>(async obj =>
-            {
-                var item = await obj;
-
-                isBottomRightPopedUp = false;
-            });
-
-            // TODO: need to listen for when placement is over to switch to battle
+            }
+            return (counter == 1);
         }
+            
 
-        private void BattleScreenUnsubscribe()
+        #region ButtonPopup Events
+
+        public void OnEvent (ButtonPopupStartBattleClicked e)
         {
-            this.Unsubscribe<CharacterPlacementCharacterIsSelected>();
-            this.Unsubscribe<CharacterPlacementIsExiting>();
-            this.Unsubscribe<BottomLeftIsExiting>();
+            if (screenSequence != Enums.BattleScreenSequences.Battle)
+            {
+                screenSequence = Enums.BattleScreenSequences.Battle;
+                eventAggregator.Publish(new BattleScreenStartingBattleSequence() { });
+            }
+            //will probably need to add enemy units to character collection
+            
+            inPlay = characterCollection.GetNext();
+            Console.WriteLine("It is: " + inPlay.CharacterName + "'s turn");
         }
+
+        public void OnEvent (ButtonPopupCancelClicked e)
+        {
+            CancelOperation();
+        }
+
+        public void OnEvent(ButtonPopupExecuteClicked e)
+        {
+            ExecuteOperation();
+        }
+
+        #endregion
 
         #region CharacterPlacement Events
 
         public void OnEvent(CharacterPlacementIsExiting e)
         {
-            isCharPlacementPopedUp = false;
+            isCharPlacementPoppedUp = false;
         }
 
         public void OnEvent(CharacterPlacementCharacterIsSelected e)
         {
-            if (screenSequence == Enums.BattleScreenSequences.PlacementSequence)
+            if (screenSequence == Enums.BattleScreenSequences.Placement)
             {
                 UnselectAll();
 
@@ -727,7 +672,7 @@ namespace oGame
 
         public void OnEvent(BottomLeftIsExiting e)
         {
-            isBottomLeftPopedUp = false;
+            isBottomLeftPoppedUp = false;
         }
 
         #endregion
@@ -736,7 +681,35 @@ namespace oGame
 
         public void OnEvent(BottomRightIsExiting e)
         {
-            isBottomRightPopedUp = false;
+            isBottomRightPoppedUp = false;
+        }
+
+        #endregion
+
+        #region ActionMenu Events
+
+        public void OnEvent(ActionMenuIsExiting e)
+        {
+            isActionMenuPoppedUp = false;
+        }
+
+        public void OnEvent(ActionMenuActionClicked e)
+        {
+            currentOperation = Enums.CurrentOperation.Action;
+            ProgressBattlePhase();
+        }
+
+        public void OnEvent(ActionMenuMoveClicked e)
+        {
+            currentOperation = Enums.CurrentOperation.Move;
+            ProgressBattlePhase();
+        }
+
+        public void OnEvent(ActionMenuWaitClicked e)
+        {
+            currentOperation = Enums.CurrentOperation.Wait;
+            //progress shit
+            EndTurn();
         }
 
         #endregion

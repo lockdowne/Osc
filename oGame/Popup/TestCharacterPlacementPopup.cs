@@ -41,8 +41,7 @@ namespace oGame.Popup
 
             TransitionOnTime = TimeSpan.FromSeconds(0);
             TransitionOffTime = TimeSpan.FromSeconds(0);
-           
-            //CharacterPlacementSubscriptions();
+
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
         }
@@ -95,6 +94,7 @@ namespace oGame.Popup
 
                 characterCollection.Populate<Character>(jon, david, andy, nick, osc);
                 characterCollection.SetAllActiveAndVisible();
+                characterCollection.SetTempValues();
 
                 #endregion
             }
@@ -106,9 +106,7 @@ namespace oGame.Popup
 
         public override void UnloadContent()
         {
-            //this.Publish(new CharacterPlacementIsExiting() { }.AsTask());
             eventAggregator.Publish(new CharacterPlacementIsExiting() { });
-            //CharacterPlacementUnsubscribe();
 
             base.UnloadContent();
         }
@@ -158,21 +156,6 @@ namespace oGame.Popup
 
             ScreenManager.SpriteBatch.End();
 
-        }
-
-        private void CharacterPlacementSubscriptions()
-        {
-            this.Subscribe<BattleScreenDeselectedAll>(async obj =>
-            {
-                var item = await obj;
-
-                ExitScreen();
-            });
-        }
-
-        private void CharacterPlacementUnsubscribe()
-        {
-            this.Unsubscribe<BattleScreenDeselectedAll>();
         }
 
         public void OnEvent(BattleScreenDeselectedAll e)

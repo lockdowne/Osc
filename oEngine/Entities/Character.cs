@@ -20,12 +20,22 @@ using System.Text;
 using oEngine.Common;
 using Microsoft.Xna.Framework;
 #endregion
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace oEngine.Entities
 {
     public class Character : Sprite
     {
+        //TEST REGION
+        public Animation deadAnimation { get; set; }
+        public bool isDead
+        {
+            get { return (Health <= 0); }
+        }
+        public string playString { get; set; }
+        //TEST REGION
+
         #region Fields
 
         private int level;
@@ -156,12 +166,16 @@ namespace oEngine.Entities
         /// <summary>
         /// Returns Whether the character has high enough TurnCounter to be considered ready
         /// </summary>
-        public bool IsReady { get { return (TurnCounter > Consts.TurnReady); } }
+        public bool IsReady { get { return ((TurnCounter > Consts.TurnReady) && !isDead); } }
 
         /// <summary>
         /// Returns the character's coordinate in relation to the tilemap
         /// </summary>
         public Point Coordinate { get; set; }
+
+        public int ActionToken { get; set; }
+
+        public int MoveToken { get; set; }
 
         #endregion
 
@@ -203,13 +217,16 @@ namespace oEngine.Entities
         /// <param name="animation"></param>
         public void AnimationInitialize(Animation animation)
         {
+            playString = "default";
             AddAnimation("default", animation);
-            PlayAnimation("default");
+            PlayAnimation(playString);
+            AddAnimation("dead", deadAnimation);
             //Position = new Vector2(float.NaN, float.NaN);
             //IsActive = true;
             //IsVisible = true;
             Scale = 1.0f;
             Tint = Color.White;
+
         }
 
         public void SetPositionToGrid(Vector2 inputPosition, int tileWidth, int tileHeight)
@@ -222,6 +239,11 @@ namespace oEngine.Entities
         {
             Coordinate = coordinate;
             Position = MathExtension.IsoCoordinateToPixels(coordinate.X, coordinate.Y, tileWidth, tileHeight) - (new Vector2(Bounds.Width / 2, Bounds.Height));
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
         }
     }
 }

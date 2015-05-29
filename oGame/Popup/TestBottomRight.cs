@@ -16,8 +16,7 @@ using oGame.Aggregators;
 
 namespace oGame.Popup
 {
-    public class TestBottomRight : GameScreen,
-        ISubscriber<BattleScreenCharacterIsHovered>, ISubscriber<BattleScreenCharacterNotHovered>
+    public class TestBottomRight : GameScreen, ISubscriber<BattleScreenCharacterNotHovered>//, ISubscriber<battlescreen>
     {
         Character character;
         Character characterToDisplay;
@@ -35,9 +34,9 @@ namespace oGame.Popup
             TransitionOffTime = TimeSpan.FromSeconds(0);
 
             this.character = character;
-            this.eventAggregator = eventAggregator;
 
-            //BottomRightSubscriptions();
+            this.eventAggregator = eventAggregator;
+            eventAggregator.Subscribe(this);
         }
 
         public override void LoadContent()
@@ -62,10 +61,7 @@ namespace oGame.Popup
 
         public override void UnloadContent()
         {
-            //this.Publish(new BottomRightIsExiting() { }.AsTask());
             eventAggregator.Publish(new BottomRightIsExiting() { });
-
-            //BottomRightUnsubscribe();
 
             base.UnloadContent();
 
@@ -94,6 +90,7 @@ namespace oGame.Popup
                 if (backgroundRectangle.Contains(new Point(Convert.ToInt32(input.Position.X), Convert.ToInt32(input.Position.Y))))
                 {
                     IsSoftPopup = false;
+                    Console.WriteLine("CLICKED");
                 }
             }
         }
@@ -110,35 +107,6 @@ namespace oGame.Popup
             ScreenManager.SpriteBatch.DrawString(ScreenManager.Font, "CT: " + characterToDisplay.TurnCounter.ToString() + " / " + Consts.TurnReady.ToString(), new Vector2(backgroundRectangle.Left, backgroundRectangle.Top + 60), Color.White);
             
             ScreenManager.SpriteBatch.End();
-        }
-
-        public void BottomRightSubscriptions()
-        {
-            this.Subscribe<BattleScreenCharacterIsHovered>(async obj =>
-            {
-                var item = await obj;
-
-                character = item.character;
-            });
-
-            this.Subscribe<BattleScreenCharacterNotHovered>(async obj =>
-            {
-                var item = await obj;
-
-                BottomRightUnsubscribe();
-                ExitScreen();
-            });
-        }
-
-        public void BottomRightUnsubscribe()
-        {
-            this.Unsubscribe<BattleScreenCharacterIsHovered>();
-            this.Unsubscribe<BattleScreenCharacterNotHovered>();
-        }
-
-        public void OnEvent(BattleScreenCharacterIsHovered e)
-        {
-            character = e.character;
         }
 
         public void OnEvent(BattleScreenCharacterNotHovered e)

@@ -32,6 +32,7 @@ namespace oGame.GameObjects
         /// <returns></returns>
         public Character GetNext()
         {
+            Character characterToReturn;
             List<Character> highestTurnCounter = new List<Character>();
             List<Character> fastestSpeed = new List<Character>();
 
@@ -65,49 +66,58 @@ namespace oGame.GameObjects
             }
 
             // When found: remove the TurnCounter, increment all characters, return the character so that action is selected.  
-            if (highestTurnCounter.Count == 1)
+            if (highestTurnCounter.Count == 1) //If count is 1, return that character
             {
-                highestTurnCounter[0].TakingTurn();
-                ProgressTurnCounter();
-                return highestTurnCounter[0];
+                //highestTurnCounter[0].TakingTurn();
+                //ProgressTurnCounter();
+                //return highestTurnCounter[0];
+                characterToReturn = highestTurnCounter[0];
             }
-
-            //find the character with the fastest speed within highestTurnCounter
-            foreach (Character character in highestTurnCounter)
+            else // Multiple chaaracters are tied for the highest TurnCounter, find fastest
             {
-                if (fastestSpeed.Count <= 0)
+
+                // find the character with the fastest speed within highestTurnCounter
+                foreach (Character character in highestTurnCounter)
                 {
-                    fastestSpeed.Add(character);
-                }
-                else
-                {
-                    if (character.Speed == fastestSpeed[0].Speed)
+                    if (fastestSpeed.Count <= 0)
                     {
                         fastestSpeed.Add(character);
                     }
-                    else if (character.Speed > fastestSpeed[0].Speed)
+                    else
                     {
-                        fastestSpeed.Clear();
-                        fastestSpeed.Add(character);
+                        if (character.Speed == fastestSpeed[0].Speed)
+                        {
+                            fastestSpeed.Add(character);
+                        }
+                        else if (character.Speed > fastestSpeed[0].Speed)
+                        {
+                            fastestSpeed.Clear();
+                            fastestSpeed.Add(character);
+                        }
                     }
+                }
+
+                // return the fastest
+                if (fastestSpeed.Count == 1) // If count is 1, return that character
+                {
+                    //fastestSpeed[0].TakingTurn();
+                    //ProgressTurnCounter();
+                    //return fastestSpeed[0];
+                    characterToReturn = fastestSpeed[0];
+                }
+                else // Multiple characters are tied for the highest Speed
+                {
+                    // randomly select one of the fastest
+                    MathExtension.Shuffle(fastestSpeed);
+                    //fastestSpeed[0].TakingTurn();
+                    //ProgressTurnCounter();
+                    //return fastestSpeed[0];
+                    characterToReturn = fastestSpeed[0];
                 }
             }
 
-            //return the fastest
-            if (fastestSpeed.Count == 1)
-            {
-                fastestSpeed[0].TakingTurn();
-                ProgressTurnCounter();
-                return fastestSpeed[0];
-            }
-            else
-            {
-                //randomly select one of the fastest
-                MathExtension.Shuffle(fastestSpeed);
-                fastestSpeed[0].TakingTurn();
-                ProgressTurnCounter();
-                return fastestSpeed[0];
-            }
+            IncrementTokens(characterToReturn);
+            return characterToReturn;
         }
 
         /// <summary>
@@ -133,7 +143,10 @@ namespace oGame.GameObjects
         {
             foreach (Character character in this)
             {
-                character.ProgressTurnCounter();
+                if (!character.isDead)
+                {
+                    character.ProgressTurnCounter();
+                }
             }
         }
 
@@ -203,11 +216,18 @@ namespace oGame.GameObjects
             return null;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime) //most likely need to change dead
         {
             foreach (Character character in this)
             {
                 character.Update(gameTime);
+                if (character.isDead)
+                {
+                    if (character.playString != "dead")
+                    {
+                        character.PlayAnimation("dead");
+                    }
+                }
             }
         }
 
@@ -228,6 +248,18 @@ namespace oGame.GameObjects
                 character.HealthPool = 100;
                 character.Health = 100;
             }
+        }
+
+        public void IncrementTokens(Character character)
+        {
+            character.ActionToken++;
+            character.MoveToken++;
+        }
+
+        public void EndTurn(Character character)
+        {
+            character.TakingTurn();
+            ProgressTurnCounter();
         }
     }
 }
