@@ -10,10 +10,16 @@ namespace oEngine.Managers
 {
     public interface ICommandManager
     {
-        Task ExecuteCommand(Command command, bool saveToStack = true, [CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0);
+
+        void ExecuteCommand(Command command, bool saveToStack = true, [CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0);
+
+        void Undo(string methodName = "", string filePath = "", int line = 0);
+        void Redo(string methodName = "", string filePath = "", int line = 0);
+
+        Task ExecuteCommandAsync(Command command, bool saveToStack = true, [CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0);
         
-        Task Undo(string methodName = "", string filePath = "", int line = 0);
-        Task Redo(string methodName = "", string filePath = "", int line = 0);
+        Task UndoAsync(string methodName = "", string filePath = "", int line = 0);
+        Task RedoAsync(string methodName = "", string filePath = "", int line = 0);
 
         void Clear();
     }

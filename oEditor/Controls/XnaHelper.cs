@@ -43,7 +43,7 @@ namespace oEditor.Controls
                 bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                 stream.Seek(0, SeekOrigin.Begin);
 
-                return Texture2D.FromStream(GraphicsDevice, stream);
+                return Texture2D.FromStream(GraphicsDevice, stream); 
             }
         }
 
@@ -58,12 +58,6 @@ namespace oEditor.Controls
 
                 return Texture2D.FromStream(GraphicsDevice, stream);
             }
-        }
-
-        public SpriteFont LoadFont(string path)
-        {
-            
-            return null;
         }
     }
 }

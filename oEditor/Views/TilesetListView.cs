@@ -1,4 +1,5 @@
-﻿using oEditor.Aggregators;
+﻿using oEditor.Events;
+using oEngine.Aggregators;
 using oEngine.Common;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace oEditor.Views
 
         private void btnAddTilesetImage_Click(object sender, EventArgs e)
         {
-            eventAggregator.Publish(new OnAddTilesetTexture() { List = radListControl });
+            this.eventAggregator.Publish(new OnAddTilesetTexture() { List = radListControl });
         }
 
         private void btnTilesetSelectTexture_Click(object sender, EventArgs e)
@@ -67,7 +68,7 @@ namespace oEditor.Views
                 return;
             }
 
-            eventAggregator.Publish(new OnSelectTilesetTexture() { FileName = SelectedItem.Text });
+            this.eventAggregator.Publish(new OnSelectTilesetTexture() { FileName = SelectedItem.Text });
         }
     }
 }

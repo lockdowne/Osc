@@ -14,6 +14,8 @@ namespace oEditor.Views
 {
     public class EntitiesView : ToolWindow, IEntitiesView
     {
+        private IEventAggregator eventAggregator;
+
         private Telerik.WinControls.UI.RadContextMenu contextMenuRoot;
         private System.ComponentModel.Container components;
         private Telerik.WinControls.UI.RadMenuItem contextMenuRootAddEntity;
@@ -42,8 +44,10 @@ namespace oEditor.Views
             get { return contextMenuTilemap; }
         }
 
-        public EntitiesView()
+        public EntitiesView(IEventAggregator eventAggregator)
         {
+            this.eventAggregator = eventAggregator;
+
             this.InitializeComponent();
 
             // Create fixed root nodes
@@ -56,23 +60,20 @@ namespace oEditor.Views
 
             radTreeView.NodeMouseDoubleClick += (sender, e) =>
             {
-                if (SelectedNode == null)
+                EntitiesTilemapNode selectedNode = SelectedNode as EntitiesTilemapNode;
+
+                if (selectedNode == null)
                     return;
 
-                if (SelectedNode.GetType() == typeof(EntitiesTilemapNode))
-                {
-                    this.Publish(new OnTilemapNodeDoubleClicked() { Node = (EntitiesTilemapNode)SelectedNode }.AsTask());
-                }
-
+                this.eventAggregator.Publish(new OnTilemapNodeDoubleClicked() { Node = selectedNode });
             };
 
             this.contextMenuRootAddEntity.Click += (sender, e) =>
             {
-                // This shouldn't be possibru
-                if (SelectedNode == null)
-                    return;
+                EntitiesRootNode root = SelectedNode as EntitiesRootNode;
 
-                EntitiesRootNode root = (EntitiesRootNode)SelectedNode;
+                if (root == null)
+                    return;
 
                 switch (root.EntityType)
                 {
@@ -83,7 +84,7 @@ namespace oEditor.Views
                     case Enums.EntityTypes.Quests:
                         break;
                     case Enums.EntityTypes.Tilemaps:
-                        this.Publish(new OnCreateTilemapNode() { Root = root, Node = new EntitiesTilemapNode() { Text = Consts.Nodes.Tilemap, ID = Guid.NewGuid(), ContextMenu = contextMenuTilemap } }.AsTask());
+                        this.eventAggregator.Publish(new OnCreateTilemapNode() { Root = root, Node = new EntitiesTilemapNode() { Text = Consts.Nodes.Tilemap, ID = Guid.NewGuid(), ContextMenu = contextMenuTilemap } });
                         break;
                     case Enums.EntityTypes.Nodes:
                         break;

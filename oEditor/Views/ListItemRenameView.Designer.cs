@@ -1,6 +1,6 @@
 ﻿namespace oEditor.Views
 {
-    partial class TilemapLayerRenameView
+    partial class ListItemRenameView
     {
         /// <summary>
         /// Required designer variable.
@@ -51,7 +51,6 @@
             this.btnTilemapLayerOK.Size = new System.Drawing.Size(110, 24);
             this.btnTilemapLayerOK.TabIndex = 1;
             this.btnTilemapLayerOK.Text = "OK";
-            this.btnTilemapLayerOK.Click += new System.EventHandler(this.btnTilemapLayerOK_Click);
             // 
             // btnTilemapLayerCancel
             // 
@@ -60,7 +59,6 @@
             this.btnTilemapLayerCancel.Size = new System.Drawing.Size(110, 24);
             this.btnTilemapLayerCancel.TabIndex = 2;
             this.btnTilemapLayerCancel.Text = "Cancel";
-            this.btnTilemapLayerCancel.Click += new System.EventHandler(this.btnTilemapLayerCancel_Click);
             // 
             // TilemapLayerRenameView
             // 

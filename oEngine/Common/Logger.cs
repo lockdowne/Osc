@@ -29,8 +29,11 @@ namespace oEngine.Common
 
         private List<LogEntry> Logs { get; set; }
 
+        private object locker = new object();
+
         public event Action<LogEntry> OnLogged;
 
+        
         public Logger()
         {
             Logs = new List<LogEntry>();
@@ -63,49 +66,51 @@ namespace oEngine.Common
             }
         }
 
-        public Task Log(string message, string methodName = "", string filePath = "", int line = 0)
+        public void Log(string message, string methodName = "", string filePath = "", int line = 0)
         {
-            return Task.Run(() =>
+            lock (locker)
+            {
+                try
                 {
-                    try
-                    {    
-                        LogEntry logEntry = new LogEntry()
-                        {
-                            Message = message,
-                            MethodName = methodName,
-                            ClassName = Path.GetFileNameWithoutExtension(filePath),
-                            LineNumber = line,
-                            DateTime = DateTime.Now.ToString("f"),
-                            ID = Logs.Count,
-                        };
 
-                        Logs.Add(logEntry);
-                        
-                        Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
-
-                        if (OnLogged != null)
-                            OnLogged(logEntry);
-
-                    }
-                    catch (Exception)
+                    LogEntry logEntry = new LogEntry()
                     {
+                        Message = message,
+                        MethodName = methodName,
+                        ClassName = Path.GetFileNameWithoutExtension(filePath),
+                        LineNumber = line,
+                        DateTime = DateTime.Now.ToString("f"),
+                        ID = Logs.Count,
+                    };
 
-                    }
-                });
+                    Logs.Add(logEntry);
+
+                    Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
+
+                    if (OnLogged != null)
+                        OnLogged(logEntry);
+
+                }
+                catch (Exception)
+                {
+
+                }
+            }               
         }
-        public Task Save()
-        {
-            return Task.Run(() =>
-                {
-                    try
-                    {
-                        Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
-                    }
-                    catch(Exception)
-                    {
 
-                    }
-                });
+        public void Save()
+        {
+            lock (locker)
+            {
+                try
+                {
+                    Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
         }
     }
 }

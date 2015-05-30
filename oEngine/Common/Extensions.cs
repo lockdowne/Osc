@@ -155,6 +155,13 @@ namespace oEngine.Common
             return collection;
         }
 
+        public static void Swap<T>(this IList<T> list, int startIndex, int endIndex)
+        {
+            T item = list[startIndex];
+            list[startIndex] = list[endIndex];
+            list[endIndex] = item;
+        }
+
         private static void LoadXnaContent(object obj, ContentManager content)
         {
             if (obj == null) return;
@@ -238,6 +245,37 @@ namespace oEngine.Common
             return EventAggregatorAsync.Unsubscribe<TEvent>(sender);
         }
 
+        /// <summary>
+        /// Randomizes the elements within the list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            Random rng = new Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+
+        public static int[,] ToIsometricArray(this int[,] array)
+        {
+            for (int x = 0; x < array.GetLength(0); x++)
+            {
+                for(int y = 0; y < array.GetLength(1); y++)
+                {
+                    
+                }
+            }
+           
+            return null;
+        }
        
     }
 }

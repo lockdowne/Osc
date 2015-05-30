@@ -120,29 +120,16 @@ namespace oEngine.Common
             }
         }
 
-        /// <summary>
-        /// Randomizes the elements within the list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        public static void Shuffle<T>(this IList<T> list)
+        public static Vector2 IsoSelector(Vector2 vector, int tileWidth, int tileHeight)
         {
-            Random rng = new Random();
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
+            return IsoSelector(vector, vector, tileWidth, tileHeight).FirstOrDefault();
         }
+
+       
 
         public static bool CoordinateWithinBounds(int x, int y, int width, int height)
         {
             return x >= 0 && y >= 0 && x < width && y < height;
         }
-
     }
 }

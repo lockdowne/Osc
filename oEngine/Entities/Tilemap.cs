@@ -17,9 +17,11 @@ namespace oEngine.Entities
         [DataMember(Name = "Tilesets")]
         private List<Tileset> Tilesets { get; set; }
 
-        [DataMember(Name = "Layers")]
+        [DataMember(Name = "VisualLayers")]
         private List<Layer<TileVisual>> TilemapLayers { get; set; }
 
+        [DataMember(Name = "CollisionLayer")]
+        public Layer<TileCollision> CollisionLayer { get; set; }
 
         /// <summary>
         /// Gets the unique ID of entity
@@ -90,6 +92,9 @@ namespace oEngine.Entities
 
             Tilesets = new List<Tileset>();
 
+            CollisionLayer = new Layer<TileCollision>();
+            CollisionLayer.Initialize(tilemapWidth, tilemapHeight);
+
             Name = name;
             Description = description;
 
@@ -129,6 +134,30 @@ namespace oEngine.Entities
             return TilemapLayers.IndexOf(layer);
         }
 
+        public Layer<TileVisual> FindLayerByIndex(int index)
+        {
+            if (index < 0 || index >= TilemapLayers.Count)
+                return null;
+
+            return TilemapLayers[index];
+        }
+
+        public void MoveLayerUp(int index)
+        {
+            if (index < 0 || index >= TilemapLayers.Count || (index - 1) <= 0)
+                return;
+
+            TilemapLayers.Swap(index, index - 1);
+        }
+
+        public void MoveLayerDown(int index)
+        {
+            if (index < 0 || index >= TilemapLayers.Count || (index + 1) >= TilemapLayers.Count)
+                return;
+
+            TilemapLayers.Swap(index, index + 1);
+        }
+
         public void AddTileset(Tileset tileset)
         {
             if (Tilesets.Any(set => set.Name == tileset.Name))
@@ -149,6 +178,8 @@ namespace oEngine.Entities
             Tilesets.Add(tileset);
         }
 
+        
+
         public void RemoveTileset(Guid id)
         {
             Tileset removeTileset = Tilesets.FirstOrDefault(tileset => tileset.ID == id);
@@ -164,7 +195,10 @@ namespace oEngine.Entities
                     {
 
                         if (layer.Columns[x].Rows[y].TilesetName == removeTileset.Name)
+                        {
+                            layer.Columns[x].Rows[y].TilesetIndex = -1;
                             layer.Columns[x].Rows[y].TilesetName = string.Empty;
+                        }
 
                     }
                 }
@@ -200,13 +234,13 @@ namespace oEngine.Entities
                         {
                             if (tile.TilesetIndex >= 0)
                             {
-                                Tileset tileset = Tilesets.FirstOrDefault(set => set.Name == tile.TilesetName);
+                                Tileset tileset = Tilesets.FirstOrDefault(set => set.TextureName == tile.TilesetName);
 
                                 if (tileset != null)
                                 {
                                     Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight);
 
-                                    spriteBatch.Draw(Pixel, position, Color.Red);
+                                    //spriteBatch.Draw(Pixel, position, Color.Red);
                                     // TODO: Apply height decimal places to the alignment of Y axis
                                     spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
                                         tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
@@ -227,7 +261,7 @@ namespace oEngine.Entities
             if (!IsGridVisible || Pixel == null)
                 return;
 
-            for (int x = 0; x < Width; x++)
+            for (int x = 1; x < Width + 2; x++)
             {
                 for (int y = -1; y < Height; y++)
                 {

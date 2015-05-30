@@ -8,11 +8,14 @@ using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
 using oEditor.Events;
 using oEngine.Common;
+using oEngine.Aggregators;
 
 namespace oEditor.Views
 {
     public class ConsoleView : ToolWindow, IConsoleView
     {
+        private IEventAggregator eventAggregator;
+
         private RadGridView radGridView1;
         private RadTextBox radTextBox1;
 
@@ -28,8 +31,9 @@ namespace oEditor.Views
             set { radTextBox1 = value; }
         }
     
-        public ConsoleView()
+        public ConsoleView(IEventAggregator eventAggregator)
         {
+            this.eventAggregator = eventAggregator;
             InitializeComponent();
 
             this.radGridView1.MasterTemplate.EnableSorting = true;
@@ -131,7 +135,7 @@ namespace oEditor.Views
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                this.Publish(new OnParseConsoleCommand() { Command = radTextBox1.Text }.AsTask());
+                this.eventAggregator.Publish(new OnParseConsoleCommand() { Command = radTextBox1.Text });
             }
         }
 

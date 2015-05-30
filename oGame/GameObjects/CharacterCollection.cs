@@ -108,7 +108,7 @@ namespace oGame.GameObjects
                 else // Multiple characters are tied for the highest Speed
                 {
                     // randomly select one of the fastest
-                    MathExtension.Shuffle(fastestSpeed);
+                    fastestSpeed.Shuffle();
                     //fastestSpeed[0].TakingTurn();
                     //ProgressTurnCounter();
                     //return fastestSpeed[0];

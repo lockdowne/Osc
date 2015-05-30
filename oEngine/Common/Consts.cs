@@ -14,7 +14,7 @@ namespace oEngine.Common
             public static readonly string TexturesDirectory = Directory.GetCurrentDirectory() + @"\Textures";
             public static readonly string MainDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game";
             public static readonly string Log = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game\Log.xml";
-            public static readonly string EditorSettings = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Osc\Game\EditorSettings.xml"; // TODO: Need to change
+            public static readonly string Settings = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game\Settings.xml"; // TODO: Need to change
         }
 
         public static class Repositories
@@ -25,11 +25,15 @@ namespace oEngine.Common
 
         public static class Nodes
         {
-            // Not really a good pattern to have root here
             public const string Root = "Root";
             public const string Tilemap = "Tilemap";
             public const string Character = "Character";
             public const string EmptyTilemap = "EmptyTilemap";
+        }
+
+        public static class Editor
+        {
+            public const string TilemapLayerName = "Tilemap Layer";
         }
 
         public static class AlertMessages

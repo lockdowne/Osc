@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace oEngine.Entities
 {
-    class TileCollision : ITile
+    public class TileCollision : ITile
     {
         /// <summary>
         /// Gets or sets the unique ID of entity
@@ -26,5 +26,8 @@ namespace oEngine.Entities
         /// </summary>
         [DataMember]
         public string Description { get; set; }
+
+        [DataMember]
+        public bool IsCollidable { get; set; }
     }
 }

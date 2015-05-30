@@ -106,6 +106,10 @@ namespace oEditor.Common
             }
         }
 
+        public static string ClassName(this object obj)
+        {
+            return obj == null ? string.Empty : obj.GetType().Name;
+        }
 
     }
 }
