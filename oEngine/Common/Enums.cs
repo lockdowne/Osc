@@ -79,5 +79,11 @@ namespace oEngine.Common
             Erase,
             Collision,
         }
+
+        public enum BattleScreenSequences
+        {
+            PlacementSequence,
+            BattleSequence,
+        }
     }
 }

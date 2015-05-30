@@ -41,13 +41,13 @@ namespace oEditor.Controllers
             
             // Create main view
             IMainView mainView = new MainView();
-            MainController mainController = new MainController(mainView, entitiesController, new CommandManager(logger), tilemapRepository);
+            MainController mainController = new MainController(mainView, entitiesController, new CommandManager(logger), logger, tilemapRepository);
             mainController.DockWindow((DockWindow)consoleView, DockPosition.Bottom);
             mainController.DockWindow((DockWindow)entitiesView, DockPosition.Right);
 
             logger.Log("Program Initialized");
 
-            Application.Run((RadForm)mainView);
+            Application.Run((Form)mainView);
 
             
         }

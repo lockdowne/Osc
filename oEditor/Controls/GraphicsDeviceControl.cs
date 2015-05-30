@@ -1,4 +1,4 @@
-﻿#region File Description
+﻿﻿#region File Description
 //-----------------------------------------------------------------------------
 // GraphicsDeviceControl.cs
 //
@@ -20,6 +20,7 @@ namespace oEditor.Controls
     // types. To avoid conflicts, we specify exactly which ones to use.
     using Color = System.Drawing.Color;
     using Rectangle = Microsoft.Xna.Framework.Rectangle;
+    using Microsoft.Xna.Framework;
 
 
     /// <summary>
@@ -31,38 +32,16 @@ namespace oEditor.Controls
     {
         #region Fields
 
-
         // However many GraphicsDeviceControl instances you have, they all share
         // the same underlying GraphicsDevice, managed by this helper service.
         GraphicsDeviceService graphicsDeviceService;
 
+        SwapChainRenderTarget _renderTarget;
 
         #endregion
 
         #region Properties
 
-        /// <summary>
-        /// The DesignMode property does not correctly tell you if
-        /// you are in design mode.  IsDesignerHosted is a corrected
-        /// version of that property.
-        /// (see https://connect.microsoft.com/VisualStudio/feedback/details/553305
-        /// and http://decav.com/blogs/andre/archive/2007/04/18/1078.aspx )
-        /// </summary>
-        public bool IsDesignerHosted
-        {
-            get
-            {
-                Control ctrl = this;
-
-                while (ctrl != null)
-                {
-                    if ((ctrl.Site != null) && ctrl.Site.DesignMode)
-                        return true;
-                    ctrl = ctrl.Parent;
-                }
-                return false;
-            }
-        }
 
         /// <summary>
         /// Gets a GraphicsDevice that can be used to draw onto this control.
@@ -71,6 +50,8 @@ namespace oEditor.Controls
         {
             get { return graphicsDeviceService.GraphicsDevice; }
         }
+
+        public RenderTarget2D DefaultRenderTarget { get { return _renderTarget; } }
 
 
         /// <summary>
@@ -90,6 +71,10 @@ namespace oEditor.Controls
 
         #region Initialization
 
+        public GraphicsDeviceControl()
+            : base()
+        {
+        }
 
         /// <summary>
         /// Initializes the control.
@@ -97,17 +82,24 @@ namespace oEditor.Controls
         protected override void OnCreateControl()
         {
             // Don't initialize the graphics device if we are running in the designer.
-            if (!IsDesignerHosted)
+            if (!DesignMode)
             {
                 graphicsDeviceService = GraphicsDeviceService.AddRef(Handle,
                                                                      ClientSize.Width,
                                                                      ClientSize.Height);
 
+                _renderTarget = new SwapChainRenderTarget(GraphicsDevice, Handle, ClientSize.Width, ClientSize.Height);
+
                 // Register the service, so components like ContentManager can find it.
-                services.AddService<IGraphicsDeviceService>(graphicsDeviceService);
+                //services.AddService<IGraphicsDeviceService>(graphicsDeviceService);
 
                 // Give derived classes a chance to initialize themselves.
                 Initialize();
+
+                //Set the XNA mouse handing to use this window
+                //Mouse.WindowHandle = Handle;
+
+                return;
             }
 
             base.OnCreateControl();
@@ -125,6 +117,13 @@ namespace oEditor.Controls
                 graphicsDeviceService = null;
             }
 
+            if (_renderTarget != null)
+            {
+                _renderTarget.Dispose();
+                _renderTarget = null;
+            }
+
+
             base.Dispose(disposing);
         }
 
@@ -133,26 +132,34 @@ namespace oEditor.Controls
 
         #region Paint
 
-
         /// <summary>
         /// Redraws the control in response to a WinForms paint message.
-        /// </summary>
+        /// </summary>        
         protected override void OnPaint(PaintEventArgs e)
         {
-            string beginDrawError = BeginDraw();
-
-            if (string.IsNullOrEmpty(beginDrawError))
+            try
             {
-                // Draw the control using the GraphicsDevice.
-                Draw();
-                EndDraw();
-
+                //call drawing                     
+                string beginDrawError = BeginDraw();
+                if (string.IsNullOrEmpty(beginDrawError))
+                {
+                    // Draw the control using the GraphicsDevice.                    
+                    Draw();
+                    OnAfterDraw(EventArgs.Empty);
+                    EndDraw();
+                }
+                else
+                {
+                    // If BeginDraw failed, show an error message using System.Drawing.
+                    PaintUsingSystemDrawing(e.Graphics, beginDrawError);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // If BeginDraw failed, show an error message using System.Drawing.
-                PaintUsingSystemDrawing(e.Graphics, beginDrawError);
+                //MessageBox.Show(ex.StackTrace, ex.Message,MessageBoxButtons.OK,MessageBoxIcon.Error);
+                int t = 5;
             }
+            return;
         }
 
 
@@ -161,7 +168,7 @@ namespace oEditor.Controls
         /// if this was not possible, which can happen if the graphics device is
         /// lost, or if we are running inside the Form designer.
         /// </summary>
-        string BeginDraw()
+        internal string BeginDraw()
         {
             // If we have no graphics device, we must be running in the designer.
             if (graphicsDeviceService == null)
@@ -177,26 +184,19 @@ namespace oEditor.Controls
                 return deviceResetError;
             }
 
+            GraphicsDevice.SetRenderTarget(_renderTarget);
+
             // Many GraphicsDeviceControl instances can be sharing the same
             // GraphicsDevice. The device backbuffer will be resized to fit the
             // largest of these controls. But what if we are currently drawing
             // a smaller control? To avoid unwanted stretching, we set the
             // viewport to only use the top left portion of the full backbuffer.
-            Viewport viewport = new Viewport();
-
-            viewport.X = 0;
-            viewport.Y = 0;
-
-            viewport.Width = ClientSize.Width;
-            viewport.Height = ClientSize.Height;
-
-            viewport.MinDepth = 0;
-            viewport.MaxDepth = 1;
-
-            GraphicsDevice.Viewport = viewport;
+            GraphicsDevice.Viewport = this.Viewport;
 
             return null;
         }
+
+        public Viewport Viewport { get { return new Viewport(0, 0, ClientSize.Width, ClientSize.Height); } }
 
 
         /// <summary>
@@ -205,15 +205,13 @@ namespace oEditor.Controls
         /// the finished image onto the screen, using the appropriate WinForms
         /// control handle to make sure it shows up in the right place.
         /// </summary>
-        void EndDraw()
+        internal void EndDraw()
         {
             try
             {
                 Rectangle sourceRectangle = new Rectangle(0, 0, ClientSize.Width,
                                                                 ClientSize.Height);
-
-                GraphicsDevice.Present();
-                //GraphicsDevice.Present(sourceRectangle, null, this.Handle);
+                _renderTarget.Present();
             }
             catch
             {
@@ -249,8 +247,8 @@ namespace oEditor.Controls
                     // If the device state is ok, check whether it is big enough.
                     PresentationParameters pp = GraphicsDevice.PresentationParameters;
 
-                    deviceNeedsReset = (ClientSize.Width > pp.BackBufferWidth) ||
-                                       (ClientSize.Height > pp.BackBufferHeight);
+                    deviceNeedsReset = (ClientSize.Width != pp.BackBufferWidth) ||
+                                       (ClientSize.Height != pp.BackBufferHeight);
                     break;
             }
 
@@ -259,8 +257,12 @@ namespace oEditor.Controls
             {
                 try
                 {
-                    graphicsDeviceService.ResetDevice(ClientSize.Width,
-                                                      ClientSize.Height);
+                    graphicsDeviceService.ResetDevice(_renderTarget.Width,
+                                                      _renderTarget.Height);
+
+                    //recreate window swapchain
+                    _renderTarget.Dispose();
+                    _renderTarget = new SwapChainRenderTarget(GraphicsDevice, Handle, ClientSize.Width, ClientSize.Height);
                 }
                 catch (Exception e)
                 {
@@ -293,7 +295,6 @@ namespace oEditor.Controls
             }
         }
 
-
         /// <summary>
         /// Ignores WinForms paint-background messages. The default implementation
         /// would clear the control to the current background color, causing
@@ -309,19 +310,35 @@ namespace oEditor.Controls
 
         #region Abstract Methods
 
-
         /// <summary>
         /// Derived classes override this to initialize their drawing code.
         /// </summary>
-        protected abstract void Initialize();
-
+         protected abstract void Initialize();
 
         /// <summary>
         /// Derived classes override this to draw themselves using the GraphicsDevice.
         /// </summary>
         protected abstract void Draw();
 
-
         #endregion
+
+
+        private readonly object AfterDrawEventLock = new object();
+        private EventHandler AfterDrawEvent;
+        public event EventHandler AfterDraw
+        {
+            add { lock (AfterDrawEventLock) { AfterDrawEvent += value; } }
+            remove { lock (AfterDrawEventLock) { AfterDrawEvent -= value; } }
+        }
+        protected virtual void OnAfterDraw(EventArgs e)
+        {
+            EventHandler handler = null;
+            lock (AfterDrawEventLock)
+            {
+                handler = AfterDrawEvent;
+                if (handler == null) return;
+            }
+            handler(this, e);
+        }
     }
 }

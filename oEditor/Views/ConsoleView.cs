@@ -131,7 +131,7 @@ namespace oEditor.Views
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                this.Publish(new OnParseConsoleCommand() { Command = radTextBox1.Text }.AsTask());
+                this.Publish(new OnParseConsoleCommand() { Command = radTextBox1.Text });
             }
         }
 

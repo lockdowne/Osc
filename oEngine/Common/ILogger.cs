@@ -11,7 +11,7 @@ namespace oEngine.Common
     {
         bool CheckPath();
 
-        Task Log(string message, string methodName = "", string filePath = "", int line = 0);
+        void Log(string message, string methodName = "", string filePath = "", int line = 0);
 
         event Action<oEngine.Common.Logger.LogEntry> OnLogged;
     }

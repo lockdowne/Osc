@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Telerik.WinControls.Enumerations;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
 
@@ -106,6 +107,21 @@ namespace oEditor.Events
     }
 
     public class OnTilemapGridClicked
+    {
+        public ToggleState ToggleState { get; set; }
+    }
+
+    public class OnDrawModeMouseClicked
+    {
+
+    }
+
+    public class OnEraseModeMouseClicked
+    {
+
+    }
+
+    public class OnCollisionModeClicked
     {
 
     }

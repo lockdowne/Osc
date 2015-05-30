@@ -61,7 +61,7 @@ namespace oEditor.Views
                 if (selectedNode == null)
                     return;
 
-                this.Publish(new OnTilemapNodeDoubleClicked() { Node = selectedNode }.AsTask());
+                this.Publish(new OnTilemapNodeDoubleClicked() { Node = selectedNode });
             };
 
             this.contextMenuRootAddEntity.Click += (sender, e) =>
@@ -80,7 +80,7 @@ namespace oEditor.Views
                     case Enums.EntityTypes.Quests:
                         break;
                     case Enums.EntityTypes.Tilemaps:
-                        this.Publish(new OnCreateTilemapNode() { Root = root, Node = new EntitiesTilemapNode() { Text = Consts.Nodes.Tilemap, ID = Guid.NewGuid(), ContextMenu = contextMenuTilemap } }.AsTask());
+                        this.Publish(new OnCreateTilemapNode() { Root = root, Node = new EntitiesTilemapNode() { Text = Consts.Nodes.Tilemap, ID = Guid.NewGuid(), ContextMenu = contextMenuTilemap } });
                         break;
                     case Enums.EntityTypes.Nodes:
                         break;

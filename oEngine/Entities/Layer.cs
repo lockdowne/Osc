@@ -126,6 +126,21 @@ namespace oEngine.Entities
             }
         }
 
+        public T[,] FindSection(int startX, int startY, int width, int height)
+        {
+            T[,] section = new T[width, height];
+
+            for(int x = 0; x < width; x++)
+            {
+                for(int y = 0; y < height; y++)
+                {
+                    section[x, y] = GetTile(x + startX, y + startY);
+                }
+            }
+
+            return section;
+        }
+
         public void Resize(int width, int height)
         {
             // TODO: Resize layer

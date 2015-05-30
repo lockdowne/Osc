@@ -53,7 +53,7 @@ namespace oEditor.Views
 
         private void btnAddTilesetImage_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnAddTilesetTexture() { List = radListControl }.AsTask());
+            this.Publish(new OnAddTilesetTexture() { List = radListControl });
         }
 
         private void btnTilesetSelectTexture_Click(object sender, EventArgs e)
@@ -64,7 +64,7 @@ namespace oEditor.Views
                 return;
             }
 
-            this.Publish(new OnSelectTilesetTexture() { FileName = SelectedItem.Text }.AsTask());
+            this.Publish(new OnSelectTilesetTexture() { FileName = SelectedItem.Text });
         }
     }
 }

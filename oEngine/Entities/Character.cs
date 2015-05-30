@@ -1,4 +1,4 @@
-﻿﻿#region File Descrption
+﻿#region File Descrption
 //------------------------------
 //  Character.cs
 //
@@ -65,7 +65,7 @@ namespace oEngine.Entities
         /// <summary>
         /// Gets or Sets the character's name
         /// </summary>
-        public string Name { get; set; }
+        public string CharacterName { get; set; }
 
         /// <summary>
         /// Gets or Sets the character's current level 
@@ -158,7 +158,10 @@ namespace oEngine.Entities
         /// </summary>
         public bool IsReady { get { return (TurnCounter > Consts.TurnReady); } }
 
-        public bool isVisible { get; set; }
+        /// <summary>
+        /// Returns the character's coordinate in relation to the tilemap
+        /// </summary>
+        public Point Coordinate { get; set; }
 
         #endregion
 
@@ -166,7 +169,7 @@ namespace oEngine.Entities
         public Character(int charSpeed, string characterName)
         {
             Speed = charSpeed;
-            Name = characterName;
+            CharacterName = characterName;
         }
         #endregion
 
@@ -200,15 +203,25 @@ namespace oEngine.Entities
         /// <param name="animation"></param>
         public void AnimationInitialize(Animation animation)
         {
-            this.AddAnimation("default", animation);
-            this.PlayAnimation("default");
-            this.Position = new Vector2(float.NaN, float.NaN);
-            this.IsActive = true;
-            this.IsVisible = true;
-            this.Scale = 1.0f;
-            this.Tint = Color.White;
+            AddAnimation("default", animation);
+            PlayAnimation("default");
+            //Position = new Vector2(float.NaN, float.NaN);
+            //IsActive = true;
+            //IsVisible = true;
+            Scale = 1.0f;
+            Tint = Color.White;
         }
 
+        public void SetPositionToGrid(Vector2 inputPosition, int tileWidth, int tileHeight)
+        {
+            Position = inputPosition;
+            Coordinate = MathExtension.IsoPixelsToCoordinate(inputPosition, tileWidth, tileHeight);
+        }
 
+        public void SetCoordinateToGrid(Point coordinate, int tileWidth, int tileHeight)
+        {
+            Coordinate = coordinate;
+            Position = MathExtension.IsoCoordinateToPixels(coordinate.X, coordinate.Y, tileWidth, tileHeight) - (new Vector2(Bounds.Width / 2, Bounds.Height));
+        }
     }
 }

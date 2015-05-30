@@ -1,5 +1,6 @@
 ﻿using oEditor.Controls;
 using oEngine.Entities;
+using oEngine.Patterns;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,10 @@ namespace oEditor.Views
         TilesetPage SelectedTilesetPage { get; }
         ListViewDataItem SelectedTilemapLayer { get; }
         RadCheckedListBox TilemapLayersListBox { get; }
+
+        oEngine.Common.Enums.TilemapStates TilemapState { get; set; }
+        TilePattern TilePattern { get; set; }
+
+        void HideCloseButtonForPage(RadPageViewPage page);
     }
 }

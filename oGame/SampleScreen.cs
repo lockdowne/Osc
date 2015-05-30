@@ -150,10 +150,10 @@ namespace oGame
 
             if (input.RightClick)
             {
-                ExitScreen();
 
                 ScreenManager.AddScreen(new SampleBS());
 
+                ExitScreen();
             }
         }
 

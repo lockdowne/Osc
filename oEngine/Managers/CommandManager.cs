@@ -21,7 +21,70 @@ namespace oEngine.Managers
             this.logger = logger;
         }
 
-        public Task ExecuteCommand(Command command, bool saveToStack = true, [CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        public void ExecuteCommand(Command command, bool saveToStack = true, [CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        {
+            try
+            {
+                if (command.CanExecute())
+                {
+                    command.Execute();
+
+                    logger.Log(command.Name, methodName, filePath, line);
+
+                    if (saveToStack)
+                    {
+                        undo.Push(command);
+                        redo.Clear();
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                logger.Log(exception.ToString(), methodName, filePath, line);
+            }
+        }
+
+        public void Undo([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        {            
+            try
+            {
+                if (undo.Count <= 0)
+                    return;
+
+                Command command = undo.Pop();
+                command.UnExecute();
+
+                logger.Log(command.Name, methodName, filePath, line);
+
+                redo.Push(command);
+            }
+            catch (Exception exception)
+            {
+                logger.Log(exception.ToString(), methodName, filePath, line);
+            }          
+        }
+
+        public void Redo([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        {           
+            try
+            {
+                if (redo.Count <= 0)
+                    return;
+
+                Command command = undo.Pop();
+                command.UnExecute();
+
+                logger.Log(command.Name, methodName, filePath, line);
+
+                redo.Push(command);
+            }
+            catch (Exception exception)
+            {
+                logger.Log(exception.ToString(), methodName, filePath, line);
+            }
+        }  
+
+        public Task ExecuteCommandAsync(Command command, bool saveToStack = true, [CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
         {
             return Task.Run(() =>
                 {
@@ -48,7 +111,7 @@ namespace oEngine.Managers
                                
         }
 
-        public Task Undo([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        public Task UndoAsync([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
         {
             return Task.Run(() =>
                 {
@@ -71,7 +134,7 @@ namespace oEngine.Managers
                 });           
         }
 
-        public Task Redo([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        public Task RedoAsync([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
         {
             return Task.Run(() =>
                 {

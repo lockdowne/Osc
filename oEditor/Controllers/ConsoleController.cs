@@ -8,10 +8,11 @@ using oEngine.Common;
 using oEditor.Events;
 using System.Data;
 using System.IO;
+using oEngine.Aggregators;
 
 namespace oEditor.Controllers
 {
-    public class ConsoleController : IConsoleController
+    public class ConsoleController : IConsoleController, ISubscriber<OnWriteConsole>, ISubscriber<OnParseConsoleCommand>
     {
         private readonly IConsoleView view;
 
@@ -22,34 +23,31 @@ namespace oEditor.Controllers
             this.view = consoleView;
             this.logger = logger;
 
+            this.Subscribe();
+
             //this.view.Grid.Columns.ForEach(column => column.BestFit());
 
             this.logger.OnLogged += (entry) =>
             {
                 view.Grid.Rows.Add(view.Grid.Rows.Count, entry.Message, entry.ClassName, entry.MethodName, entry.LineNumber, entry.DateTime);
             };
-
-            this.Subscribe<OnWriteConsole>(async obj =>
-            {
-                var item = await obj;
-
-                if (!string.IsNullOrEmpty(item.Message))
-                {
-                    
-                }
-            });
-
-            this.Subscribe<OnParseConsoleCommand>(async obj =>
-            {
-                var item = await obj;
-
-                if(!string.IsNullOrEmpty(item.Command))
-                {                 
-                    //view.RadListControl.Invoke(new Action(() => view.RadListControl.Items.Add(item.Command)));
-                    view.RadTextBox.Invoke(new Action(() => view.RadTextBox.Text = ""));
-                }
-            });
             
         } 
+        public void OnEvent(OnWriteConsole e)
+        {
+            if (!string.IsNullOrEmpty(e.Message))
+            {
+
+            }
+        }
+
+        public void OnEvent(OnParseConsoleCommand e)
+        {
+            if (!string.IsNullOrEmpty(e.Command))
+            {
+                //view.RadListControl.Invoke(new Action(() => view.RadListControl.Items.Add(item.Command)));
+                view.RadTextBox.Text = "";
+            }
+        }
     }
 }

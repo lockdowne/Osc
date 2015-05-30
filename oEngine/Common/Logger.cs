@@ -63,40 +63,38 @@ namespace oEngine.Common
             }
         }
 
-        public Task Log(string message, string methodName = "", string filePath = "", int line = 0)
+        public void Log(string message, string methodName = "", string filePath = "", int line = 0)
         {
-            return Task.Run(() =>
+            try
+            {    
+                LogEntry logEntry = new LogEntry()
                 {
-                    try
-                    {    
-                        LogEntry logEntry = new LogEntry()
-                        {
-                            Message = message,
-                            MethodName = methodName,
-                            ClassName = Path.GetFileNameWithoutExtension(filePath),
-                            LineNumber = line,
-                            DateTime = DateTime.Now.ToString("f"),
-                            ID = Logs.Count,
-                        };
+                    Message = message,
+                    MethodName = methodName,
+                    ClassName = Path.GetFileNameWithoutExtension(filePath),
+                    LineNumber = line,
+                    DateTime = DateTime.Now.ToString("f"),
+                    ID = Logs.Count,
+                };
 
-                        Logs.Add(logEntry);
+                Logs.Add(logEntry);
                         
-                        Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
+                Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
 
-                        if (OnLogged != null)
-                            OnLogged(logEntry);
+                if (OnLogged != null)
+                    OnLogged(logEntry);
 
-                    }
-                    catch (Exception)
-                    {
+            }
+            catch (Exception)
+            {
 
-                    }
-                });
+            }
+               
         }
-        public Task Save()
+
+        public void Save()
         {
-            return Task.Run(() =>
-                {
+           
                     try
                     {
                         Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
@@ -105,7 +103,7 @@ namespace oEngine.Common
                     {
 
                     }
-                });
+              
         }
     }
 }

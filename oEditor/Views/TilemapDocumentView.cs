@@ -11,10 +11,11 @@ using Telerik.WinControls.UI.Docking;
 using oEngine.Common;
 using oEditor.Events;
 using Telerik.WinControls.Enumerations;
+using oEngine.Patterns;
 
 namespace oEditor.Views
 {
-    public class TilemapDocumentView : RadForm, ITilemapDocumentView
+    public class TilemapDocumentView : DocumentWindow, ITilemapDocumentView
     {
         private RadDock radDock1;
         private ToolWindow toolWindow1;
@@ -67,6 +68,18 @@ namespace oEditor.Views
             set { tilemapRender.Tilemap = value; }
         }
 
+        public oEngine.Common.Enums.TilemapStates TilemapState
+        {
+            get { return tilemapRender.CurrentState; }
+            set { tilemapRender.CurrentState = value; }
+        }
+
+        public TilePattern TilePattern
+        {
+            get { return tilemapRender.TilePattern; }
+            set { tilemapRender.TilePattern = value; }
+        }
+
         public RadPageView TilesetPages
         {
             get { return radPageView1; }
@@ -102,10 +115,28 @@ namespace oEditor.Views
 
             this.radDock2.TabIndexChanged += (sender, e) =>
             {
-                this.Publish(new OnTilemapDocumentChanged() { Window = SelectedDocument }.AsTask());
+                this.Publish(new OnTilemapDocumentChanged() { Window = SelectedDocument });
             };
 
-            
+            this.btnTilemapGrid.ToggleStateChanged += (sender, e) =>
+            {
+                this.Publish(new OnTilemapGridClicked() { ToggleState = e.ToggleState });
+            };
+
+            this.tilemapRender.OnDrawModeMouseClicked += () =>
+            {
+                this.Publish(new OnDrawModeMouseClicked());
+            };
+
+            this.tilemapRender.OnEraseModeMouseClicked += () =>
+            {
+                this.Publish(new OnEraseModeMouseClicked());
+            };
+
+            this.tilemapRender.OnCollisionModeMouseClicked += () =>
+            {
+                this.Publish(new OnCollisionModeClicked());
+            };
         }
 
         private void InitializeComponent()
@@ -113,6 +144,8 @@ namespace oEditor.Views
             this.radDock1 = new Telerik.WinControls.UI.Docking.RadDock();
             this.toolWindow1 = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.radDock2 = new Telerik.WinControls.UI.Docking.RadDock();
+            this.documentContainer2 = new Telerik.WinControls.UI.Docking.DocumentContainer();
+            this.documentTabStrip2 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
             this.documentWindow4 = new Telerik.WinControls.UI.Docking.DocumentWindow();
             this.radPageView1 = new Telerik.WinControls.UI.RadPageView();
             this.radCommandBar2 = new Telerik.WinControls.UI.RadCommandBar();
@@ -120,8 +153,6 @@ namespace oEditor.Views
             this.commandBarStripElement2 = new Telerik.WinControls.UI.CommandBarStripElement();
             this.btnAddTileset = new Telerik.WinControls.UI.CommandBarButton();
             this.btnRemoveTileset = new Telerik.WinControls.UI.CommandBarButton();
-            this.documentContainer2 = new Telerik.WinControls.UI.Docking.DocumentContainer();
-            this.documentTabStrip2 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
             this.documentWindow3 = new Telerik.WinControls.UI.Docking.DocumentWindow();
             this.radCheckedListBox1 = new Telerik.WinControls.UI.RadCheckedListBox();
             this.radCommandBar3 = new Telerik.WinControls.UI.RadCommandBar();
@@ -157,13 +188,13 @@ namespace oEditor.Views
             this.toolWindow1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radDock2)).BeginInit();
             this.radDock2.SuspendLayout();
-            this.documentWindow4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer2)).BeginInit();
             this.documentContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip2)).BeginInit();
             this.documentTabStrip2.SuspendLayout();
+            this.documentWindow4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).BeginInit();
             this.documentWindow3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radCheckedListBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar3)).BeginInit();
@@ -175,7 +206,6 @@ namespace oEditor.Views
             this.documentTabStrip1.SuspendLayout();
             this.documentWindow1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // radDock1
@@ -210,7 +240,7 @@ namespace oEditor.Views
             // 
             // radDock2
             // 
-            this.radDock2.ActiveWindow = this.documentWindow3;
+            this.radDock2.ActiveWindow = this.documentWindow4;
             this.radDock2.Controls.Add(this.documentContainer2);
             this.radDock2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radDock2.IsCleanUpTarget = true;
@@ -225,6 +255,32 @@ namespace oEditor.Views
             this.radDock2.TabIndex = 0;
             this.radDock2.TabStop = false;
             this.radDock2.Text = "radDock2";
+            // 
+            // documentContainer2
+            // 
+            this.documentContainer2.Controls.Add(this.documentTabStrip2);
+            this.documentContainer2.Name = "documentContainer2";
+            // 
+            // 
+            // 
+            this.documentContainer2.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.documentContainer2.SizeInfo.SizeMode = Telerik.WinControls.UI.Docking.SplitPanelSizeMode.Fill;
+            // 
+            // documentTabStrip2
+            // 
+            this.documentTabStrip2.CanUpdateChildIndex = true;
+            this.documentTabStrip2.Controls.Add(this.documentWindow4);
+            this.documentTabStrip2.Controls.Add(this.documentWindow3);
+            this.documentTabStrip2.Location = new System.Drawing.Point(0, 0);
+            this.documentTabStrip2.Name = "documentTabStrip2";
+            // 
+            // 
+            // 
+            this.documentTabStrip2.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.documentTabStrip2.SelectedIndex = 0;
+            this.documentTabStrip2.Size = new System.Drawing.Size(515, 405);
+            this.documentTabStrip2.TabIndex = 0;
+            this.documentTabStrip2.TabStop = false;
             // 
             // documentWindow4
             // 
@@ -294,32 +350,6 @@ namespace oEditor.Views
             this.btnRemoveTileset.Text = "commandBarButton2";
             this.btnRemoveTileset.ToolTipText = "Remove Tileset";
             this.btnRemoveTileset.Click += new System.EventHandler(this.btnRemoveTileset_Click);
-            // 
-            // documentContainer2
-            // 
-            this.documentContainer2.Controls.Add(this.documentTabStrip2);
-            this.documentContainer2.Name = "documentContainer2";
-            // 
-            // 
-            // 
-            this.documentContainer2.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.documentContainer2.SizeInfo.SizeMode = Telerik.WinControls.UI.Docking.SplitPanelSizeMode.Fill;
-            // 
-            // documentTabStrip2
-            // 
-            this.documentTabStrip2.CanUpdateChildIndex = true;
-            this.documentTabStrip2.Controls.Add(this.documentWindow4);
-            this.documentTabStrip2.Controls.Add(this.documentWindow3);
-            this.documentTabStrip2.Location = new System.Drawing.Point(0, 0);
-            this.documentTabStrip2.Name = "documentTabStrip2";
-            // 
-            // 
-            // 
-            this.documentTabStrip2.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.documentTabStrip2.SelectedIndex = 1;
-            this.documentTabStrip2.Size = new System.Drawing.Size(515, 405);
-            this.documentTabStrip2.TabIndex = 0;
-            this.documentTabStrip2.TabStop = false;
             // 
             // documentWindow3
             // 
@@ -530,11 +560,13 @@ namespace oEditor.Views
             // 
             this.btnTilemapSelect.AccessibleDescription = "commandBarToggleButton1";
             this.btnTilemapSelect.AccessibleName = "commandBarToggleButton1";
+            this.btnTilemapSelect.CheckState = System.Windows.Forms.CheckState.Checked;
             this.btnTilemapSelect.DisplayName = "commandBarToggleButton1";
             this.btnTilemapSelect.Image = global::oEditor.Properties.Resources.RectangleSelectionTool_200;
             this.btnTilemapSelect.Name = "btnTilemapSelect";
             this.btnTilemapSelect.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnTilemapSelect.Text = "commandBarToggleButton1";
+            this.btnTilemapSelect.ToggleState = Telerik.WinControls.Enumerations.ToggleState.On;
             this.btnTilemapSelect.Click += new System.EventHandler(this.btnTilemapSelect_Click);
             // 
             // btnTilemapDraw
@@ -634,21 +666,26 @@ namespace oEditor.Views
             // 
             this.btnTilemapGrid.AccessibleDescription = "commandBarToggleButton5";
             this.btnTilemapGrid.AccessibleName = "commandBarToggleButton5";
+            this.btnTilemapGrid.CheckState = System.Windows.Forms.CheckState.Checked;
             this.btnTilemapGrid.DisplayName = "commandBarToggleButton5";
             this.btnTilemapGrid.Image = global::oEditor.Properties.Resources.grid_Toggle_16xLG;
             this.btnTilemapGrid.Name = "btnTilemapGrid";
             this.btnTilemapGrid.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnTilemapGrid.Text = "commandBarToggleButton5";
+            this.btnTilemapGrid.ToggleState = Telerik.WinControls.Enumerations.ToggleState.On;
             this.btnTilemapGrid.Click += new System.EventHandler(this.btnTilemapGrid_Click);
             // 
             // tilemapRender
             // 
+            this.tilemapRender.BackColor = System.Drawing.Color.Black;
+            this.tilemapRender.CurrentState = oEngine.Common.Enums.TilemapStates.Selection;
             this.tilemapRender.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tilemapRender.Location = new System.Drawing.Point(0, 0);
             this.tilemapRender.Name = "tilemapRender";
             this.tilemapRender.Size = new System.Drawing.Size(522, 406);
             this.tilemapRender.TabIndex = 1;
             this.tilemapRender.Tilemap = null;
+            this.tilemapRender.TilePattern = null;
             // 
             // TilemapDocumentView
             // 
@@ -658,20 +695,19 @@ namespace oEditor.Views
             // 
             // 
             // 
-            this.RootElement.ApplyShapeToControl = true;
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).EndInit();
             this.radDock1.ResumeLayout(false);
             this.toolWindow1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.radDock2)).EndInit();
             this.radDock2.ResumeLayout(false);
-            this.documentWindow4.ResumeLayout(false);
-            this.documentWindow4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer2)).EndInit();
             this.documentContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip2)).EndInit();
             this.documentTabStrip2.ResumeLayout(false);
+            this.documentWindow4.ResumeLayout(false);
+            this.documentWindow4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).EndInit();
             this.documentWindow3.ResumeLayout(false);
             this.documentWindow3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radCheckedListBox1)).EndInit();
@@ -685,59 +721,58 @@ namespace oEditor.Views
             this.documentWindow1.ResumeLayout(false);
             this.documentWindow1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         private void tilemapRender_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            this.Publish(new OnTilemapMouseWheel() { MouseEvent = e }.AsTask());
+            this.Publish(new OnTilemapMouseWheel() { MouseEvent = e });
         }
 
         private void tilemapRender_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            this.Publish(new OnTilemapMouseDown() { MouseEvent = e }.AsTask());
+            this.Publish(new OnTilemapMouseDown() { MouseEvent = e });
         }
 
         private void tilemapRender_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            this.Publish(new OnTilemapMouseMove() { MouseEvent = e }.AsTask());
+            this.Publish(new OnTilemapMouseMove() { MouseEvent = e });
         }
 
         private void tilemapRender_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            this.Publish(new OnTilemapMouseUp() { MouseEvent = e }.AsTask());
+            this.Publish(new OnTilemapMouseUp() { MouseEvent = e });
         }
 
         private void btnAddTileset_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnAddTileset().AsTask());
+            this.Publish(new OnAddTileset());
         }
 
         private void btnRemoveTileset_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnRemoveTileset() { Page = SelectedTilesetPage }.AsTask());
+            this.Publish(new OnRemoveTileset() { Page = SelectedTilesetPage });
         }
 
         private void btnAddTilemapLayer_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnAddTilemapLayer() { Args = e }.AsTask());
+            this.Publish(new OnAddTilemapLayer() { Args = e });
         }
 
         private void btnRemoveTilemapLayer_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnRemoveTilemapLayer() { Item = SelectedTilemapLayer }.AsTask());
+            this.Publish(new OnRemoveTilemapLayer() { Item = SelectedTilemapLayer });
         }
 
         private void btnMoveTilemapLayerUp_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnMoveTilemapLayerUp() { Item = SelectedTilemapLayer }.AsTask());
+            this.Publish(new OnMoveTilemapLayerUp() { Item = SelectedTilemapLayer });
         }
 
         private void btnMoveTilemapLayerDown_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnMoveTilemapLayerDown() { Item = SelectedTilemapLayer }.AsTask());
+            this.Publish(new OnMoveTilemapLayerDown() { Item = SelectedTilemapLayer });
         }
 
         private void btnMergeTilemapLayer_Click(object sender, EventArgs e)
@@ -747,81 +782,86 @@ namespace oEditor.Views
 
         private void btnRenameTilemap_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnRenameTilemapLayer() { Item = SelectedTilemapLayer }.AsTask());
+            this.Publish(new OnRenameTilemapLayer() { Item = SelectedTilemapLayer });
         }
 
         private void btnTilemapSelect_Click(object sender, EventArgs e)
         {
-            DeToggleMains();
-            btnTilemapSelect.ToggleState = ToggleState.On;
+            DeToggleMains(this.btnTilemapSelect);
+            //btnTilemapSelect.ToggleState = ToggleState.On;
             EnabledNonSelectableButtons();
 
-            this.Publish(new OnTilemapSelectionBoxClicked().AsTask());
+            this.Publish(new OnTilemapSelectionBoxClicked());
         }
 
         private void btnTilemapDraw_Click(object sender, EventArgs e)
         {
-            DeToggleMains();
-            btnTilemapDraw.ToggleState = ToggleState.On;
+            DeToggleMains(this.btnTilemapDraw);
+            //btnTilemapDraw.ToggleState = ToggleState.On;
             DisableNonSelectableButtons();
 
-            this.Publish(new OnTilemapDrawClicked().AsTask());
+            this.Publish(new OnTilemapDrawClicked());
         }
 
         private void btnTilemapFill_Click(object sender, EventArgs e)
         {
-            DeToggleMains();
-            btnTilemapFill.ToggleState = ToggleState.On;
+            DeToggleMains(this.btnTilemapFill);
+            //btnTilemapFill.ToggleState = ToggleState.On;
             DisableNonSelectableButtons();
 
-            this.Publish(new OnTilemapFillClicked().AsTask());
+            this.Publish(new OnTilemapFillClicked());
         }
 
         private void btnTilemapErase_Click(object sender, EventArgs e)
         {
-            DeToggleMains();
-            btnTilemapErase.ToggleState = ToggleState.On;
+            DeToggleMains(this.btnTilemapErase);
+            //btnTilemapErase.ToggleState = ToggleState.On;
             DisableNonSelectableButtons();
 
-            this.Publish(new OnTilemapEraseClicked().AsTask());
+            this.Publish(new OnTilemapEraseClicked());
         }
 
         private void btnTilemapCollision_Click(object sender, EventArgs e)
         {
-            DeToggleMains();
-            btnTilemapCollision.ToggleState = ToggleState.On;
+            DeToggleMains(this.btnTilemapCollision);
+            //btnTilemapCollision.ToggleState = ToggleState.On;
             DisableNonSelectableButtons();
 
-            this.Publish(new OnTilemapCollisionClicked().AsTask());
+            this.Publish(new OnTilemapCollisionClicked());
         }
 
         private void btnTilemapCopy_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnTilemapCopyClicked().AsTask());
+            this.Publish(new OnTilemapCopyClicked());
         }
 
         private void btnTilemapCut_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnTilemapCutClicked().AsTask());
+            this.Publish(new OnTilemapCutClicked());
         }
 
         private void btnTilemapProperties_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnTilemapPropertiesClicked().AsTask());
+            this.Publish(new OnTilemapPropertiesClicked());
         }
 
         private void btnTilemapGrid_Click(object sender, EventArgs e)
-        {           
-            this.Publish(new OnTilemapGridClicked().AsTask());
+        {
+            
         }
 
-        private void DeToggleMains()
+        private void DeToggleMains(CommandBarToggleButton buttonToIgnore)
         {
-            this.btnTilemapSelect.ToggleState = ToggleState.Off;
-            this.btnTilemapDraw.ToggleState = ToggleState.Off;
-            this.btnTilemapFill.ToggleState = ToggleState.Off;
-            this.btnTilemapErase.ToggleState = ToggleState.Off;
-            this.btnTilemapCollision.ToggleState = ToggleState.Off;
+            if(buttonToIgnore != btnTilemapSelect)
+                this.btnTilemapSelect.ToggleState = ToggleState.Off;
+            if(buttonToIgnore != btnTilemapDraw)
+                this.btnTilemapDraw.ToggleState = ToggleState.Off;
+            if(buttonToIgnore != btnTilemapFill)
+                this.btnTilemapFill.ToggleState = ToggleState.Off;
+            if(buttonToIgnore != btnTilemapErase)
+                this.btnTilemapErase.ToggleState = ToggleState.Off;
+            if (buttonToIgnore != btnTilemapCollision)
+                this.btnTilemapCollision.ToggleState = ToggleState.Off;
         }
 
         private void DisableNonSelectableButtons()
@@ -834,6 +874,22 @@ namespace oEditor.Views
         {
             this.btnTilemapCopy.Enabled = true;
             this.btnTilemapCut.Enabled = true;
+        }
+
+        public void HideCloseButtonForPage(RadPageViewPage page)
+        {
+            var pageViewStripElement = ((Telerik.WinControls.UI.RadPageViewContentAreaElement)((radPageView1.ViewElement).ContentArea)).Owner as RadPageViewStripElement;
+            var stripItem = ((Telerik.WinControls.UI.RadPageViewElement)(pageViewStripElement)).Items.Where(item => item.Page == page).FirstOrDefault();
+            if (stripItem != null)
+            {
+                stripItem.ButtonsPanel.SetValue(LightVisualElement.VisibilityProperty, Telerik.WinControls.ElementVisibility.Collapsed);
+                stripItem.ButtonsPanel.SetDefaultValueOverride(LightVisualElement.VisibilityProperty, Telerik.WinControls.ElementVisibility.Collapsed);
+            }
+        }
+
+        private void tilemapRender_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

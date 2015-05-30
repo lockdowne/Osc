@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telerik.WinControls.UI;
+using oEngine.Common;
+using oEditor.Events;
 
 namespace oEditor.Controls
 {
@@ -21,6 +23,11 @@ namespace oEditor.Controls
         public TilesetPage()
         {
             InitializeComponent();
+
+            this.tilesetRender.OnTilePatternGenerated += (pattern) =>
+            {
+                this.Publish(new OnTilePatternGenerated() { TilePattern = pattern });
+            };
         }
 
         private void InitializeComponent()
@@ -34,7 +41,7 @@ namespace oEditor.Controls
             this.tilesetRender.Name = "tilesetRender";
             this.tilesetRender.Size = new System.Drawing.Size(150, 150);
             this.tilesetRender.TabIndex = 0;
-            this.tilesetRender.Tileset = null;
+            //this.tilesetRender.Tileset = null;
             this.tilesetRender.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ResumeLayout(false);
             this.Controls.Add(tilesetRender);

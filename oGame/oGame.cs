@@ -45,6 +45,8 @@ namespace oGame
 
                 screenManager = new ScreenManager(this);
                 Components.Add(screenManager);
+
+                
             }
             catch (Exception exception)
             {

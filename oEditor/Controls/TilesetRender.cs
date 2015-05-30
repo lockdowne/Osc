@@ -9,6 +9,7 @@ using oEngine.Entities;
 using oEngine.Common;
 using oEditor.Common;
 using System.Windows.Forms;
+using oEngine.Patterns;
 
 namespace oEditor.Controls
 {
@@ -54,6 +55,8 @@ namespace oEditor.Controls
 
         public Tileset Tileset { get; set; }
 
+        public event Action<TilePattern> OnTilePatternGenerated;
+
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -67,8 +70,8 @@ namespace oEditor.Controls
 
             cameraZoom = camera.Zoom;
 
-            pixel = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            pixel.SetData<Color>(new Color[] { Color.White });
+            pixel = new Texture2D(GraphicsDevice, 2, 2, false, SurfaceFormat.Color);
+            pixel.SetData<Color>(new Color[] { Color.White, Color.White, Color.White, Color.White });
 
             tileOverlay = XnaHelper.Instance.LoadTexture(global::oEditor.Properties.Resources.tile_overlay);
 
@@ -105,7 +108,12 @@ namespace oEditor.Controls
                     isMouseRightDown = false;
 
                 if (isMouseLeftDown)
+                {
                     isMouseLeftDown = false;
+                                        
+                    if (OnTilePatternGenerated != null)
+                        OnTilePatternGenerated(GetTilePattern());
+                }
             };
 
             MouseMove += (sender, e) =>
@@ -192,6 +200,56 @@ namespace oEditor.Controls
 
 
             return null;
+        }
+
+        public TilePattern GetTilePattern()
+        {
+            if (Tileset == null)
+                return null;
+
+            if (Tileset.Texture == null)
+                return null;
+
+            if (SelectionOrthogonalBox.IsEmpty)
+                return null;
+
+            int tileWidth = Configuration.Settings.TileWidth;
+            int tileHeight = Configuration.Settings.TileHeight;
+
+            int width = SelectionOrthogonalBox.Width / tileWidth;
+            int height = SelectionOrthogonalBox.Height / tileHeight;
+            int x = SelectionOrthogonalBox.Location.X / tileWidth;
+            int y = SelectionOrthogonalBox.Location.Y / tileHeight;
+
+            int index = (y * (Tileset.Texture.Width / tileWidth)) + x;
+
+            if (width == 0 || height == 0)
+                return null;
+
+            int[,] box = new int[width, height];
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    box[j, i] = index + j;
+                }
+
+                index += (Tileset.Texture.Width / tileWidth);
+            }
+
+            return new TilePattern()
+            {
+                Tint = Color.White,
+                Alpha = 1.0f,
+                Origin = Vector2.Zero,
+                Pattern = box,
+                Position = Vector2.Zero,
+                TileHeight = tileHeight,
+                TileWidth = tileWidth,
+                Tileset = Tileset
+            };
+
         }
     }
 }

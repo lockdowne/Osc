@@ -34,6 +34,9 @@ namespace oEditor.Common
         public float MinCameraZoom { get; set; }
 
         [DataMember]
+        public float CameraLerpAmount { get; set; }
+
+        [DataMember]
         public float SelectionBoxOpacity { get; set; }
 
         [DataMember]
@@ -48,19 +51,21 @@ namespace oEditor.Common
         [DataMember]
         public int SceneHeight { get; set; }
 
+        
+
         public static Settings CreateDefault()
         {
             try
             {
-                if (IOMethods.CreateDirectory(Consts.OscPaths.EditorSettings))
+                if (IOMethods.CreateDirectory(Consts.OscPaths.Settings))
                 {
-                    if (!File.Exists(Consts.OscPaths.EditorSettings))
+                    if (!File.Exists(Consts.OscPaths.Settings))
                     {
                         Settings settings = Default();
-                        Serializer.Serialize(settings, Consts.OscPaths.EditorSettings);
+                        Serializer.Serialize(settings, Consts.OscPaths.Settings);
                     }
 
-                    return Serializer.Deserialize<Settings>(Consts.OscPaths.EditorSettings);
+                    return Serializer.Deserialize<Settings>(Consts.OscPaths.Settings);
                 }
             }
             catch(Exception)
@@ -87,6 +92,7 @@ namespace oEditor.Common
                 TileHeight = 64,
                 SceneWidth = 20,
                 SceneHeight = 20,
+                CameraLerpAmount = 1.0f,
             };
         }
     }

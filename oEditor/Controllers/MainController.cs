@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 using Telerik.WinControls.UI.Docking;
 using oEngine.Common;
 using oEditor.Events;
+using oEngine.Aggregators;
+using oEditor.Common;
 
 namespace oEditor.Controllers
 {
-    public class MainController
+    public class MainController : ISubscriber<OnTilemapNodeDoubleClicked>
     {
         private readonly IMainView view;
 
@@ -23,8 +25,12 @@ namespace oEditor.Controllers
 
         private readonly ICommandManager commandManager;
 
+        private readonly ILogger logger;
 
-        public MainController(IMainView mainView, IEntitiesController entitiesController, ICommandManager commandManager, IRepository<Tilemap> tilemapRepository)
+        private List<IController> activeControllers = new List<IController>();
+
+
+        public MainController(IMainView mainView, IEntitiesController entitiesController, ICommandManager commandManager, ILogger logger, IRepository<Tilemap> tilemapRepository)
         {
             this.view = mainView;
             this.entitiesController = entitiesController;
@@ -33,44 +39,45 @@ namespace oEditor.Controllers
 
             this.tilemapRepository = tilemapRepository;
 
-            //this.view.DockManager.DockWindow((DockWindow)entitiesController.View, DockPosition.Right);
+            this.logger = logger;
 
-            this.Subscribe<OnTilemapNodeDoubleClicked>(async obj =>
+            this.Subscribe();
+            //this.view.DockManager.DockWindow((DockWindow)entitiesController.View, DockPosition.Right);            
+        }
+
+        public void OnEvent(OnTilemapNodeDoubleClicked item)
+        {
+            string name = item.ClassName();
+
+            commandManager.ExecuteCommand(new Command()
             {
-                string name = "OnTilemapNodeDoubleClicked";
+                CanExecute = () =>
+                {
+                    if (item == null)
+                        return false;
 
-                var item = await obj;
+                    return item.Node != null && tilemapRepository.Find(tilemap => tilemap.ID == item.Node.ID) != null;
+                },
+                Execute = () =>
+                {
+                    Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
 
-                await commandManager.ExecuteCommand(new Command()
-                    {
-                        CanExecute = () =>
-                        {
-                            if (obj.Exception != null)
-                                return false;
+                    ITilemapDocumentView documentView = new TilemapDocumentView() { Tilemap = tilemap };
+                    TilemapController tilemapController = new TilemapController(documentView, new CommandManager(logger), tilemapRepository);
 
-                            if (item == null)
-                                return false;
+                    activeControllers.Add(tilemapController);
 
-                            return item.Node != null && tilemapRepository.Find(tilemap => tilemap.ID == item.Node.ID) != null;
-                        },
-                        Execute = () =>
-                        {
-                            Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
+                    DockWindow((DockWindow)documentView, DockPosition.Fill);
+                },
+                UnExecute = () =>
+                {
 
-                            //view.DockManager.Invoke(new Action(() => DockWindow((DockWindow)new TilemapDocumentView() { Tilemap = tilemap }, DockPosition.Fill)));
-                        },
-                        UnExecute = () =>
-                        {
+                },
+                ID = Guid.NewGuid(),
+                Name = "Opened Tilemap",
+                Description = "Opens the selected tilemap node and opens it for editing",
+            }, false, name);
 
-                        },
-                        ID = Guid.NewGuid(),
-                        Name = name,
-                        Description = "Opens the selected tilemap node and opens it for editing",
-                    }, false, name);
-
-                // Write to console view
-                //this.Publish(new OnWriteConsole() { Message = commandManager.LastCommandString }.AsTask());
-            });
         }
 
         public void DockWindow(DockWindow window, DockPosition position)

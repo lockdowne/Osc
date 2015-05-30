@@ -22,6 +22,8 @@ namespace oEngine.Common
     {
         private static readonly EventAggregatorAsync EventAggregatorAsync = new EventAggregatorAsync();
 
+        private static readonly IEventAggregator EventAggregator = new EventAggregator();
+
         public static Vector2 InvertMatrixAtVector(this Matrix matrix, int x, int y)
         {
             return Vector2.Transform(new Vector2(x, y), Matrix.Invert(matrix));
@@ -245,6 +247,47 @@ namespace oEngine.Common
             return EventAggregatorAsync.Unsubscribe<TEvent>(sender);
         }
 
+        public static void Subscribe(this object sender)
+        {
+            EventAggregator.Subscribe(sender);
+        }
+
+        public static void Publish<TEvent>(this object sender, TEvent eventData)
+        {
+            EventAggregator.Publish(eventData);
+        }
+
+        /// <summary>
+        /// Randomizes the elements within the list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            Random rng = new Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+
+        public static int[,] ToIsometricArray(this int[,] array)
+        {
+            for (int x = 0; x < array.GetLength(0); x++)
+            {
+                for(int y = 0; y < array.GetLength(1); y++)
+                {
+                    
+                }
+            }
+           
+            return null;
+        }
        
     }
 }

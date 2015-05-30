@@ -12,10 +12,11 @@ using oEngine.Entities;
 using oEditor.Repositories;
 using oEditor.Controls;
 using oEditor.Common;
+using oEngine.Aggregators;
 
 namespace oEditor.Controllers
 {
-    public class EntitiesController : IEntitiesController
+    public class EntitiesController : IEntitiesController, ISubscriber<OnCreateTilemapNode>
     {
         private readonly IEntitiesView view;
 
@@ -29,57 +30,7 @@ namespace oEditor.Controllers
             this.commandManager = commandManager;
             this.tilemapRepository = tilemapRepository;
 
-            this.Subscribe<OnCreateTilemapNode>(async obj =>
-            {
-                var item = await obj;
-
-                string name = item.GetType().Name;
-
-                await commandManager.ExecuteCommand(new Command()
-                {
-                    CanExecute = () =>
-                    {
-                        if (obj.Exception != null)
-                            return false;
-
-                        if (item == null)
-                            return false;
-
-                        return item.Root != null && item.Node != null;
-                    },
-                    Execute = () =>
-                    {
-                        // Create empty tilemap
-                        Tilemap tilemap = new Tilemap()
-                        {
-                            ID = item.Node.ID,
-                            IsGridVisible = true,
-                        };
-                        tilemap.Initialize(Consts.Nodes.EmptyTilemap, string.Empty, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Configuration.Settings.SceneWidth, Configuration.Settings.SceneHeight);
-
-                        // Add to repo
-                        tilemapRepository.Add(tilemap);
-                        
-                        // Save tilemap
-                        tilemapRepository.SaveAsync();
-
-                        // Add node to tree
-                        //item.Root.Nodes.Add(item.Node);
-                        view.TreeView.Invoke(new Action(() => item.Root.Nodes.Add(item.Node)));                        
-                    },
-                    UnExecute = () =>
-                    {
-
-                    },
-                    Name = name,
-                    ID = Guid.NewGuid(),
-                    Description = "Creates new tilemap node under Tilemaps root in Entities tool window",
-                }, false, name);
-
-                // Write to console view
-                //this.Publish(new OnWriteConsole() { Message = commandManager.LastCommandString }.AsTask());
-            });
-            
+            this.Subscribe();            
 
             // Command load nodes
             commandManager.ExecuteCommand(new Command()
@@ -102,6 +53,49 @@ namespace oEditor.Controllers
             }, false);
         }
 
+
+        public void OnEvent(OnCreateTilemapNode item)
+        {
+            string name = item.ClassName();
+
+            commandManager.ExecuteCommandAsync(new Command()
+            {
+                CanExecute = () =>
+                {
+                    if (item == null)
+                        return false;
+
+                    return item.Root != null && item.Node != null;
+                },
+                Execute = () =>
+                {
+                    // Create empty tilemap
+                    Tilemap tilemap = new Tilemap()
+                    {
+                        ID = item.Node.ID,
+                        IsGridVisible = true,
+                    };
+                    tilemap.Initialize(Consts.Nodes.EmptyTilemap, string.Empty, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Configuration.Settings.SceneWidth, Configuration.Settings.SceneHeight);
+
+                    // Add to repo
+                    tilemapRepository.Add(tilemap);
+
+                    // Save tilemap
+                    tilemapRepository.SaveAsync();
+
+                    // Add node to tree
+                    //item.Root.Nodes.Add(item.Node);
+                    view.TreeView.Invoke(new Action(() => item.Root.Nodes.Add(item.Node)));
+                },
+                UnExecute = () =>
+                {
+
+                },
+                Name = name,
+                ID = Guid.NewGuid(),
+                Description = "Creates new tilemap node under Tilemaps root in Entities tool window",
+            }, false, name);
+        }
 
         private async Task LoadAllNodes()
         {
