@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 using Telerik.WinControls.UI;
 using oEngine.Common;
 using oEditor.Events;
+using oEngine.Aggregators;
 
 namespace oEditor.Controls
 {
     public class TilesetPage : RadPageViewPage
     {
+        private IEventAggregator eventAggregator;
+
         private TilesetRender tilesetRender;
 
         public Tileset Tileset
@@ -20,13 +23,15 @@ namespace oEditor.Controls
             set { tilesetRender.Tileset = value; }
         }
 
-        public TilesetPage()
+        public TilesetPage(IEventAggregator eventAggregator)
         {
+            this.eventAggregator = eventAggregator;
+
             InitializeComponent();
 
             this.tilesetRender.OnTilePatternGenerated += (pattern) =>
             {
-                this.Publish(new OnTilePatternGenerated() { TilePattern = pattern });
+                this.eventAggregator.Publish(new OnTilePatternGenerated() { TilePattern = pattern });
             };
         }
 

@@ -14,6 +14,8 @@ namespace oEditor.Views
 {
     public class EntitiesView : ToolWindow, IEntitiesView
     {
+        private IEventAggregator eventAggregator;
+
         private Telerik.WinControls.UI.RadContextMenu contextMenuRoot;
         private System.ComponentModel.Container components;
         private Telerik.WinControls.UI.RadMenuItem contextMenuRootAddEntity;
@@ -42,8 +44,10 @@ namespace oEditor.Views
             get { return contextMenuTilemap; }
         }
 
-        public EntitiesView()
+        public EntitiesView(IEventAggregator eventAggregator)
         {
+            this.eventAggregator = eventAggregator;
+
             this.InitializeComponent();
 
             // Create fixed root nodes
@@ -61,7 +65,7 @@ namespace oEditor.Views
                 if (selectedNode == null)
                     return;
 
-                this.Publish(new OnTilemapNodeDoubleClicked() { Node = selectedNode });
+                this.eventAggregator.Publish(new OnTilemapNodeDoubleClicked() { Node = selectedNode });
             };
 
             this.contextMenuRootAddEntity.Click += (sender, e) =>
@@ -80,7 +84,7 @@ namespace oEditor.Views
                     case Enums.EntityTypes.Quests:
                         break;
                     case Enums.EntityTypes.Tilemaps:
-                        this.Publish(new OnCreateTilemapNode() { Root = root, Node = new EntitiesTilemapNode() { Text = Consts.Nodes.Tilemap, ID = Guid.NewGuid(), ContextMenu = contextMenuTilemap } });
+                        this.eventAggregator.Publish(new OnCreateTilemapNode() { Root = root, Node = new EntitiesTilemapNode() { Text = Consts.Nodes.Tilemap, ID = Guid.NewGuid(), ContextMenu = contextMenuTilemap } });
                         break;
                     case Enums.EntityTypes.Nodes:
                         break;

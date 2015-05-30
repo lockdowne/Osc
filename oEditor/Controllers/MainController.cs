@@ -27,21 +27,25 @@ namespace oEditor.Controllers
 
         private readonly ILogger logger;
 
+        private readonly IEventAggregator eventAggregator;
+
         private List<IController> activeControllers = new List<IController>();
 
 
-        public MainController(IMainView mainView, IEntitiesController entitiesController, ICommandManager commandManager, ILogger logger, IRepository<Tilemap> tilemapRepository)
+        public MainController(IMainView mainView, IEntitiesController entitiesController, ICommandManager commandManager, ILogger logger, IEventAggregator eventAggregator, IRepository<Tilemap> tilemapRepository)
         {
             this.view = mainView;
             this.entitiesController = entitiesController;
 
             this.commandManager = commandManager;
 
+            this.eventAggregator = eventAggregator;
+
             this.tilemapRepository = tilemapRepository;
 
             this.logger = logger;
 
-            this.Subscribe();
+            this.eventAggregator.Subscribe(this);
             //this.view.DockManager.DockWindow((DockWindow)entitiesController.View, DockPosition.Right);            
         }
 
@@ -62,8 +66,10 @@ namespace oEditor.Controllers
                 {
                     Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
 
-                    ITilemapDocumentView documentView = new TilemapDocumentView() { Tilemap = tilemap };
-                    TilemapController tilemapController = new TilemapController(documentView, new CommandManager(logger), tilemapRepository);
+                    IEventAggregator aggregator = new EventAggregator();
+
+                    ITilemapDocumentView documentView = new TilemapDocumentView(aggregator) { Tilemap = tilemap, Name = tilemap.Name };
+                    TilemapController tilemapController = new TilemapController(documentView, new CommandManager(logger), aggregator, tilemapRepository);
 
                     activeControllers.Add(tilemapController);
 

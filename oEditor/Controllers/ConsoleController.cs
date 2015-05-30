@@ -18,18 +18,21 @@ namespace oEditor.Controllers
 
         private readonly ILogger logger;
 
-        public ConsoleController(IConsoleView consoleView, ILogger logger)
+        private readonly IEventAggregator eventAggregator;
+
+        public ConsoleController(IConsoleView consoleView, ILogger logger, IEventAggregator eventAggregator)
         {
             this.view = consoleView;
             this.logger = logger;
+            this.eventAggregator = eventAggregator;
 
-            this.Subscribe();
+            this.eventAggregator.Subscribe(this);
 
             //this.view.Grid.Columns.ForEach(column => column.BestFit());
 
             this.logger.OnLogged += (entry) =>
             {
-                view.Grid.Rows.Add(view.Grid.Rows.Count, entry.Message, entry.ClassName, entry.MethodName, entry.LineNumber, entry.DateTime);
+                view.Grid.Rows.Add(view.Grid.Rows.Count.ToString().PadLeft(4, '0'), entry.Message, entry.ClassName, entry.MethodName, entry.LineNumber, entry.DateTime);
             };
             
         } 

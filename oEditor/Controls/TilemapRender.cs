@@ -33,7 +33,17 @@ namespace oEditor.Controls
         private Texture2D pixel;
         private Texture2D tileOverlay;
 
-        public Enums.TilemapStates CurrentState { get; set; } // = Enums.TilemapStates.Selection;
+        private Enums.TilemapStates currentState;
+
+        public Enums.TilemapStates CurrentState
+        {
+            get { return currentState; }
+            set
+            {
+                currentState = value;
+                ResetSelectionBox();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the current render controls tilemap data
@@ -43,8 +53,8 @@ namespace oEditor.Controls
         public TilePattern TilePattern { get; set; }
 
         public event Action OnDrawModeMouseClicked;
-        public event Action OnEraseModeMouseClicked;
-        public event Action OnCollisionModeMouseClicked;
+        public event Action<List<Vector2>> OnEraseModeMouseClicked;
+        public event Action<List<Vector2>> OnCollisionModeMouseClicked;
 
         protected override void Initialize()
         {
@@ -110,15 +120,17 @@ namespace oEditor.Controls
                     case Enums.TilemapStates.Erase:
                         if(e.Button == MouseButtons.Left)
                         {
-                            if (OnEraseModeMouseClicked != null)
-                                OnEraseModeMouseClicked();
+                            selectionBoxStart = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                            selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+
+                          
                         }
                         break;
                     case Enums.TilemapStates.Collision:
                         if(e.Button == MouseButtons.Left)
                         {
-                            if (OnCollisionModeMouseClicked != null)
-                                OnCollisionModeMouseClicked();
+                            selectionBoxStart = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                            selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
                         }
                         break;
                 }
@@ -141,8 +153,27 @@ namespace oEditor.Controls
                     case Enums.TilemapStates.Fill:
                         break;
                     case Enums.TilemapStates.Erase:
+
+                        selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+
+                        if (selectionBoxEnd != null && selectionBoxStart != null)
+                        {
+                            if (OnEraseModeMouseClicked != null)
+                                OnEraseModeMouseClicked(MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ToList());
+
+                            ResetSelectionBox();
+                        }
                         break;
                     case Enums.TilemapStates.Collision:
+                        selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+
+                        if (selectionBoxEnd != null && selectionBoxStart != null)
+                        {
+                            if (OnCollisionModeMouseClicked != null)
+                                OnCollisionModeMouseClicked(MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ToList());
+
+                            ResetSelectionBox();
+                        }
                         break;
                 }
             };
@@ -184,8 +215,16 @@ namespace oEditor.Controls
                     case Enums.TilemapStates.Fill:
                         break;
                     case Enums.TilemapStates.Erase:
+                        if (isMouseLeftDown)
+                        {
+                            selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                        }
                         break;
                     case Enums.TilemapStates.Collision:
+                        if (isMouseLeftDown)
+                        {
+                            selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
+                        }
                         break;
                 }
             };
@@ -232,8 +271,11 @@ namespace oEditor.Controls
                 case Enums.TilemapStates.Fill:
                     break;
                 case Enums.TilemapStates.Erase:
+                    DrawEraseOverlay(spriteBatch);
                     break;
                 case Enums.TilemapStates.Collision:
+                    DrawCollisionOverlay(spriteBatch);
+                    DrawCollisionLayer(spriteBatch);
                     break;
             }
             
@@ -260,6 +302,50 @@ namespace oEditor.Controls
             TilePattern.Draw(spriteBatch);
         }
 
+        private void DrawEraseOverlay(SpriteBatch spriteBatch)
+        {
+            if (selectionBoxEnd == null || selectionBoxStart == null)
+                return;
 
+            MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ForEach(position =>
+            {
+                spriteBatch.Draw(tileOverlay, position, Configuration.Settings.EraseBoxColor * Configuration.Settings.EraseBoxOpacity);
+            });
+        }
+
+        private void DrawCollisionOverlay(SpriteBatch spriteBatch)
+        {
+            if (selectionBoxEnd == null || selectionBoxStart == null)
+                return;
+
+            MathExtension.IsoSelector(selectionBoxStart.Value, selectionBoxEnd.Value, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ForEach(position =>
+            {
+                spriteBatch.Draw(tileOverlay, position, Configuration.Settings.CollisionBoxColor * Configuration.Settings.CollisionBoxOpacity);
+            });
+        }
+
+        private void DrawCollisionLayer(SpriteBatch spriteBatch)
+        {
+            Layer<TileCollision> collisionLayer = Tilemap.CollisionLayer;
+
+            for(int x = 0; x < collisionLayer.Width; x++)
+            {
+                for(int y = 0; y < collisionLayer.Height; y++)
+                {
+                    if(collisionLayer.Columns[x].Rows[y].IsCollidable)
+                    {
+                        Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight);
+
+                        spriteBatch.Draw(tileOverlay, position, Configuration.Settings.CollisionLayerColor * Configuration.Settings.CollisionLayerOpacity);
+                    }
+                }
+            }
+        }
+
+        private void ResetSelectionBox()
+        {
+            selectionBoxStart = null;
+            selectionBoxEnd = null;
+        }
     }
 }

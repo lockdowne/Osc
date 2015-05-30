@@ -1,4 +1,5 @@
 ﻿using oEditor.Events;
+using oEngine.Aggregators;
 using oEngine.Common;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace oEditor.Views
 {
     public partial class TilesetListView : RadForm
     {
+        private readonly IEventAggregator eventAggregator;
 
         public RadListDataItem SelectedItem
         {
@@ -22,8 +24,10 @@ namespace oEditor.Views
             set { radListControl.SelectedItem = value; }
         }
 
-        public TilesetListView()
+        public TilesetListView(IEventAggregator eventAggregator)
         {
+            this.eventAggregator = eventAggregator;
+
             InitializeComponent();
 
             pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -53,7 +57,7 @@ namespace oEditor.Views
 
         private void btnAddTilesetImage_Click(object sender, EventArgs e)
         {
-            this.Publish(new OnAddTilesetTexture() { List = radListControl });
+            this.eventAggregator.Publish(new OnAddTilesetTexture() { List = radListControl });
         }
 
         private void btnTilesetSelectTexture_Click(object sender, EventArgs e)
@@ -64,7 +68,7 @@ namespace oEditor.Views
                 return;
             }
 
-            this.Publish(new OnSelectTilesetTexture() { FileName = SelectedItem.Text });
+            this.eventAggregator.Publish(new OnSelectTilesetTexture() { FileName = SelectedItem.Text });
         }
     }
 }

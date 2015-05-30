@@ -241,7 +241,7 @@ namespace oEditor.Controls
             return new TilePattern()
             {
                 Tint = Color.White,
-                Alpha = 1.0f,
+                Alpha = Configuration.Settings.TilePatternOpacity,
                 Origin = Vector2.Zero,
                 Pattern = box,
                 Position = Vector2.Zero,

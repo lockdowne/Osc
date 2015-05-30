@@ -22,6 +22,15 @@ namespace oEditor.Common
         public Color SelectionBoxColor { get; set; }
 
         [DataMember]
+        public Color EraseBoxColor { get; set; }
+
+        [DataMember]
+        public Color CollisionBoxColor { get; set; }
+
+        [DataMember]
+        public Color CollisionLayerColor { get; set; }
+
+        [DataMember]
         public int MaxNumberOfConsoleMessage { get; set; }
 
         [DataMember]
@@ -38,6 +47,18 @@ namespace oEditor.Common
 
         [DataMember]
         public float SelectionBoxOpacity { get; set; }
+
+        [DataMember]
+        public float EraseBoxOpacity { get; set; }
+
+        [DataMember]
+        public float CollisionBoxOpacity { get; set; }
+
+        [DataMember]
+        public float CollisionLayerOpacity { get; set; }
+
+        [DataMember]
+        public float TilePatternOpacity { get; set; }
 
         [DataMember]
         public int TileWidth { get; set; }
@@ -83,11 +104,18 @@ namespace oEditor.Common
                 TilemapBackground = new Color(40, 40, 40),
                 TilesetBackground = new Color(40, 40, 40),
                 SelectionBoxColor = new Color(150, 150, 150),
+                EraseBoxColor = Color.Red,
+                CollisionBoxColor = new Color(150, 150, 150),
+                CollisionLayerColor = new Color(75, 0, 130),
                 MaxNumberOfConsoleMessage = 1024,
                 ZoomIncrement = 0.2f,
                 MaxCameraZoom = 2.0f,
                 MinCameraZoom = 0.5f,
                 SelectionBoxOpacity = 0.2f,
+                EraseBoxOpacity = 0.2f,
+                CollisionBoxOpacity = 0.2f,
+                CollisionLayerOpacity = 0.5f,
+                TilePatternOpacity = 0.5f,
                 TileWidth = 128,
                 TileHeight = 64,
                 SceneWidth = 20,

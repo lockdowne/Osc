@@ -62,13 +62,27 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.WinControls, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
-    <Reference Include="Telerik.WinControls.GridView, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
-    <Reference Include="Telerik.WinControls.RadDock, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
-    <Reference Include="Telerik.WinControls.Themes.VisualStudio2012Dark, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
-    <Reference Include="Telerik.WinControls.UI, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
-    <Reference Include="Telerik.Windows.Zip, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
-    <Reference Include="TelerikCommon, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Telerik.WinControls.GridView, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Telerik.WinControls.RadDock, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Telerik.WinControls.Themes.VisualStudio2012Dark, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Telerik.WinControls.UI, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Telerik.Windows.Zip, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="TelerikCommon, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Configuration.cs" />
@@ -80,7 +94,9 @@
     <Compile Include="Controllers\IConsoleController.cs" />
     <Compile Include="Controllers\IController.cs" />
     <Compile Include="Controllers\IEntitiesController.cs" />
+    <Compile Include="Controllers\IProjectController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TilemapController.cs" />
     <Compile Include="Controls\EntitiesRootNode.cs" />
     <Compile Include="Controls\EntitiesTilemapNode.cs" />
@@ -122,6 +138,7 @@
     <Compile Include="Views\IConsoleView.cs" />
     <Compile Include="Views\IEntitiesView.cs" />
     <Compile Include="Views\IMainView.cs" />
+    <Compile Include="Views\IProjectView.cs" />
     <Compile Include="Views\ITilemapDocumentView.cs" />
     <Compile Include="Views\ListItemRenameView.cs">
       <SubType>Form</SubType>
@@ -135,8 +152,20 @@
     <Compile Include="Views\MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\ProjectView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Views\ProjectView.Designer.cs">
+      <DependentUpon>ProjectView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\TilemapDocumentView.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Views\TilemapPropertiesView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\TilemapPropertiesView.Designer.cs">
+      <DependentUpon>TilemapPropertiesView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\TilesetListView.cs">
       <SubType>Form</SubType>
@@ -167,8 +196,14 @@
     <EmbeddedResource Include="Views\MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\ProjectView.resx">
+      <DependentUpon>ProjectView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\TilemapDocumentView.resx">
       <DependentUpon>TilemapDocumentView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TilemapPropertiesView.resx">
+      <DependentUpon>TilemapPropertiesView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TilesetListView.cs.resx">
       <DependentUpon>TilesetListView.cs</DependentUpon>

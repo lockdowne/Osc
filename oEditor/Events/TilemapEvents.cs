@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -118,11 +119,16 @@ namespace oEditor.Events
 
     public class OnEraseModeMouseClicked
     {
-
+        public List<Vector2> Positions { get; set; }
     }
 
-    public class OnCollisionModeClicked
+    public class OnCollisionModeMouseClicked
     {
+        public List<Vector2> Positions { get; set; }
+    }
 
+    public class OnTilemapLayerVisibilityChanged
+    {
+        public ListViewDataItem Item { get; set; }
     }
 }

@@ -71,6 +71,7 @@
     <Compile Include="Entities\Layer.cs" />
     <Compile Include="Entities\Sprite.cs" />
     <Compile Include="Entities\Tile.cs" />
+    <Compile Include="Entities\TileCollision.cs" />
     <Compile Include="Entities\Tilemap.cs" />
     <Compile Include="Entities\Tileset.cs" />
     <Compile Include="Entities\TileVisual.cs" />

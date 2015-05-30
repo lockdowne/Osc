@@ -17,9 +17,11 @@ namespace oEngine.Entities
         [DataMember(Name = "Tilesets")]
         private List<Tileset> Tilesets { get; set; }
 
-        [DataMember(Name = "Layers")]
+        [DataMember(Name = "VisualLayers")]
         private List<Layer<TileVisual>> TilemapLayers { get; set; }
 
+        [DataMember(Name = "CollisionLayer")]
+        public Layer<TileCollision> CollisionLayer { get; set; }
 
         /// <summary>
         /// Gets the unique ID of entity
@@ -89,6 +91,9 @@ namespace oEngine.Entities
             TilemapLayers = new List<Layer<TileVisual>>();
 
             Tilesets = new List<Tileset>();
+
+            CollisionLayer = new Layer<TileCollision>();
+            CollisionLayer.Initialize(tilemapWidth, tilemapHeight);
 
             Name = name;
             Description = description;

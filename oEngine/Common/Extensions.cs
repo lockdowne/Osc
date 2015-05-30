@@ -22,8 +22,6 @@ namespace oEngine.Common
     {
         private static readonly EventAggregatorAsync EventAggregatorAsync = new EventAggregatorAsync();
 
-        private static readonly IEventAggregator EventAggregator = new EventAggregator();
-
         public static Vector2 InvertMatrixAtVector(this Matrix matrix, int x, int y)
         {
             return Vector2.Transform(new Vector2(x, y), Matrix.Invert(matrix));
@@ -161,7 +159,7 @@ namespace oEngine.Common
         {
             T item = list[startIndex];
             list[startIndex] = list[endIndex];
-            list[endIndex] = item;            
+            list[endIndex] = item;
         }
 
         private static void LoadXnaContent(object obj, ContentManager content)
@@ -245,16 +243,6 @@ namespace oEngine.Common
         public static Task Unsubscribe<TEvent>(this object sender)
         {
             return EventAggregatorAsync.Unsubscribe<TEvent>(sender);
-        }
-
-        public static void Subscribe(this object sender)
-        {
-            EventAggregator.Subscribe(sender);
-        }
-
-        public static void Publish<TEvent>(this object sender, TEvent eventData)
-        {
-            EventAggregator.Publish(eventData);
         }
 
         /// <summary>

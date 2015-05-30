@@ -1,5 +1,6 @@
 ﻿using oEditor.Repositories;
 using oEditor.Views;
+using oEngine.Aggregators;
 using oEngine.Common;
 using oEngine.Entities;
 using oEngine.Managers;
@@ -31,18 +32,24 @@ namespace oEditor.Controllers
             // Repositories
             IRepository<Tilemap> tilemapRepository = new TilemapRepository();
 
+            IEventAggregator eventAggregator = new EventAggregator();
+
             // Entities
-            IEntitiesView entitiesView = new EntitiesView();
-            IEntitiesController entitiesController = new EntitiesController(entitiesView, new CommandManager(logger), tilemapRepository);
+            IEntitiesView entitiesView = new EntitiesView(eventAggregator);
+            IEntitiesController entitiesController = new EntitiesController(entitiesView, new CommandManager(logger), tilemapRepository, eventAggregator);
+
+            IProjectView projectView = new ProjectView(eventAggregator);
+            IProjectController projectController = new ProjectController(projectView);
 
             // Console
-            IConsoleView consoleView = new ConsoleView();
-            IConsoleController consoleController = new ConsoleController(consoleView, logger);
+            IConsoleView consoleView = new ConsoleView(eventAggregator);
+            IConsoleController consoleController = new ConsoleController(consoleView, logger, eventAggregator);
             
             // Create main view
             IMainView mainView = new MainView();
-            MainController mainController = new MainController(mainView, entitiesController, new CommandManager(logger), logger, tilemapRepository);
+            MainController mainController = new MainController(mainView, entitiesController, new CommandManager(logger), logger, eventAggregator, tilemapRepository);
             mainController.DockWindow((DockWindow)consoleView, DockPosition.Bottom);
+            mainController.DockWindow((DockWindow)projectView, DockPosition.Right);
             mainController.DockWindow((DockWindow)entitiesView, DockPosition.Right);
 
             logger.Log("Program Initialized");

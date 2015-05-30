@@ -24,13 +24,16 @@ namespace oEditor.Controllers
 
         private readonly IRepository<Tilemap> tilemapRepository;
 
-        public EntitiesController(IEntitiesView entitiesView, ICommandManager commandManager, IRepository<Tilemap> tilemapRepository)
+        private readonly IEventAggregator eventAggregator;
+
+        public EntitiesController(IEntitiesView entitiesView, ICommandManager commandManager, IRepository<Tilemap> tilemapRepository, IEventAggregator eventAggregator)
         {
             this.view = entitiesView;
             this.commandManager = commandManager;
             this.tilemapRepository = tilemapRepository;
+            this.eventAggregator = eventAggregator;
 
-            this.Subscribe();            
+            this.eventAggregator.Subscribe(this);
 
             // Command load nodes
             commandManager.ExecuteCommand(new Command()
@@ -56,8 +59,6 @@ namespace oEditor.Controllers
 
         public void OnEvent(OnCreateTilemapNode item)
         {
-            string name = item.ClassName();
-
             commandManager.ExecuteCommandAsync(new Command()
             {
                 CanExecute = () =>
@@ -85,16 +86,16 @@ namespace oEditor.Controllers
 
                     // Add node to tree
                     //item.Root.Nodes.Add(item.Node);
-                    view.TreeView.Invoke(new Action(() => item.Root.Nodes.Add(item.Node)));
+                    item.Root.Nodes.Add(item.Node);
                 },
                 UnExecute = () =>
                 {
 
                 },
-                Name = name,
+                Name = "Created New Tilemap",
                 ID = Guid.NewGuid(),
                 Description = "Creates new tilemap node under Tilemaps root in Entities tool window",
-            }, false, name);
+            }, false, item.ClassName());
         }
 
         private async Task LoadAllNodes()

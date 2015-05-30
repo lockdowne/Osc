@@ -1,4 +1,5 @@
-﻿using System;
+﻿using oEngine.Aggregators;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,6 +20,7 @@ namespace oEditor.Views
 
         public ListItemRenameView(string itemValue = "")
         {
+
             InitializeComponent();
 
             this.ItemValue = itemValue;
