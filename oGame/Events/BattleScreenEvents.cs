@@ -36,4 +36,34 @@ namespace oGame.Events
     {
 
     }
+
+    public class BattleScreenCharacterCollectionNowEmpty
+    {
+
+    }
+
+    public class BattleScreenCharacterCollectionNotEmpty
+    {
+
+    }
+
+    public class BattleScreenStartingBattleSequence
+    {
+
+    }
+
+    public class BattleScreenConfirming
+    {
+
+    }
+
+    public class BattleScreenNotConfirming
+    {
+
+    }
+
+    public class BattleScreenIsExiting
+    {
+
+    }
 }

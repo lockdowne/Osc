@@ -10,7 +10,6 @@ using oEngine.Common;
 using oEngine.Entities;
 using oEngine.Screens;
 using oGame.Events;
-using oGame.GameObjects;
 using oGame.Aggregators;
 
 namespace oGame.Popup
@@ -84,6 +83,8 @@ namespace oGame.Popup
                 if (backgroundRectangle.Contains(new Point(Convert.ToInt32(input.Position.X), Convert.ToInt32(input.Position.Y))))
                 {
                     IsSoftPopup = false;
+
+                    Console.WriteLine("CLICKED");
                 }
             }
         }
@@ -94,6 +95,7 @@ namespace oGame.Popup
 
             characterToDisplay = character;
         }
+
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);

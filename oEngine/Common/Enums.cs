@@ -82,8 +82,22 @@ namespace oEngine.Common
 
         public enum BattleScreenSequences
         {
-            PlacementSequence,
-            BattleSequence,
+            Placement,
+            Battle,
+        }
+
+        public enum BattlePhases
+        {
+            Selecting,
+            Targetting,
+            Confirming,
+        }
+
+        public enum CurrentOperation
+        {
+            Move,
+            Action,
+            Wait,
         }
     }
 }
