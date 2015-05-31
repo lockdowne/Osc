@@ -13,10 +13,12 @@ using oEditor.Repositories;
 using oEditor.Controls;
 using oEditor.Common;
 using oEngine.Aggregators;
+using Telerik.WinControls;
+using System.Windows.Forms;
 
 namespace oEditor.Controllers
 {
-    public class EntitiesController : IEntitiesController, ISubscriber<OnCreateTilemapNode>
+    public class EntitiesController : IEntitiesController, ISubscriber<OnCreateTilemapNode>, ISubscriber<OnEditTilemapNodeClicked>, ISubscriber<OnDeleteTilemapNodeClicked>
     {
         private readonly IEntitiesView view;
 
@@ -50,12 +52,55 @@ namespace oEditor.Controllers
                 {
 
                 },
-                Name = "LoadAllNodes",
+                Name = "Loaded Nodes",
                 ID = Guid.NewGuid(),
                 Description = "Populate all created nodes",
             }, false);
         }
 
+
+        public void OnEvent(OnDeleteTilemapNodeClicked item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Deleted Tilemap",
+                CanExecute = () => { return item != null && item.Node != null && tilemapRepository.Find(t => t.ID == item.Node.ID) != null; },
+                Execute = () =>
+                {
+                    if (RadMessageBox.Show(Consts.AlertMessages.Messages.RemoveTilemap, Consts.AlertMessages.Captions.RemoveTilemap, System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
+
+                        tilemapRepository.Remove(tilemap);
+
+                        tilemapRepository.Save();
+
+                        item.Node.Remove();
+                    }
+                },
+            }, false, item.ClassName());
+        }
+
+        public void OnEvent(OnEditTilemapNodeClicked item)
+        {
+            Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
+
+            TilemapPropertiesView propertiesView = new TilemapPropertiesView(tilemap.Name, tilemap.Description, tilemap.Width, tilemap.Height);
+
+            DialogResult result = propertiesView.ShowDialog();
+
+            propertiesView.Close();
+
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Edited Tilemap",
+                CanExecute = () => { return item != null && item.Node != null && tilemap != null && result == DialogResult.OK && !string.IsNullOrEmpty(propertiesView.TilemapName) && !string.IsNullOrEmpty(propertiesView.TilemapDescription); },
+                Execute = () =>
+                {
+                   
+                },
+            }, false, item.ClassName());
+        }
 
         public void OnEvent(OnCreateTilemapNode item)
         {
@@ -82,11 +127,18 @@ namespace oEditor.Controllers
                     tilemapRepository.Add(tilemap);
 
                     // Save tilemap
-                    tilemapRepository.SaveAsync();
+                    tilemapRepository.Save();
 
                     // Add node to tree
                     //item.Root.Nodes.Add(item.Node);
-                    item.Root.Nodes.Add(item.Node);
+                    if (this.view.TreeView.InvokeRequired)
+                    {
+                        this.view.TreeView.Invoke(new Action(() => { item.Root.Nodes.Add(item.Node); }));
+                    }
+                    else
+                    {
+                        item.Root.Nodes.Add(item.Node);
+                    }
                 },
                 UnExecute = () =>
                 {
@@ -106,17 +158,18 @@ namespace oEditor.Controllers
         private Task LoadTilemapNodes()
         {
             return Task.Run(() =>
-            {
-                EntitiesRootNode rootNode = view.TreeView.Nodes.FirstOrDefault(node => node is EntitiesRootNode && ((EntitiesRootNode)node).EntityType == Enums.EntityTypes.Tilemaps) as EntitiesRootNode;
-
-                if (rootNode == null)
-                    return;
-
-                tilemapRepository.FindAll(predicate => true).ForEach(tilemap =>
                 {
-                    rootNode.Nodes.Add(new EntitiesTilemapNode() { ID = tilemap.ID, Text = tilemap.Name });
+                    EntitiesRootNode rootNode = view.TreeView.Nodes.FirstOrDefault(node => node is EntitiesRootNode && ((EntitiesRootNode)node).EntityType == Enums.EntityTypes.Tilemaps) as EntitiesRootNode;
+
+                    if (rootNode == null)
+                        return;
+
+
+                    tilemapRepository.FindAll(predicate => true).ForEach(tilemap =>
+                    {
+                        rootNode.Nodes.Add(new EntitiesChildNode() { ID = tilemap.ID, Text = tilemap.Name, EntityType = Enums.EntityTypes.Tilemaps, ContextMenu = this.view.ContextMenuChild });
+                    });
                 });
-            });
         }
     }
 }

@@ -14,6 +14,6 @@ namespace oEditor.Views
         RadTreeNode SelectedNode { get; }
 
         RadContextMenu ContextMenuRoot { get; }
-        RadContextMenu ContextMenuTilemap { get; }
+        RadContextMenu ContextMenuChild { get; }
     }
 }

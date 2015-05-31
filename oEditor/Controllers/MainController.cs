@@ -51,8 +51,6 @@ namespace oEditor.Controllers
 
         public void OnEvent(OnTilemapNodeDoubleClicked item)
         {
-            string name = item.ClassName();
-
             commandManager.ExecuteCommand(new Command()
             {
                 CanExecute = () =>
@@ -82,7 +80,7 @@ namespace oEditor.Controllers
                 ID = Guid.NewGuid(),
                 Name = "Opened Tilemap",
                 Description = "Opens the selected tilemap node and opens it for editing",
-            }, false, name);
+            }, false, item.ClassName());
 
         }
 

@@ -9,12 +9,22 @@ namespace oEditor.Events
 {
    public class OnTilemapNodeDoubleClicked
    {
-       public EntitiesTilemapNode Node { get; set; }       
+       public EntitiesChildNode Node { get; set; }       
    }
 
     public class OnCreateTilemapNode
     {
         public EntitiesRootNode Root { get; set; }
-        public EntitiesTilemapNode Node { get; set; }
+        public EntitiesChildNode Node { get; set; }
+    }
+
+    public class OnEditTilemapNodeClicked
+    {
+        public EntitiesChildNode Node { get; set; }
+    }
+
+    public class OnDeleteTilemapNodeClicked
+    {
+        public EntitiesChildNode Node { get; set; }
     }
 }

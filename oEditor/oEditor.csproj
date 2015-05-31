@@ -98,10 +98,10 @@
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TilemapController.cs" />
+    <Compile Include="Controls\EntitiesChildNode.cs" />
     <Compile Include="Controls\EntitiesRootNode.cs" />
-    <Compile Include="Controls\EntitiesTilemapNode.cs" />
     <Compile Include="Controls\GameControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\GraphicsDeviceControl.cs">
       <SubType>UserControl</SubType>

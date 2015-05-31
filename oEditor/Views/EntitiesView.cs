@@ -19,9 +19,9 @@ namespace oEditor.Views
         private Telerik.WinControls.UI.RadContextMenu contextMenuRoot;
         private System.ComponentModel.Container components;
         private Telerik.WinControls.UI.RadMenuItem contextMenuRootAddEntity;
-        private Telerik.WinControls.UI.RadContextMenu contextMenuTilemap;
-        private Telerik.WinControls.UI.RadMenuItem contextMenuEditTilemap;
-        private Telerik.WinControls.UI.RadMenuItem contextMenuDeleteTilemap;
+        private Telerik.WinControls.UI.RadContextMenu contextMenuChild;
+        private Telerik.WinControls.UI.RadMenuItem contextMenuChildEdit;
+        private Telerik.WinControls.UI.RadMenuItem contextMenuChildDelete;
         private Telerik.WinControls.UI.RadTreeView radTreeView;
 
         public RadTreeView TreeView
@@ -39,9 +39,9 @@ namespace oEditor.Views
             get { return contextMenuRoot; }
         }
 
-        public RadContextMenu ContextMenuTilemap
+        public RadContextMenu ContextMenuChild
         {
-            get { return contextMenuTilemap; }
+            get { return contextMenuChild; }
         }
 
         public EntitiesView(IEventAggregator eventAggregator)
@@ -60,12 +60,92 @@ namespace oEditor.Views
 
             radTreeView.NodeMouseDoubleClick += (sender, e) =>
             {
-                EntitiesTilemapNode selectedNode = SelectedNode as EntitiesTilemapNode;
+                EntitiesChildNode selectedNode = SelectedNode as EntitiesChildNode;
 
                 if (selectedNode == null)
                     return;
+                              
 
-                this.eventAggregator.Publish(new OnTilemapNodeDoubleClicked() { Node = selectedNode });
+                switch (selectedNode.EntityType)
+                {
+                    case Enums.EntityTypes.Characters:
+                        break;
+                    case Enums.EntityTypes.Items:
+                        break;
+                    case Enums.EntityTypes.Quests:
+                        break;
+                    case Enums.EntityTypes.Tilemaps:
+                        this.eventAggregator.Publish(new OnTilemapNodeDoubleClicked() { Node = selectedNode });
+                        break;
+                    case Enums.EntityTypes.Nodes:
+                        break;
+                    case Enums.EntityTypes.BattleScenes:
+                        break;
+                    case Enums.EntityTypes.FreeRoamScenes:
+                        break;
+                    case Enums.EntityTypes.RandomBattleScenes:
+                        break;
+                }
+
+                
+            };
+
+            this.contextMenuChildDelete.Click += (sender, e) =>
+            {
+                EntitiesChildNode child = SelectedNode as EntitiesChildNode;
+
+                if (child == null)
+                    return;
+
+                switch (child.EntityType)
+                {
+                    case Enums.EntityTypes.Characters:
+                        break;
+                    case Enums.EntityTypes.Items:
+                        break;
+                    case Enums.EntityTypes.Quests:
+                        break;
+                    case Enums.EntityTypes.Tilemaps:
+                        this.eventAggregator.Publish(new OnDeleteTilemapNodeClicked() { Node = child });
+                        break;
+                    case Enums.EntityTypes.Nodes:
+                        break;
+                    case Enums.EntityTypes.BattleScenes:
+                        break;
+                    case Enums.EntityTypes.FreeRoamScenes:
+                        break;
+                    case Enums.EntityTypes.RandomBattleScenes:
+                        break;
+                }
+            };
+
+            this.contextMenuChildEdit.Click += (sender, e) =>
+            {
+                EntitiesChildNode child = SelectedNode as EntitiesChildNode;
+
+                if (child == null)
+                    return;
+
+                switch (child.EntityType)
+                {
+                    case Enums.EntityTypes.Characters:
+                        break;
+                    case Enums.EntityTypes.Items:
+                        break;
+                    case Enums.EntityTypes.Quests:
+                        break;
+                    case Enums.EntityTypes.Tilemaps:
+                        this.eventAggregator.Publish(new OnEditTilemapNodeClicked() { Node = child });
+                        break;
+                    case Enums.EntityTypes.Nodes:
+                        break;
+                    case Enums.EntityTypes.BattleScenes:
+                        break;
+                    case Enums.EntityTypes.FreeRoamScenes:
+                        break;
+                    case Enums.EntityTypes.RandomBattleScenes:
+                        break;
+                }
             };
 
             this.contextMenuRootAddEntity.Click += (sender, e) =>
@@ -84,7 +164,7 @@ namespace oEditor.Views
                     case Enums.EntityTypes.Quests:
                         break;
                     case Enums.EntityTypes.Tilemaps:
-                        this.eventAggregator.Publish(new OnCreateTilemapNode() { Root = root, Node = new EntitiesTilemapNode() { Text = Consts.Nodes.Tilemap, ID = Guid.NewGuid(), ContextMenu = contextMenuTilemap } });
+                        this.eventAggregator.Publish(new OnCreateTilemapNode() { Root = root, Node = new EntitiesChildNode() { Text = Consts.Nodes.Tilemap, ID = Guid.NewGuid(), ContextMenu = contextMenuChild, EntityType = Enums.EntityTypes.Tilemaps } });
                         break;
                     case Enums.EntityTypes.Nodes:
                         break;
@@ -106,9 +186,9 @@ namespace oEditor.Views
             this.radTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.contextMenuRoot = new Telerik.WinControls.UI.RadContextMenu(this.components);
             this.contextMenuRootAddEntity = new Telerik.WinControls.UI.RadMenuItem();
-            this.contextMenuTilemap = new Telerik.WinControls.UI.RadContextMenu(this.components);
-            this.contextMenuEditTilemap = new Telerik.WinControls.UI.RadMenuItem();
-            this.contextMenuDeleteTilemap = new Telerik.WinControls.UI.RadMenuItem();
+            this.contextMenuChild = new Telerik.WinControls.UI.RadContextMenu(this.components);
+            this.contextMenuChildEdit = new Telerik.WinControls.UI.RadMenuItem();
+            this.contextMenuChildDelete = new Telerik.WinControls.UI.RadMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -136,24 +216,24 @@ namespace oEditor.Views
             // 
             // contextMenuTilemap
             // 
-            this.contextMenuTilemap.Items.AddRange(new Telerik.WinControls.RadItem[] {
-            this.contextMenuEditTilemap,
-            this.contextMenuDeleteTilemap});
+            this.contextMenuChild.Items.AddRange(new Telerik.WinControls.RadItem[] {
+            this.contextMenuChildEdit,
+            this.contextMenuChildDelete});
             // 
             // contextMenuEditTilemap
             // 
-            this.contextMenuEditTilemap.AccessibleDescription = "contextMenuEditTilemap";
-            this.contextMenuEditTilemap.AccessibleName = "contextMenuEditTilemap";
-            this.contextMenuEditTilemap.Name = "contextMenuEditTilemap";
-            this.contextMenuEditTilemap.Text = "Edit";
-            this.contextMenuEditTilemap.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.contextMenuChildEdit.AccessibleDescription = "contextMenuEditTilemap";
+            this.contextMenuChildEdit.AccessibleName = "contextMenuEditTilemap";
+            this.contextMenuChildEdit.Name = "contextMenuEditTilemap";
+            this.contextMenuChildEdit.Text = "Edit";
+            this.contextMenuChildEdit.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // contextMenuDeleteTilemap
             // 
-            this.contextMenuDeleteTilemap.AccessibleDescription = "Delete";
-            this.contextMenuDeleteTilemap.AccessibleName = "Delete";
-            this.contextMenuDeleteTilemap.Name = "contextMenuDeleteTilemap";
-            this.contextMenuDeleteTilemap.Text = "Delete";
+            this.contextMenuChildDelete.AccessibleDescription = "Delete";
+            this.contextMenuChildDelete.AccessibleName = "Delete";
+            this.contextMenuChildDelete.Name = "contextMenuDeleteTilemap";
+            this.contextMenuChildDelete.Text = "Delete";
             // 
             // EntitiesView
             // 

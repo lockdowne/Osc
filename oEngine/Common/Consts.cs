@@ -44,6 +44,7 @@ namespace oEngine.Common
                 public const string ImageAlreadyExists = "An image with the same name already exists";
                 public const string SelectTilesetImage = "Select a tileset";
                 public const string RemoveTileset = "Are you sure you want to delete the selected tileset?";
+                public const string RemoveTilemap = "Are you sure you want to delete the selected tilemap?";
             }
 
             public static class Captions
@@ -52,6 +53,7 @@ namespace oEngine.Common
                 public const string ImageAlreadyExists = "Hey Listen";
                 public const string SelectTilesetImage = "Hey Listen";
                 public const string RemoveTileset = "Hey Listen";
+                public const string RemoveTilemap = "Hey Listen";
             }
         }
 

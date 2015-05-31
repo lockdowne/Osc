@@ -34,20 +34,20 @@
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
             this.radLabel4 = new Telerik.WinControls.UI.RadLabel();
-            this.txtTilemapWidth = new System.Windows.Forms.NumericUpDown();
-            this.txtTilemapHeight = new System.Windows.Forms.NumericUpDown();
             this.btnOK = new Telerik.WinControls.UI.RadButton();
             this.btnCancel = new Telerik.WinControls.UI.RadButton();
+            this.txtTilemapWidth = new Telerik.WinControls.UI.RadSpinEditor();
+            this.txtTilemapHeight = new Telerik.WinControls.UI.RadSpinEditor();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTilemapName)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTilemapDescription)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnOK)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnCancel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -101,40 +101,6 @@
             this.radLabel4.TabIndex = 6;
             this.radLabel4.Text = "Height:";
             // 
-            // txtTilemapWidth
-            // 
-            this.txtTilemapWidth.Location = new System.Drawing.Point(152, 190);
-            this.txtTilemapWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.txtTilemapWidth.Name = "txtTilemapWidth";
-            this.txtTilemapWidth.Size = new System.Drawing.Size(226, 20);
-            this.txtTilemapWidth.TabIndex = 7;
-            this.txtTilemapWidth.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // txtTilemapHeight
-            // 
-            this.txtTilemapHeight.Location = new System.Drawing.Point(152, 216);
-            this.txtTilemapHeight.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.txtTilemapHeight.Name = "txtTilemapHeight";
-            this.txtTilemapHeight.Size = new System.Drawing.Size(226, 20);
-            this.txtTilemapHeight.TabIndex = 8;
-            this.txtTilemapHeight.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // btnOK
             // 
             this.btnOK.Location = new System.Drawing.Point(152, 255);
@@ -153,15 +119,51 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // txtTilemapWidth
+            // 
+            this.txtTilemapWidth.Location = new System.Drawing.Point(152, 190);
+            this.txtTilemapWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtTilemapWidth.Name = "txtTilemapWidth";
+            this.txtTilemapWidth.Size = new System.Drawing.Size(226, 20);
+            this.txtTilemapWidth.TabIndex = 11;
+            this.txtTilemapWidth.TabStop = false;
+            this.txtTilemapWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // txtTilemapHeight
+            // 
+            this.txtTilemapHeight.Location = new System.Drawing.Point(152, 216);
+            this.txtTilemapHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtTilemapHeight.Name = "txtTilemapHeight";
+            this.txtTilemapHeight.Size = new System.Drawing.Size(226, 20);
+            this.txtTilemapHeight.TabIndex = 12;
+            this.txtTilemapHeight.TabStop = false;
+            this.txtTilemapHeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // TilemapPropertiesView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(393, 294);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtTilemapHeight);
             this.Controls.Add(this.txtTilemapWidth);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnOK);
             this.Controls.Add(this.radLabel4);
             this.Controls.Add(this.txtTilemapDescription);
             this.Controls.Add(this.radLabel3);
@@ -182,10 +184,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnOK)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnCancel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTilemapHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -200,9 +202,9 @@
         private Telerik.WinControls.UI.RadLabel radLabel2;
         private Telerik.WinControls.UI.RadLabel radLabel3;
         private Telerik.WinControls.UI.RadLabel radLabel4;
-        private System.Windows.Forms.NumericUpDown txtTilemapWidth;
-        private System.Windows.Forms.NumericUpDown txtTilemapHeight;
         private Telerik.WinControls.UI.RadButton btnOK;
         private Telerik.WinControls.UI.RadButton btnCancel;
+        private Telerik.WinControls.UI.RadSpinEditor txtTilemapWidth;
+        private Telerik.WinControls.UI.RadSpinEditor txtTilemapHeight;
     }
 }

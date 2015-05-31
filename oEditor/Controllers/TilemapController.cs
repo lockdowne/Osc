@@ -561,10 +561,9 @@ namespace oEditor.Controllers
             }, false, name);
         }
 
-        private async void LoadTilemap()
+        private void LoadTilemap()
         {
-            await Task.Run(() =>
-            {
+            
                 commandManager.ExecuteCommand(new Command()
                 {
                     Name = "Loaded Tilemap",
@@ -575,27 +574,25 @@ namespace oEditor.Controllers
 
                         tilemap.FindTilemapLayers(t => { return true; }).ForEach(layer =>
                         {
-                            this.view.TilemapLayersListBox.Invoke(new Action(() =>
-                            {
+                            
                                 this.view.TilemapLayersListBox.Items.Add(new ListViewDataItem() { Text = layer.Name, Tag = layer.ID });
-                            }));
+                            
                         });
 
                         tilemap.FindTilesets(t => { return true; }).ForEach(tileset =>
                         {
-                            this.view.TilesetPages.Invoke(new Action(() =>
-                            {
+                           
                                 this.view.TilesetPages.Pages.Add(new TilesetPage(eventAggregator)
                                 {
                                     Tileset = tileset,
                                     Text = tileset.TextureName,
                                     Name = tileset.TextureName,
                                 });
-                            }));
+                          
                         });
                     },
                 }, false);
-            });
+           
             
         }
     }
