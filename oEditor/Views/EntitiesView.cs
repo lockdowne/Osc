@@ -17,7 +17,7 @@ namespace oEditor.Views
         private IEventAggregator eventAggregator;
 
         private Telerik.WinControls.UI.RadContextMenu contextMenuRoot;
-        private System.ComponentModel.Container components;
+        private System.ComponentModel.IContainer components;
         private Telerik.WinControls.UI.RadMenuItem contextMenuRootAddEntity;
         private Telerik.WinControls.UI.RadContextMenu contextMenuChild;
         private Telerik.WinControls.UI.RadMenuItem contextMenuChildEdit;
@@ -183,6 +183,7 @@ namespace oEditor.Views
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EntitiesView));
             this.radTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.contextMenuRoot = new Telerik.WinControls.UI.RadContextMenu(this.components);
             this.contextMenuRootAddEntity = new Telerik.WinControls.UI.RadMenuItem();
@@ -197,7 +198,7 @@ namespace oEditor.Views
             this.radTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radTreeView.Location = new System.Drawing.Point(0, 0);
             this.radTreeView.Name = "radTreeView";
-            this.radTreeView.Size = new System.Drawing.Size(150, 250);
+            this.radTreeView.Size = new System.Drawing.Size(200, 200);
             this.radTreeView.SpacingBetweenNodes = -1;
             this.radTreeView.TabIndex = 0;
             this.radTreeView.Text = "radTreeView1";
@@ -211,33 +212,36 @@ namespace oEditor.Views
             // 
             this.contextMenuRootAddEntity.AccessibleDescription = "Add";
             this.contextMenuRootAddEntity.AccessibleName = "Add";
+            this.contextMenuRootAddEntity.Image = ((System.Drawing.Image)(resources.GetObject("contextMenuRootAddEntity.Image")));
             this.contextMenuRootAddEntity.Name = "contextMenuRootAddEntity";
             this.contextMenuRootAddEntity.Text = "Add";
             // 
-            // contextMenuTilemap
+            // contextMenuChild
             // 
             this.contextMenuChild.Items.AddRange(new Telerik.WinControls.RadItem[] {
             this.contextMenuChildEdit,
             this.contextMenuChildDelete});
             // 
-            // contextMenuEditTilemap
+            // contextMenuChildEdit
             // 
             this.contextMenuChildEdit.AccessibleDescription = "contextMenuEditTilemap";
             this.contextMenuChildEdit.AccessibleName = "contextMenuEditTilemap";
-            this.contextMenuChildEdit.Name = "contextMenuEditTilemap";
+            this.contextMenuChildEdit.Image = ((System.Drawing.Image)(resources.GetObject("contextMenuChildEdit.Image")));
+            this.contextMenuChildEdit.Name = "contextMenuChildEdit";
             this.contextMenuChildEdit.Text = "Edit";
             this.contextMenuChildEdit.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // contextMenuDeleteTilemap
+            // contextMenuChildDelete
             // 
             this.contextMenuChildDelete.AccessibleDescription = "Delete";
             this.contextMenuChildDelete.AccessibleName = "Delete";
-            this.contextMenuChildDelete.Name = "contextMenuDeleteTilemap";
+            this.contextMenuChildDelete.Image = ((System.Drawing.Image)(resources.GetObject("contextMenuChildDelete.Image")));
+            this.contextMenuChildDelete.Name = "contextMenuChildDelete";
             this.contextMenuChildDelete.Text = "Delete";
             // 
             // EntitiesView
             // 
-            this.Controls.Add(radTreeView);
+            this.Controls.Add(this.radTreeView);
             this.Text = "Entities";
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView)).EndInit();
             this.ResumeLayout(false);

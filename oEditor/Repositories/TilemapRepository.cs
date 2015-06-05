@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using oEditor.Common;
 
 namespace oEditor.Repositories
 {
@@ -15,12 +16,19 @@ namespace oEditor.Repositories
 
         public TilemapRepository()
         {
-            if(IOMethods.CreateDirectory(Consts.Repositories.Tilemaps))
+            try
             {
-                if(File.Exists(Consts.Repositories.Tilemaps))
+                if (IOMethods.CreateDirectory(Consts.Repositories.Tilemaps))
                 {
-                    entities = Serializer.Deserialize<List<Tilemap>>(Consts.Repositories.Tilemaps);
+                    if (File.Exists(Consts.Repositories.Tilemaps))
+                    {
+                        entities = XnaSerializer.XnaDeserialize<List<Tilemap>>(Consts.Repositories.Tilemaps); //Serializer.Deserialize<List<Tilemap>>(Consts.Repositories.Tilemaps);
+                    }
                 }
+            }
+            catch(Exception exception)
+            {
+                
             }
         }
 

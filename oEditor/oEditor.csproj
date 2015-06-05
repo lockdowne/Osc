@@ -88,6 +88,7 @@
     <Compile Include="Common\Configuration.cs" />
     <Compile Include="Common\Extensions.cs" />
     <Compile Include="Common\Settings.cs" />
+    <Compile Include="Common\XnaSerializer.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\ConsoleController.cs" />
     <Compile Include="Controllers\EntitiesController.cs" />
@@ -100,9 +101,6 @@
     <Compile Include="Controllers\TilemapController.cs" />
     <Compile Include="Controls\EntitiesChildNode.cs" />
     <Compile Include="Controls\EntitiesRootNode.cs" />
-    <Compile Include="Controls\GameControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Controls\GraphicsDeviceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -337,6 +335,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\tile-overlay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Arrow_RedoRetry_16xLG_color.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Arrow_UndoRevertRestore_16xLG_color.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CheckIn_13188.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Saveall_6518.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\template_Frameset_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tile-overlay - 2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

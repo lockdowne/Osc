@@ -72,8 +72,8 @@ namespace oEditor.Controls
             pixel = new Texture2D(GraphicsDevice, 2, 2, false, SurfaceFormat.Color);
             pixel.SetData<Color>(new Color[] { Color.White, Color.White, Color.White, Color.White });
 
-            tileOverlay = XnaHelper.Instance.LoadTexture(global::oEditor.Properties.Resources.tile_overlay);
-           
+            tileOverlay = XnaHelper.Instance.LoadTexture(global::oEditor.Properties.Resources.tile_overlay___2);
+            
             Tilemap.Pixel = pixel;
             Tilemap.IsGridVisible = true;            
 
@@ -133,6 +133,8 @@ namespace oEditor.Controls
                             selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
                         }
                         break;
+                    case Enums.TilemapStates.HeightMap:
+                        break;
                 }
             };
 
@@ -174,6 +176,8 @@ namespace oEditor.Controls
 
                             ResetSelectionBox();
                         }
+                        break;
+                    case Enums.TilemapStates.HeightMap:
                         break;
                 }
             };
@@ -226,6 +230,8 @@ namespace oEditor.Controls
                             selectionBoxEnd = MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation);
                         }
                         break;
+                    case Enums.TilemapStates.HeightMap:
+                        break;
                 }
             };
 
@@ -276,6 +282,8 @@ namespace oEditor.Controls
                 case Enums.TilemapStates.Collision:
                     DrawCollisionOverlay(spriteBatch);
                     DrawCollisionLayer(spriteBatch);
+                    break;
+                case Enums.TilemapStates.HeightMap:
                     break;
             }
             

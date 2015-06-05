@@ -92,6 +92,11 @@ namespace oEditor.Events
 
     }
 
+    public class OnTilemapHeightMapClicked
+    {
+
+    }
+
     public class OnTilemapCopyClicked
     {
 
@@ -131,4 +136,6 @@ namespace oEditor.Events
     {
         public ListViewDataItem Item { get; set; }
     }
+
+
 }

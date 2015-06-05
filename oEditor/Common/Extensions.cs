@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace oEditor.Common
@@ -28,84 +29,7 @@ namespace oEditor.Common
                 lst.Remove(obj);
         }
 
-        /// <summary>
-        /// Deserializes an xelement node into object
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="xElement"></param>
-        /// <returns></returns>
-        public static T DeserializeXElement<T>(this XElement xElement)
-        {
-            using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(xElement.ToString())))
-            {
-                DataContractSerializer xml = new DataContractSerializer(typeof(T));
-                T obj = (T)xml.ReadObject(memoryStream);
-                CreateTextures(obj);
-
-                return obj;
-            }
-        }
-
-        private static void CreateTextures(object obj)
-        {
-            if (obj == null) return;
-
-            Type objType = obj.GetType();
-            PropertyInfo[] properties = objType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-
-            foreach (PropertyInfo property in properties)
-            {
-                object propValue = property.GetValue(obj, null);
-
-                // Check for dictionary collection
-                var dict = propValue as IDictionary;
-                if (dict != null)
-                {
-                    foreach (var item in dict.Values)
-                    {
-                        CreateTextures(item);
-                    }
-                }
-                else
-                {
-                    // Check for the rest of collections
-                    var elems = propValue as IEnumerable;
-                    if (elems != null)
-                    {
-                        foreach (var item in elems)
-                        {
-                            CreateTextures(item);
-                        }
-                    }
-                    else
-                    {
-                        // This will not cut-off System.Collections because of the first check
-                        if (property.PropertyType.Assembly == objType.Assembly)
-                        {
-                            CreateTextures(propValue);
-
-                        }
-                    }
-                }
-
-                if (property.Name.ToLower() == "texturename")
-                {
-                    if (!string.IsNullOrEmpty(property.GetValue(obj, null).ToString()))
-                    {
-                        //((ITexture)obj).Texture = content.Load<Texture2D>("Textures/" + property.GetValue(obj, null));
-                        Bitmap bitmap = new Bitmap(Consts.OscPaths.TexturesDirectory + @"\" + property.GetValue(obj, null) + ".png"); // png is ok since I only accept pngs to save
-                        // Need a universal graphics device
-                        using (MemoryStream stream = new MemoryStream())
-                        {
-                            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                            stream.Seek(0, SeekOrigin.Begin);
-                            ((ITexture)obj).Texture = Texture2D.FromStream(oEditor.Controls.XnaHelper.Instance.GraphicsDevice, stream); // This might enable me to get a universal graphics device, since all the gfx controls share one anyways
-                        }
-                    }
-                }
-            }
-        }
-
+    
         public static string ClassName(this object obj)
         {
             return obj == null ? string.Empty : obj.GetType().Name;

@@ -78,6 +78,7 @@ namespace oEngine.Common
             Fill,
             Erase,
             Collision,
+            HeightMap,
         }
 
         public enum BattleScreenSequences

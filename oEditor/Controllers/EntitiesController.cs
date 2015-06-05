@@ -73,7 +73,7 @@ namespace oEditor.Controllers
 
                         tilemapRepository.Remove(tilemap);
 
-                        tilemapRepository.Save();
+                        //tilemapRepository.Save();
 
                         item.Node.Remove();
                     }
@@ -83,21 +83,44 @@ namespace oEditor.Controllers
 
         public void OnEvent(OnEditTilemapNodeClicked item)
         {
+            if (item == null)
+                return;
+
             Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
+
+            int previousWidth = tilemap.Width;
+            int previousHeight = tilemap.Height;
+
+            if (tilemap == null)
+                return;
 
             TilemapPropertiesView propertiesView = new TilemapPropertiesView(tilemap.Name, tilemap.Description, tilemap.Width, tilemap.Height);
 
             DialogResult result = propertiesView.ShowDialog();
 
-            propertiesView.Close();
-
             commandManager.ExecuteCommand(new Command()
             {
                 Name = "Edited Tilemap",
-                CanExecute = () => { return item != null && item.Node != null && tilemap != null && result == DialogResult.OK && !string.IsNullOrEmpty(propertiesView.TilemapName) && !string.IsNullOrEmpty(propertiesView.TilemapDescription); },
+                CanExecute = () => { return item != null && item.Node != null && tilemap != null && result == DialogResult.OK && !string.IsNullOrEmpty(propertiesView.TilemapName); },
                 Execute = () =>
                 {
-                   
+                    tilemap.Name = propertiesView.TilemapName;
+                    tilemap.Description = propertiesView.TilemapDescription;
+
+                    if(previousWidth != propertiesView.TilemapWidth || previousHeight != propertiesView.TilemapHeight)
+                    {
+                        tilemap.FindTilemapLayers(t => { return true; }).ForEach(layer =>
+                        {
+                            layer.Resize(propertiesView.TilemapWidth, propertiesView.TilemapHeight);
+                        });
+
+                        tilemap.CollisionLayer.Resize(propertiesView.TilemapWidth, propertiesView.TilemapHeight);
+
+                        tilemap.Width = propertiesView.TilemapWidth;
+                        tilemap.Height = propertiesView.TilemapHeight;
+                    }
+
+                    item.Node.Text = propertiesView.TilemapName;
                 },
             }, false, item.ClassName());
         }
@@ -127,7 +150,7 @@ namespace oEditor.Controllers
                     tilemapRepository.Add(tilemap);
 
                     // Save tilemap
-                    tilemapRepository.Save();
+                    //tilemapRepository.Save();
 
                     // Add node to tree
                     //item.Root.Nodes.Add(item.Node);

@@ -155,11 +155,20 @@ namespace oEngine.Common
             return collection;
         }
 
+
         public static void Swap<T>(this IList<T> list, int startIndex, int endIndex)
         {
+            // do nothing if index out of range
+
+            if (startIndex < 0 || endIndex >= list.Count)
+                return;
+
             T item = list[startIndex];
+            
             list[startIndex] = list[endIndex];
             list[endIndex] = item;
+            //list.RemoveAt(endIndex);
+            //list.Insert(endIndex, item);
         }
 
         private static void LoadXnaContent(object obj, ContentManager content)

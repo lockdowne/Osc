@@ -55,6 +55,7 @@ namespace oEditor.Views
         private CommandBarToggleButton btnTilemapFill;
         private CommandBarToggleButton btnTilemapErase;
         private CommandBarToggleButton btnTilemapCollision;
+        private CommandBarToggleButton btnTilemapHeight;
         private CommandBarSeparator commandBarSeparator1;
         private CommandBarButton btnTilemapCopy;
         private CommandBarButton btnTilemapCut;
@@ -147,6 +148,11 @@ namespace oEditor.Views
             {
                 
             };
+
+            this.radCheckedListBox1.ItemCheckedChanged += (sender, e) =>
+            {
+                this.eventAggregator.Publish(new OnTilemapLayerVisibilityChanged() { Item = e.Item });
+            };
         }
 
         private void InitializeComponent()
@@ -162,6 +168,7 @@ namespace oEditor.Views
             this.btnTilemapFill = new Telerik.WinControls.UI.CommandBarToggleButton();
             this.btnTilemapErase = new Telerik.WinControls.UI.CommandBarToggleButton();
             this.btnTilemapCollision = new Telerik.WinControls.UI.CommandBarToggleButton();
+            this.btnTilemapHeight = new Telerik.WinControls.UI.CommandBarToggleButton();
             this.commandBarSeparator1 = new Telerik.WinControls.UI.CommandBarSeparator();
             this.btnTilemapCopy = new Telerik.WinControls.UI.CommandBarButton();
             this.btnTilemapCut = new Telerik.WinControls.UI.CommandBarButton();
@@ -275,6 +282,7 @@ namespace oEditor.Views
             this.btnTilemapFill,
             this.btnTilemapErase,
             this.btnTilemapCollision,
+            this.btnTilemapHeight,
             this.commandBarSeparator1,
             this.btnTilemapCopy,
             this.btnTilemapCut,
@@ -339,6 +347,17 @@ namespace oEditor.Views
             this.btnTilemapCollision.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnTilemapCollision.Text = "commandBarToggleButton4";
             this.btnTilemapCollision.Click += new System.EventHandler(this.btnTilemapCollision_Click);
+            // 
+            // btnTilemapHeight
+            // 
+            this.btnTilemapHeight.AccessibleDescription = "commandBarToggleButton5";
+            this.btnTilemapHeight.AccessibleName = "commandBarToggleButton5";
+            this.btnTilemapHeight.DisplayName = "commandBarToggleButton5";
+            this.btnTilemapHeight.Image = global::oEditor.Properties.Resources.template_Frameset_16xLG;
+            this.btnTilemapHeight.Name = "btnTilemapHeight";
+            this.btnTilemapHeight.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnTilemapHeight.Text = "commandBarToggleButton5";
+            this.btnTilemapHeight.Click += new System.EventHandler(this.btnTilemapHeight_Click);
             // 
             // commandBarSeparator1
             // 
@@ -736,6 +755,8 @@ namespace oEditor.Views
 
         }
 
+       
+
         private void tilemapRender_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             this.eventAggregator.Publish(new OnTilemapMouseWheel() { MouseEvent = e });
@@ -841,6 +862,13 @@ namespace oEditor.Views
             this.eventAggregator.Publish(new OnTilemapCollisionClicked());
         }
 
+        private void btnTilemapHeight_Click(object sender, EventArgs e)
+        {
+            DeToggleMains(this.btnTilemapHeight);
+            DisableNonSelectableButtons();
+            this.eventAggregator.Publish(new OnTilemapHeightMapClicked());
+        }
+
         private void btnTilemapCopy_Click(object sender, EventArgs e)
         {
             this.eventAggregator.Publish(new OnTilemapCopyClicked());
@@ -873,6 +901,8 @@ namespace oEditor.Views
                 this.btnTilemapErase.ToggleState = ToggleState.Off;
             if (buttonToIgnore != btnTilemapCollision)
                 this.btnTilemapCollision.ToggleState = ToggleState.Off;
+            if (buttonToIgnore != btnTilemapHeight)
+                this.btnTilemapHeight.ToggleState = ToggleState.Off;
         }
 
         private void DisableNonSelectableButtons()

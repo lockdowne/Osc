@@ -34,12 +34,12 @@ namespace oEditor.Views
 
             StartPosition = FormStartPosition.CenterScreen;
 
-            if(!Directory.Exists(Consts.OscPaths.TilesetTexturesDirectory))
+            if (!Directory.Exists(Consts.OscPaths.TexturesDirectory))
             {
-                Directory.CreateDirectory(Consts.OscPaths.TilesetTexturesDirectory);
+                Directory.CreateDirectory(Consts.OscPaths.TexturesDirectory);
             }
 
-            DirectoryInfo directory = new DirectoryInfo(Consts.OscPaths.TilesetTexturesDirectory);
+            DirectoryInfo directory = new DirectoryInfo(Consts.OscPaths.TexturesDirectory);
 
             foreach(var file in directory.GetFiles("*.png"))
             {
@@ -51,7 +51,7 @@ namespace oEditor.Views
                 if (SelectedItem == null)
                     return;
 
-                pictureBox.Image = new Bitmap(Consts.OscPaths.TilesetTexturesDirectory + @"\" + SelectedItem.Text);
+                pictureBox.Image = new Bitmap(Consts.OscPaths.TexturesDirectory + @"\" + SelectedItem.Text);
             };          
         }
 

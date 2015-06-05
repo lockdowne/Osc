@@ -78,14 +78,8 @@ namespace oEngine.Entities
         /// <param name="height">height in tiles</param>
         public void Initialize(int width, int height)
         {
-            // Prevent this call if has already been initialized
-            if (Columns.Count > 0)
-                throw new Exception("Layer has already been initialized");
-
             this.width = width;
             this.height = height;
-
-            ID = Guid.NewGuid();
 
             // Populate layer with tile instances
             for (int x = 0; x < width; x++)
@@ -141,9 +135,43 @@ namespace oEngine.Entities
             return section;
         }
 
-        public void Resize(int width, int height)
+        public void Resize(int newWidth, int newHeight)
         {
-            // TODO: Resize layer
+            List<Column> columns = new List<Column>();
+            // Populate layer with tile instances
+            for (int x = 0; x < newWidth; x++)
+            {
+                Column column = new Column();
+
+                for (int y = 0; y < newHeight; y++)
+                {
+                    column.Rows.Add((T)Activator.CreateInstance(typeof(T)));
+                }
+
+                columns.Add(column);
+            }
+
+            int minWidth = Math.Min(newWidth, Width);
+            int minHeight = Math.Min(newHeight, Height);
+
+            for(int x = 0; x < minWidth; x++)
+            {
+                for(int y = 0; y < minHeight; y++)
+                {
+                    columns[x].Rows[y] = Columns[x].Rows[y];
+                }
+            }
+
+            this.Columns.Clear();
+            this.Initialize(newWidth, newHeight);
+
+            for(int x = 0; x < minWidth; x++)
+            {
+                for(int y = 0; y < minHeight; y++)
+                {
+                    Columns[x].Rows[y] = columns[x].Rows[y];
+                }
+            }
         }
 
         

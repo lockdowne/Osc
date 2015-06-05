@@ -35,17 +35,6 @@ namespace oGame
             try
             {
                 graphics = new GraphicsDeviceManager(this);
-                //graphics.PreferredBackBufferHeight = 0;
-                // graphics.PreferredBackBufferWidth = 0;
-
-                Content.RootDirectory = "Content";
-                IsMouseVisible = true;
-                graphics.PreferredBackBufferWidth = 1024;
-                graphics.PreferredBackBufferHeight = 768;
-
-                screenManager = new ScreenManager(this);
-                Components.Add(screenManager);
-
                 
             }
             catch (Exception exception)

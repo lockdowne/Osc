@@ -63,6 +63,12 @@ namespace oEngine.Common
                (int)Math.Round(((vector.Y / (tileHeight / 2)) - (vector.X / (tileWidth / 2))) / 2));
         }
 
+        public static Point OrthogonalToIsoCoordinate(int x, int y, int tileWidth, int tileHeight)
+        {
+            Vector2 isoPixels = IsoCoordinateToPixels(x, y, tileWidth, tileHeight);
+            return IsoPixelsToCoordinate(isoPixels, tileWidth, tileHeight);
+        }
+
         /// <summary>
         /// Rounds vector to align with isometric grid
         /// </summary>

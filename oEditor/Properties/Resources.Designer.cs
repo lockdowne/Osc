@@ -93,9 +93,39 @@ namespace oEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Arrow_RedoRetry_16xLG_color {
+            get {
+                object obj = ResourceManager.GetObject("Arrow_RedoRetry_16xLG_color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Arrow_UndoRevertRestore_16xLG_color {
+            get {
+                object obj = ResourceManager.GetObject("Arrow_UndoRevertRestore_16xLG_color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap arrow_Up_16xLG {
             get {
                 object obj = ResourceManager.GetObject("arrow_Up_16xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CheckIn_13188 {
+            get {
+                object obj = ResourceManager.GetObject("CheckIn_13188", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -333,9 +363,29 @@ namespace oEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Saveall_6518 {
+            get {
+                object obj = ResourceManager.GetObject("Saveall_6518", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap square_dashed_rounded_16 {
             get {
                 object obj = ResourceManager.GetObject("square_dashed_rounded_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap template_Frameset_16xLG {
+            get {
+                object obj = ResourceManager.GetObject("template_Frameset_16xLG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -356,6 +406,16 @@ namespace oEditor.Properties {
         internal static System.Drawing.Bitmap tile_overlay {
             get {
                 object obj = ResourceManager.GetObject("tile_overlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tile_overlay___2 {
+            get {
+                object obj = ResourceManager.GetObject("tile_overlay___2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

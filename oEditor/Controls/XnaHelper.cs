@@ -59,5 +59,11 @@ namespace oEditor.Controls
                 return Texture2D.FromStream(GraphicsDevice, stream);
             }
         }
+
+        public SpriteFont LoadSpriteFont(string path)
+        {
+            
+            return null;
+        }
     }
 }

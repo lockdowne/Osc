@@ -10,7 +10,7 @@ namespace oEngine.Common
     {
         public static class OscPaths
         {
-            public static readonly string TilesetTexturesDirectory = Directory.GetCurrentDirectory() + @"\Textures\Tilesets";
+            //public static readonly string TilesetTexturesDirectory = Directory.GetCurrentDirectory() + @"\Textures\Tilesets";
             public static readonly string TexturesDirectory = Directory.GetCurrentDirectory() + @"\Textures";
             public static readonly string MainDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game";
             public static readonly string Log = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game\Log.xml";
