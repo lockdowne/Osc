@@ -14,12 +14,12 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Osc.Engine.Screens;
-using Osc.Engine.Inputs;
-using Osc.Engine.Common;
+using Osc.Rotch.Engine.Screens;
+using Osc.Rotch.Engine.Inputs;
+using Osc.Rotch.Engine.Common;
 #endregion
 
-namespace Osc.Engine.Managers
+namespace Osc.Rotch.Engine.Managers
 {
     /// <summary>
     /// The screen factory is a component which manages one or more GameScreen

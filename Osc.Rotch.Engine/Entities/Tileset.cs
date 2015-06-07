@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace Osc.Engine.Entities
+namespace Osc.Rotch.Engine.Entities
 {
     [DataContract(Namespace = "")]
     public class Tileset : IEntity, ITexture

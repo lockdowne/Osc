@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Osc.Engine.Common;
+using Osc.Rotch.Engine.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Osc.Engine.Entities
+namespace Osc.Rotch.Engine.Entities
 {
     [DataContract(Name = Consts.Nodes.Tilemap, Namespace = "")]
     public class Tilemap : IEntity

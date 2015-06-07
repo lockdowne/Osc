@@ -8,22 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Osc.Engine.Common
+namespace Osc.Rotch.Engine.Common
 {
     public class Logger : ILogger
     {
+        [DataContract(Namespace="")]
         public class LogEntry
         {
+            [DataMember]
             public int ID { get; set; }
-
+            [DataMember]
             public string Message { get; set; }
-
+            [DataMember]
             public string MethodName { get; set; }
-
+            [DataMember]
             public string ClassName { get; set; }
-            
+            [DataMember]
             public int LineNumber { get; set; }
-
+            [DataMember]
             public string DateTime { get; set; }            
         }
 

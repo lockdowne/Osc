@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Osc.Engine.Entities;
-using Osc.Engine.Common;
+using Osc.Rotch.Engine.Entities;
+using Osc.Rotch.Engine.Common;
 using System.Runtime.CompilerServices;
 
-namespace Osc.Engine.Managers
+namespace Osc.Rotch.Engine.Managers
 {
     public class CommandManager : ICommandManager
     {

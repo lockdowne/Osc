@@ -5,11 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using Osc.Engine.Common;
+using Osc.Rotch.Engine.Common;
 
 namespace Osc.Rotch.Editor.Common
 {
-    [DataContract]
+    [DataContract(Namespace="")]
     public class Settings
     {
         [DataMember]

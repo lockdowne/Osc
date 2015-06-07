@@ -1,5 +1,5 @@
 ﻿using Osc.Rotch.Editor.Controls;
-using Osc.Engine.Patterns;
+using Osc.Rotch.Engine.Patterns;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace Osc.Engine.Common
+namespace Osc.Rotch.Engine.Common
 {
     public static class MathExtension
     {

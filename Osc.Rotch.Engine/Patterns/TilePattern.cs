@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Osc.Engine.Entities;
+using Osc.Rotch.Engine.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Osc.Engine.Patterns
+namespace Osc.Rotch.Engine.Patterns
 {
     public class TilePattern
     {

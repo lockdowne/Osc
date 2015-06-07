@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Osc.Engine.Entities
+namespace Osc.Rotch.Engine.Entities
 {
     public interface ITile
     {

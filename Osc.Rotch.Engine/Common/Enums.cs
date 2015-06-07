@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Osc.Engine.Common
+namespace Osc.Rotch.Engine.Common
 {
     public class Enums
     {
@@ -50,12 +50,13 @@ namespace Osc.Engine.Common
             RandomBattleScenes,
         }
 
-        public enum LayerTypes
+        public enum PlacementTypes
         {
-            Visual,
-            Trigger,
-            Movement,
-            Placement,
+            None,
+            Player,
+            Enemy,
+            Ally,
+            Neutral,
         }
 
         public enum SelectionModes

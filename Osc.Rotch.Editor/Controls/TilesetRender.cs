@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Osc.Engine.Entities;
-using Osc.Engine.Common;
+using Osc.Rotch.Engine.Entities;
+using Osc.Rotch.Engine.Common;
 using Osc.Rotch.Editor.Common;
 using System.Windows.Forms;
-using Osc.Engine.Patterns;
+using Osc.Rotch.Engine.Patterns;
 
 namespace Osc.Rotch.Editor.Controls
 {

@@ -1,10 +1,6 @@
-﻿#region Using Statements
-using System;
-using System.Collections.Generic;
-using System.Linq;
-#endregion
+﻿using System;
 
-namespace oGame
+namespace Osc.Rotch.Game
 {
 #if WINDOWS || LINUX
     /// <summary>
@@ -18,7 +14,7 @@ namespace oGame
         [STAThread]
         static void Main()
         {
-            using (var game = new oGame())
+            using (var game = new MainGame())
                 game.Run();
         }
     }

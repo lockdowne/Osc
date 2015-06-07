@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace oEngine.Inputs
+namespace Osc.Rotch.Engine.Inputs
 {
     public class InputState
     {
@@ -36,6 +36,11 @@ namespace oEngine.Inputs
         public bool MiddleClick
         {
             get { return (currentMouseState.MiddleButton == ButtonState.Pressed) && (previousMouseState.MiddleButton == ButtonState.Released); }
+        }
+
+        public bool MiddleDown
+        {
+            get { return (currentMouseState.MiddleButton == ButtonState.Pressed) && (previousMouseState.MiddleButton == ButtonState.Pressed); }
         }
 
         public bool LeftDown

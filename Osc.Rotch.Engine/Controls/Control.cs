@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Osc.Engine.Controls
+namespace Osc.Rotch.Engine.Controls
 {
     public abstract class Control
     {

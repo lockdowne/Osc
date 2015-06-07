@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Osc.Engine.Entities;
+using Osc.Rotch.Engine.Entities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Osc.Engine.Common
+namespace Osc.Rotch.Engine.Common
 {
     public static class Serializer
     {

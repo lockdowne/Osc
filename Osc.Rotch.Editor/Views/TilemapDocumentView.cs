@@ -1,5 +1,5 @@
 ﻿using Osc.Rotch.Editor.Controls;
-using Osc.Engine.Entities;
+using Osc.Rotch.Engine.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using Telerik.WinControls;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
-using Osc.Engine.Common;
+using Osc.Rotch.Engine.Common;
 using Osc.Rotch.Editor.Events;
 using Telerik.WinControls.Enumerations;
-using Osc.Engine.Patterns;
-using Osc.Engine.Aggregators;
+using Osc.Rotch.Engine.Patterns;
+using Osc.Rotch.Engine.Aggregators;
 
 namespace Osc.Rotch.Editor.Views
 {
@@ -72,7 +72,7 @@ namespace Osc.Rotch.Editor.Views
             set { tilemapRender.Tilemap = value; }
         }
 
-        public Osc.Engine.Common.Enums.TilemapStates TilemapState
+        public Osc.Rotch.Engine.Common.Enums.TilemapStates TilemapState
         {
             get { return tilemapRender.CurrentState; }
             set { tilemapRender.CurrentState = value; }
@@ -413,7 +413,7 @@ namespace Osc.Rotch.Editor.Views
             // tilemapRender
             // 
             this.tilemapRender.BackColor = System.Drawing.Color.Black;
-            this.tilemapRender.CurrentState = Osc.Engine.Common.Enums.TilemapStates.Selection;
+            this.tilemapRender.CurrentState = Osc.Rotch.Engine.Common.Enums.TilemapStates.Selection;
             this.tilemapRender.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tilemapRender.Location = new System.Drawing.Point(0, 0);
             this.tilemapRender.Name = "tilemapRender";

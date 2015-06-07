@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace Osc.Engine.Entities
+namespace Osc.Rotch.Engine.Entities
 {
     public class TileCollision : ITile
     {

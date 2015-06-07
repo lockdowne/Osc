@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Osc.Engine.Common;
+using Osc.Rotch.Engine.Common;
 using System.Runtime.Serialization;
 
-namespace Osc.Engine.Entities
+namespace Osc.Rotch.Engine.Entities
 {
     [DataContract]
     public class Sprite : IEntity

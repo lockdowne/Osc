@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C51E9A29-424D-4976-9D88-E9A512CBFAB5}</ProjectGuid>
+    <ProjectGuid>{9E8F5FB2-6B5F-43F1-B22E-FB118488F982}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>oGame</RootNamespace>
-    <AssemblyName>oGame</AssemblyName>
+    <RootNamespace>Osc.Rotch.Game</RootNamespace>
+    <AssemblyName>Osc.Rotch.Game</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <MonoGameContentBuilderExe>
@@ -42,28 +42,13 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Aggregators\EventAggregator.cs" />
-    <Compile Include="Aggregators\IEventAggregator.cs" />
-    <Compile Include="Aggregators\ISubscriber.cs" />
-    <Compile Include="Components\FpsCounter.cs" />
-    <Compile Include="Controllers\ApplicationController.cs" />
-    <Compile Include="Events\ActionMenuEvents.cs" />
-    <Compile Include="Events\BattleScreenEvents.cs" />
-    <Compile Include="Events\BottomLeftEvents.cs" />
-    <Compile Include="Events\BottomRightEvents.cs" />
-    <Compile Include="Events\ButtonPopupEvents.cs" />
-    <Compile Include="Events\CharacterPlacementEvents.cs" />
-    <Compile Include="GameObjects\CharacterCollection.cs" />
-    <Compile Include="oGame.cs" />
-    <Compile Include="Popup\TestActionMenuPopup.cs" />
-    <Compile Include="Popup\TestBottomLeftPopup.cs" />
-    <Compile Include="Popup\TestBottomRight.cs" />
-    <Compile Include="Popup\TestButtonPopup.cs" />
-    <Compile Include="Popup\TestCharacterPlacementPopup.cs" />
+    <Compile Include="MainGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleBS.cs" />
-    <Compile Include="SampleScreen.cs" />
+    <Compile Include="Screens\RandomBattleScreen.cs" />
+    <Compile Include="States\IState.cs" />
+    <Compile Include="States\RandomBattleEngagementState.cs" />
+    <Compile Include="States\RandomBattlePlacementState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.4.0.459, Culture=neutral, processorArchitecture=MSIL">
@@ -74,18 +59,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Textures\test-animation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\TestActionMenu.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\TestBL.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\TestBR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\TestSelectionBG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\" />
+    <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Content\Content.mgcb" />
+    <Folder Include="Content\Songs\" />
+    <Folder Include="Content\Sounds\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\Fonts\Fps.spritefont" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Osc.Engine\Osc.Rotch.Engine.csproj">
+    <ProjectReference Include="..\Osc.Rotch.Engine\Osc.Rotch.Engine.csproj">
       <Project>{b9348183-1739-4300-a31d-b9024c08d411}</Project>
       <Name>Osc.Rotch.Engine</Name>
     </ProjectReference>

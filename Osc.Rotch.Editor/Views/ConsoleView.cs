@@ -7,8 +7,8 @@ using System.Windows.Forms;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
 using Osc.Rotch.Editor.Events;
-using Osc.Engine.Common;
-using Osc.Engine.Aggregators;
+using Osc.Rotch.Engine.Common;
+using Osc.Rotch.Engine.Aggregators;
 
 namespace Osc.Rotch.Editor.Views
 {

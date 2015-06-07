@@ -17,25 +17,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Osc.Engine.Common;
+using Osc.Rotch.Engine.Common;
 using Microsoft.Xna.Framework;
 #endregion
 using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Osc.Engine.Entities
+namespace Osc.Rotch.Engine.Entities
 {
     public class Character : Sprite
     {
-        //TEST REGION
-        public Animation deadAnimation { get; set; }
-        public bool isDead
-        {
-            get { return (Health <= 0); }
-        }
-        public string playString { get; set; }
-        //TEST REGION
-
         #region Fields
 
         private int level;
@@ -121,7 +112,7 @@ namespace Osc.Engine.Entities
         /// <summary>
         /// Gets or Sets the character's Turn Counter  
         /// </summary>
-        public int TurnCounter { get; private set; }
+        public int TurnCounter { get; set; }
 
         /// <summary>
         /// Gets or Sets the character's physical resistance
@@ -162,88 +153,17 @@ namespace Osc.Engine.Entities
         /// Gets or Sets the character's movement
         /// </summary>
         public int Movement { get { return movement; } set { movement = (int)MathHelper.Clamp(value, 0, Int32.MaxValue); } }
-
-        /// <summary>
-        /// Returns Whether the character has high enough TurnCounter to be considered ready
-        /// </summary>
-        public bool IsReady { get { return ((TurnCounter > Consts.TurnReady) && !isDead); } }
-
-        /// <summary>
-        /// Returns the character's coordinate in relation to the tilemap
-        /// </summary>
-        public Point Coordinate { get; set; }
-
+        
         public int ActionToken { get; set; }
 
         public int MoveToken { get; set; }
 
+        public bool IsAlive
+        {
+            get { return Health > 0; }
+        }
+
         #endregion
 
-        #region Initialization
-        public Character(int charSpeed, string characterName)
-        {
-            Speed = charSpeed;
-            CharacterName = characterName;
-        }
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Used to symbolize a turn has progressed
-        /// </summary>
-        public void ProgressTurnCounter()
-        {
-            //potentially need a check to prevent counter from going (ie. stop effects)
-            TurnCounter += Speed;
-        }
-
-        /// <summary>
-        /// Used to symbolize spending TurnCounter needed for action
-        /// </summary>
-        public void TakingTurn()
-        {
-            TurnCounter -= Consts.TurnReady;
-        }
-        #endregion
-
-        //TODO: need to add a method to select set of animations depending on character job
-
-        //TODO: need to select animation depending on current action
-
-        /// <summary>
-        /// TEMPORARY METHOD FOR TEST
-        /// </summary>
-        /// <param name="animation"></param>
-        public void AnimationInitialize(Animation animation)
-        {
-            playString = "default";
-            AddAnimation("default", animation);
-            PlayAnimation(playString);
-            AddAnimation("dead", deadAnimation);
-            //Position = new Vector2(float.NaN, float.NaN);
-            //IsActive = true;
-            //IsVisible = true;
-            Scale = 1.0f;
-            Tint = Color.White;
-
-        }
-
-        public void SetPositionToGrid(Vector2 inputPosition, int tileWidth, int tileHeight)
-        {
-            Position = inputPosition;
-            Coordinate = MathExtension.IsoPixelsToCoordinate(inputPosition, tileWidth, tileHeight);
-        }
-
-        public void SetCoordinateToGrid(Point coordinate, int tileWidth, int tileHeight)
-        {
-            Coordinate = coordinate;
-            Position = MathExtension.IsoCoordinateToPixels(coordinate.X, coordinate.Y, tileWidth, tileHeight) - (new Vector2(Bounds.Width / 2, Bounds.Height));
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-        }
     }
 }

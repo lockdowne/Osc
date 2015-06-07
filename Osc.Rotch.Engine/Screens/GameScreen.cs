@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
-using Osc.Engine.Common;
-using Osc.Engine.Inputs;
-using Osc.Engine.Managers;
+using Osc.Rotch.Engine.Common;
+using Osc.Rotch.Engine.Inputs;
+using Osc.Rotch.Engine.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Osc.Engine.Screens
+namespace Osc.Rotch.Engine.Screens
 {
     /// <summary>
     /// A screen is a single layer that has update and draw logic, and which

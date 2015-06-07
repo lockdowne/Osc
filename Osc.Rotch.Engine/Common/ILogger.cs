@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Osc.Engine.Common
+namespace Osc.Rotch.Engine.Common
 {
     public interface ILogger
     {
@@ -13,6 +13,6 @@ namespace Osc.Engine.Common
 
         void Log(string message, string methodName = "", string filePath = "", int line = 0);
 
-        event Action<Osc.Engine.Common.Logger.LogEntry> OnLogged;
+        event Action<Osc.Rotch.Engine.Common.Logger.LogEntry> OnLogged;
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Osc.Engine.Aggregators
+namespace Osc.Rotch.Engine.Aggregators
 {
     public interface IEventAggregator
     {

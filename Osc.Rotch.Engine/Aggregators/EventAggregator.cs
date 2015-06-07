@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Osc.Engine.Aggregators
+namespace Osc.Rotch.Engine.Aggregators
 {
     public class EventAggregator : IEventAggregator
     {

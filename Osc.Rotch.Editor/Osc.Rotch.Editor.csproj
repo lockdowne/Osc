@@ -7,8 +7,8 @@
     <ProjectGuid>{9000ED26-F6C3-4853-9248-D6690C6327AB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>oEditor</RootNamespace>
-    <AssemblyName>oEditor</AssemblyName>
+    <RootNamespace>Osc.Rotch.Editor</RootNamespace>
+    <AssemblyName>Osc.Rotch.Editor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
@@ -211,7 +211,9 @@
     <EmbeddedResource Include="Views\TilesetListView.resx">
       <DependentUpon>TilesetListView.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -349,6 +351,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\tile-overlay - 2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Osc.Rotch.Engine\Osc.Rotch.Engine.csproj">
+      <Project>{b9348183-1739-4300-a31d-b9024c08d411}</Project>
+      <Name>Osc.Rotch.Engine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

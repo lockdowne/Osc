@@ -1,5 +1,5 @@
 ﻿using Osc.Rotch.Editor.Controls;
-using Osc.Engine.Common;
+using Osc.Rotch.Engine.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
 using Osc.Rotch.Editor.Events;
-using Osc.Engine.Aggregators;
+using Osc.Rotch.Engine.Aggregators;
 
 namespace Osc.Rotch.Editor.Views
 {
