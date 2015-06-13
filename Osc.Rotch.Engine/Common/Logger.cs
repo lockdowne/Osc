@@ -72,7 +72,7 @@ namespace Osc.Rotch.Engine.Common
             }
         }
 
-        public void Log(string message, string methodName = "", string filePath = "", int line = 0)
+        public void Log(string message, [CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
         {
             lock (locker)
             {

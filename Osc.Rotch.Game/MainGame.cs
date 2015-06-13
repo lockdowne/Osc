@@ -32,13 +32,11 @@ namespace Osc.Rotch.Game
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            //Services.AddService(typeof(SpriteBatch), spriteBatch);
-
-            Tilemap tilemap = Content.XnaDeserialize<List<Tilemap>>(@"C:\SourceCode\Rotch\Osc.Rotch.Game\Content\Tilemaps.xml").FirstOrDefault();
+            //Services.AddService(typeof(SpriteBatch), spriteBatch);        
 
             // Add components
             screenManager = new ScreenManager(this);
-            Components.Add(screenManager);        
+            Components.Add(screenManager);
 
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 768;

@@ -11,7 +11,7 @@ namespace Osc.Rotch.Engine.Common
     {
         bool CheckPath();
 
-        void Log(string message, string methodName = "", string filePath = "", int line = 0);
+        void Log(string message, [CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0);
 
         event Action<Osc.Rotch.Engine.Common.Logger.LogEntry> OnLogged;
     }
