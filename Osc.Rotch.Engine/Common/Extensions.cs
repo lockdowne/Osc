@@ -201,7 +201,7 @@ namespace Osc.Rotch.Engine.Common
             if (obj == null) return;
 
             Type objType = obj.GetType();
-            PropertyInfo[] properties = objType.GetProperties();
+            PropertyInfo[] properties = objType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
             foreach (PropertyInfo property in properties)
             {

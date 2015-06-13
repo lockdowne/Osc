@@ -2,6 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Osc.Rotch.Engine.Managers;
+using Osc.Rotch.Engine.Common;
+using Osc.Rotch.Engine.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Osc.Rotch.Game
 {
@@ -29,6 +33,8 @@ namespace Osc.Rotch.Game
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Services.AddService(typeof(SpriteBatch), spriteBatch);
+
+            Tilemap tilemap = Content.XnaDeserialize<List<Tilemap>>(@"C:\SourceCode\Rotch\Osc.Rotch.Game\Content\Tilemaps.xml").FirstOrDefault();
 
             // Add components
             screenManager = new ScreenManager(this);
