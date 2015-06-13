@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Common\Configuration.cs" />
     <Compile Include="Common\Extensions.cs" />
+    <Compile Include="Common\ProgressHelper.cs" />
     <Compile Include="Common\Settings.cs" />
     <Compile Include="Common\XnaSerializer.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
@@ -105,6 +106,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\GraphicsDeviceService.cs" />
+    <Compile Include="Controls\ProgressIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ServiceContainer.cs" />
     <Compile Include="Controls\TilemapRender.cs">
       <SubType>UserControl</SubType>
@@ -138,11 +142,18 @@
     <Compile Include="Views\IMainView.cs" />
     <Compile Include="Views\IProjectView.cs" />
     <Compile Include="Views\ITilemapDocumentView.cs" />
+    <Compile Include="Views\ITilemapPropertiesView.cs" />
     <Compile Include="Views\ListItemRenameView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\ListItemRenameView.Designer.cs">
       <DependentUpon>ListItemRenameView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoadingView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\LoadingView.Designer.cs">
+      <DependentUpon>LoadingView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.cs">
       <SubType>Form</SubType>
@@ -192,6 +203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ListItemRenameView.resx">
       <DependentUpon>ListItemRenameView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LoadingView.resx">
+      <DependentUpon>LoadingView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
@@ -259,9 +273,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Merge_13256.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\osc_logo_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Rename_6779.png" />
@@ -357,6 +368,30 @@
       <Project>{b9348183-1739-4300-a31d-b9024c08d411}</Project>
       <Name>Osc.Rotch.Engine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Synchronize_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\osc_logo_02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\osc_logo_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\undo-4-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\redo-4-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sinchronize-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\osc-splash.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

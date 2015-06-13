@@ -33,7 +33,6 @@ namespace Osc.Rotch.Game.Screens
         public override void LoadContent()
         {
             base.LoadContent();
-
             // scene = Serializer.Deserialize<RandomBattleScene>(randomBattlePath)
             scene = new RandomBattleScene();
             states.Add(Enums.BattleScreenSequences.Placement, new RandomBattlePlacementState(scene));

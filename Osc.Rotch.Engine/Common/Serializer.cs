@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Osc.Rotch.Engine.Entities;
 using System;
 using System.Collections;
@@ -91,6 +92,6 @@ namespace Osc.Rotch.Engine.Common
                         xml.WriteObject(writer, obj);
                     }
                 });
-        }
+        }     
     }
 }

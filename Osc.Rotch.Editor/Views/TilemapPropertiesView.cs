@@ -8,11 +8,16 @@ using System.Text;
 using System.Windows.Forms;
 using Telerik.WinControls;
 using Telerik.WinControls.UI;
+using Osc.Rotch.Editor.Events;
 
 namespace Osc.Rotch.Editor.Views
 {
-    public partial class TilemapPropertiesView : RadForm
+    public partial class TilemapPropertiesView : RadForm, ITilemapPropertiesView
     {
+        private readonly IEventAggregator eventAggregator;
+
+        public Guid ID { get; set; }
+
         public string TilemapName
         {
             get { return txtTilemapName.Text; }
@@ -37,14 +42,11 @@ namespace Osc.Rotch.Editor.Views
             set { txtTilemapHeight.Value = value; }
         }
 
-        public TilemapPropertiesView(string tilemapName, string tilemapDescription, int tilemapWidth, int tilemapHeight)
+        public TilemapPropertiesView(IEventAggregator eventAggregator)
         {
-            InitializeComponent();
+            this.eventAggregator = eventAggregator;
 
-            this.TilemapName = tilemapName;
-            this.TilemapDescription = tilemapDescription;
-            this.TilemapWidth = tilemapWidth;
-            this.TilemapHeight = tilemapHeight;
+            InitializeComponent();
 
             this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -56,7 +58,9 @@ namespace Osc.Rotch.Editor.Views
         private void btnOK_Click(object sender, EventArgs e)
         {
             DialogResult = System.Windows.Forms.DialogResult.OK;
-            Close();
+
+            eventAggregator.Publish(new OnTilemapPropertiesSaved() { ID = ID, TilemapDescription = TilemapDescription, TilemapHeight = TilemapHeight, TilemapName = TilemapName, TilemapWidth = TilemapWidth });
+       
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

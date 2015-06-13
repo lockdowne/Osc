@@ -18,6 +18,7 @@ namespace oEditor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new RadForm1());
+
             ApplicationController main = new ApplicationController();
         }
     }

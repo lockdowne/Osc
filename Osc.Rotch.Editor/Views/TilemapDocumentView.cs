@@ -754,9 +754,7 @@ namespace Osc.Rotch.Editor.Views
             this.ResumeLayout(false);
 
         }
-
-       
-
+        
         private void tilemapRender_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             this.eventAggregator.Publish(new OnTilemapMouseWheel() { MouseEvent = e });

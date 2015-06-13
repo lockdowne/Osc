@@ -48,6 +48,8 @@ namespace Osc.Rotch.Editor.Views
                     
             };
 
+            Name = Consts.Editor.Windows.Console;
+            Text = Consts.Editor.Windows.Console;
             //this.radGridView1.MasterGridViewTemplate.AutoSizeColumnsMode = GridViewAutoSizeColumnsMode.Fill;
             //this.radGridView1.Columns[1].BestFit(); 
         }
@@ -123,6 +125,7 @@ namespace Osc.Rotch.Editor.Views
             this.Controls.Add(this.radGridView1);
             this.Size = new System.Drawing.Size(708, 290);
             this.Text = "Console";
+            this.ToolCaptionButtons = Telerik.WinControls.UI.Docking.ToolStripCaptionButtons.AutoHide;
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radTextBox1)).EndInit();

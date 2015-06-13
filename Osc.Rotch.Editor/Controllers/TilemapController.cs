@@ -71,55 +71,8 @@ namespace Osc.Rotch.Editor.Controllers
                         this.view.Tilemap.FindTilemapLayers(l => l.ID == id).FirstOrDefault().IsVisble = false;
                     }
                 },
-            });
-        }
-
-        public void OnEvent(OnTilemapPropertiesClicked item)
-        {
-            commandManager.ExecuteCommand(new Command()
-            {
-                Name = "Tilemap Properties Opened",
-                CanExecute = () => { return this.view.Tilemap != null; },
-                Execute = () =>
-                {
-                    int previousWidth = this.view.Tilemap.Width;
-                    int previousHeight = this.view.Tilemap.Height;
-
-                    TilemapPropertiesView propertiesView = new TilemapPropertiesView(this.view.Tilemap.Name, this.view.Tilemap.Description, this.view.Tilemap.Width, this.view.Tilemap.Height);
-
-                    if(propertiesView.ShowDialog() == DialogResult.OK)
-                    {
-                        // Set name
-                        this.view.Tilemap.Name = propertiesView.TilemapName;
-
-                        // TODO: Switch tilemapproperties view to eventaggregator to rename node in entitiesview
-
-                        // Set description
-                        this.view.Tilemap.Description = propertiesView.TilemapDescription;
-
-                        // Resize if needed
-                        int newWidth = propertiesView.TilemapWidth;
-                        int newHeight = propertiesView.TilemapHeight;
-
-                        if(previousHeight != newHeight || previousWidth != newWidth)
-                        {
-                            this.view.Tilemap.FindTilemapLayers(t => { return true; }).ForEach(layer =>
-                            {
-                                layer.Resize(newWidth, newHeight);
-                            });
-
-                            this.view.Tilemap.CollisionLayer.Resize(newWidth, newHeight);
-                        }
-
-                        this.view.Tilemap.Width = newWidth;
-                        this.view.Tilemap.Height = newHeight;
-                    }
-
-                    propertiesView.Close();
-                    
-                },
-            });
-        }
+            }, false, item.ClassName());
+        }     
 
         public void OnEvent(OnTilemapCollisionClicked item)
         {

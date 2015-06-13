@@ -27,4 +27,22 @@ namespace Osc.Rotch.Editor.Events
     {
         public EntitiesChildNode Node { get; set; }
     }
+
+    public class OnTilemapPropertiesSaved
+    {
+        public Guid ID { get; set; }
+
+        public string TilemapName { get; set; }
+        public string TilemapDescription { get; set; }
+
+        public int TilemapWidth { get; set; }
+        public int TilemapHeight { get; set; }
+    }
+
+    public class OnNodeNameChanged
+    {
+        public EntitiesChildNode Node { get; set; }
+
+        public string Name { get; set; }
+    }
 }

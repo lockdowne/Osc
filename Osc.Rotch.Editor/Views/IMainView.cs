@@ -10,5 +10,7 @@ namespace Osc.Rotch.Editor.Views
     public interface IMainView
     {
         RadDock DockManager { get; }
+
+        event EventHandler Load;
     }
 }

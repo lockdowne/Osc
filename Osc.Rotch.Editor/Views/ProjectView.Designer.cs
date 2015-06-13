@@ -43,15 +43,10 @@
             // 
             // ProjectView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(298, 279);
             this.Controls.Add(this.radListView1);
-            this.Name = "ProjectView";
-            // 
-            // 
-            // 
+            this.Size = new System.Drawing.Size(298, 279);
             this.Text = "Project Explorer";
+            this.ToolCaptionButtons = Telerik.WinControls.UI.Docking.ToolStripCaptionButtons.AutoHide;
             ((System.ComponentModel.ISupportInitialize)(this.radListView1)).EndInit();
             this.ResumeLayout(false);
 
