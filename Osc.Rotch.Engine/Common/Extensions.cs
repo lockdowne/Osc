@@ -171,6 +171,31 @@ namespace Osc.Rotch.Engine.Common
             //list.Insert(endIndex, item);
         }
 
+        public static T XnaDeserialize<T>(this ContentManager content, string path)
+        {
+            DataContractSerializer xml = new DataContractSerializer(typeof(T));
+
+            using (XmlReader reader = XmlReader.Create(path))
+            {
+                T obj = (T)xml.ReadObject(reader);
+
+                var collection = obj as IEnumerable;
+
+                if (collection != null)
+                {
+                    foreach (var i in collection)
+                    {
+                        LoadXnaContent(i, content);
+                    }
+                }
+                else
+                {
+                    LoadXnaContent(obj, content);
+                }
+                return obj;
+            }
+        }
+
         private static void LoadXnaContent(object obj, ContentManager content)
         {
             if (obj == null) return;
@@ -213,7 +238,7 @@ namespace Osc.Rotch.Engine.Common
                     }
                 }
 
-                if (property.Name == "TextureName")
+                if (property.Name.ToLower() == "texturename")
                 {
                     ((ITexture)obj).Texture = content.Load<Texture2D>("Textures/" + property.GetValue(obj, null));
                 }

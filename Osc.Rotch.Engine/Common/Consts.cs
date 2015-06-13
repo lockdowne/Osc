@@ -12,9 +12,10 @@ namespace Osc.Rotch.Engine.Common
         {
             //public static readonly string TilesetTexturesDirectory = Directory.GetCurrentDirectory() + @"\Textures\Tilesets";
             public static readonly string TexturesDirectory = Directory.GetCurrentDirectory() + @"\Textures";
-            public static readonly string MainDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game";
-            public static readonly string Log = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game\Log.xml";
-            public static readonly string Settings = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game\Settings.xml"; // TODO: Need to change
+            public static readonly string MainDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Rotch";
+            public static readonly string EditorDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Rotch\Editor";
+           // public static readonly string Log = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game\Log.xml";
+            public static readonly string Settings = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Rotch\Settings.xml"; // TODO: Need to change
         }
 
         public static class Repositories
@@ -29,11 +30,18 @@ namespace Osc.Rotch.Engine.Common
             public const string Tilemap = "Tilemap";
             public const string Character = "Character";
             public const string EmptyTilemap = "EmptyTilemap";
-        }
+        }       
 
         public static class Editor
         {
             public const string TilemapLayerName = "Tilemap Layer";
+
+            public static class Windows
+            {
+                public const string Console = "Console";
+                public const string ProjectExplorer = "Project Explorer";
+                public const string Entities = "Entities";
+            }
         }
 
         public static class AlertMessages
@@ -45,6 +53,7 @@ namespace Osc.Rotch.Engine.Common
                 public const string SelectTilesetImage = "Select a tileset";
                 public const string RemoveTileset = "Are you sure you want to delete the selected tileset?";
                 public const string RemoveTilemap = "Are you sure you want to delete the selected tilemap?";
+                public const string NodeNameTaken = "Name is already in use.";
             }
 
             public static class Captions
@@ -54,6 +63,7 @@ namespace Osc.Rotch.Engine.Common
                 public const string SelectTilesetImage = "Hey Listen";
                 public const string RemoveTileset = "Hey Listen";
                 public const string RemoveTilemap = "Hey Listen";
+                public const string NodeNameTaken = "Hey Listen";
             }
         }
 

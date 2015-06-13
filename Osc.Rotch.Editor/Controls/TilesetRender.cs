@@ -120,8 +120,11 @@ namespace Osc.Rotch.Editor.Controls
             {
                 if (isMouseLeftDown)
                 {
-                    selectionBoxEnd = MathExtension.InvertMatrixAtVector(new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
-                           MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height)), camera.CameraTransformation);
+                    selectionBoxStart = MathExtension.InvertMatrixAtVector(new Vector2(MathHelper.Clamp(e.Location.X, 0, Tileset.Texture.Width),
+                            MathHelper.Clamp(e.Location.Y, 0, Tileset.Texture.Height)), camera.CameraTransformation);
+
+                    selectionBoxEnd = MathExtension.InvertMatrixAtVector(new Vector2(MathHelper.Clamp(e.Location.X + Configuration.Settings.TileWidth, 0, Tileset.Texture.Width),
+                       MathHelper.Clamp(e.Location.Y + Configuration.Settings.TileHeight, 0, Tileset.Texture.Height)), camera.CameraTransformation);
                 }
                 else if (isMouseRightDown)
                 {

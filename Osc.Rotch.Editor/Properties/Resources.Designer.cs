@@ -281,12 +281,32 @@ namespace Osc.Rotch.Editor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap osc_logo_02 {
+            get {
+                object obj = ResourceManager.GetObject("osc_logo_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon osc_logo_icon {
             get {
                 object obj = ResourceManager.GetObject("osc_logo_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap osc_splash {
+            get {
+                object obj = ResourceManager.GetObject("osc_splash", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -353,9 +373,29 @@ namespace Osc.Rotch.Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap redo_4_32 {
+            get {
+                object obj = ResourceManager.GetObject("redo_4_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Rename_6779 {
             get {
                 object obj = ResourceManager.GetObject("Rename_6779", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap save_32 {
+            get {
+                object obj = ResourceManager.GetObject("save_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -373,9 +413,29 @@ namespace Osc.Rotch.Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap sinchronize_32 {
+            get {
+                object obj = ResourceManager.GetObject("sinchronize_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap square_dashed_rounded_16 {
             get {
                 object obj = ResourceManager.GetObject("square_dashed_rounded_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Synchronize_16xLG {
+            get {
+                object obj = ResourceManager.GetObject("Synchronize_16xLG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -416,6 +476,16 @@ namespace Osc.Rotch.Editor.Properties {
         internal static System.Drawing.Bitmap tile_overlay___2 {
             get {
                 object obj = ResourceManager.GetObject("tile_overlay___2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap undo_4_32 {
+            get {
+                object obj = ResourceManager.GetObject("undo_4_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -10,7 +10,6 @@ namespace Osc.Rotch.Engine.Managers
 {
     public interface ICommandManager
     {
-
         void ExecuteCommand(Command command, bool saveToStack = true, [CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0);
 
         void Undo(string methodName = "", string filePath = "", int line = 0);

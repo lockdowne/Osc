@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTilemap xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <Tilemap>
+    <CollisionLayer xmlns:d3p1="http://schemas.datacontract.org/2004/07/Osc.Rotch.Engine.Entities">
+      <d3p1:Alpha>0</d3p1:Alpha>
+      <d3p1:Columns>
+        <d3p1:Layer.ColumnOfTileCollisionyejLYiRO>
+          <d3p1:Rows>
+            <d3p1:TileCollision>
+              <d3p1:Description i:nil="true" />
+              <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+              <d3p1:IsCollidable>false</d3p1:IsCollidable>
+              <d3p1:Name i:nil="true" />
+            </d3p1:TileCollision>
+            <d3p1:TileCollision>
+              <d3p1:Description i:nil="true" />
+              <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+              <d3p1:IsCollidable>false</d3p1:IsCollidable>
+              <d3p1:Name i:nil="true" />
+            </d3p1:TileCollision>
+            <d3p1:TileCollision>
+              <d3p1:Description i:nil="true" />
+              <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+              <d3p1:IsCollidable>false</d3p1:IsCollidable>
+              <d3p1:Name i:nil="true" />
+            </d3p1:TileCollision>
+          </d3p1:Rows>
+        </d3p1:Layer.ColumnOfTileCollisionyejLYiRO>
+        <d3p1:Layer.ColumnOfTileCollisionyejLYiRO>
+          <d3p1:Rows>
+            <d3p1:TileCollision>
+              <d3p1:Description i:nil="true" />
+              <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+              <d3p1:IsCollidable>false</d3p1:IsCollidable>
+              <d3p1:Name i:nil="true" />
+            </d3p1:TileCollision>
+            <d3p1:TileCollision>
+              <d3p1:Description i:nil="true" />
+              <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+              <d3p1:IsCollidable>false</d3p1:IsCollidable>
+              <d3p1:Name i:nil="true" />
+            </d3p1:TileCollision>
+            <d3p1:TileCollision>
+              <d3p1:Description i:nil="true" />
+              <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+              <d3p1:IsCollidable>false</d3p1:IsCollidable>
+              <d3p1:Name i:nil="true" />
+            </d3p1:TileCollision>
+          </d3p1:Rows>
+        </d3p1:Layer.ColumnOfTileCollisionyejLYiRO>
+        <d3p1:Layer.ColumnOfTileCollisionyejLYiRO>
+          <d3p1:Rows>
+            <d3p1:TileCollision>
+              <d3p1:Description i:nil="true" />
+              <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+              <d3p1:IsCollidable>false</d3p1:IsCollidable>
+              <d3p1:Name i:nil="true" />
+            </d3p1:TileCollision>
+            <d3p1:TileCollision>
+              <d3p1:Description i:nil="true" />
+              <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+              <d3p1:IsCollidable>false</d3p1:IsCollidable>
+              <d3p1:Name i:nil="true" />
+            </d3p1:TileCollision>
+            <d3p1:TileCollision>
+              <d3p1:Description i:nil="true" />
+              <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+              <d3p1:IsCollidable>false</d3p1:IsCollidable>
+              <d3p1:Name i:nil="true" />
+            </d3p1:TileCollision>
+          </d3p1:Rows>
+        </d3p1:Layer.ColumnOfTileCollisionyejLYiRO>
+      </d3p1:Columns>
+      <d3p1:Description i:nil="true" />
+      <d3p1:ID>00000000-0000-0000-0000-000000000000</d3p1:ID>
+      <d3p1:IsVisble>false</d3p1:IsVisble>
+      <d3p1:Name i:nil="true" />
+      <d3p1:height>3</d3p1:height>
+      <d3p1:width>3</d3p1:width>
+    </CollisionLayer>
+    <Description></Description>
+    <Height>3</Height>
+    <ID>50f66b6f-4cfe-4040-8cce-4c6e91b5db4c</ID>
+    <Name>EmptyTilemap</Name>
+    <TileHeight>64</TileHeight>
+    <TileWidth>128</TileWidth>
+    <Tilesets>
+      <Tileset>
+        <Description i:nil="true" />
+        <ID>b0dc2c4d-78e8-41d6-9183-b6797b319fae</ID>
+        <Name>test</Name>
+        <TextureName>test.png</TextureName>
+      </Tileset>
+    </Tilesets>
+    <VisualLayers xmlns:d3p1="http://schemas.datacontract.org/2004/07/Osc.Rotch.Engine.Entities">
+      <d3p1:LayerOfTileVisualNcCATIYq>
+        <d3p1:Alpha>1</d3p1:Alpha>
+        <d3p1:Columns>
+          <d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+            <d3p1:Rows>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>2</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>2</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>2</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+            </d3p1:Rows>
+          </d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+          <d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+            <d3p1:Rows>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>2</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>2</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>2</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+            </d3p1:Rows>
+          </d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+          <d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+            <d3p1:Rows>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>2</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>2</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>2</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+            </d3p1:Rows>
+          </d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+        </d3p1:Columns>
+        <d3p1:Description></d3p1:Description>
+        <d3p1:ID>de06ce68-80ac-4c39-bcc3-6737d981dc83</d3p1:ID>
+        <d3p1:IsVisble>true</d3p1:IsVisble>
+        <d3p1:Name>asdfasdfadsf</d3p1:Name>
+        <d3p1:height>3</d3p1:height>
+        <d3p1:width>3</d3p1:width>
+      </d3p1:LayerOfTileVisualNcCATIYq>
+      <d3p1:LayerOfTileVisualNcCATIYq>
+        <d3p1:Alpha>1</d3p1:Alpha>
+        <d3p1:Columns>
+          <d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+            <d3p1:Rows>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>4</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>0</TilesetIndex>
+                <TilesetName i:nil="true" />
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>0</TilesetIndex>
+                <TilesetName i:nil="true" />
+              </TileVisual>
+            </d3p1:Rows>
+          </d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+          <d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+            <d3p1:Rows>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>0</TilesetIndex>
+                <TilesetName i:nil="true" />
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>8</TilesetIndex>
+                <TilesetName>test.png</TilesetName>
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>0</TilesetIndex>
+                <TilesetName i:nil="true" />
+              </TileVisual>
+            </d3p1:Rows>
+          </d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+          <d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+            <d3p1:Rows>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>0</TilesetIndex>
+                <TilesetName i:nil="true" />
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>0</TilesetIndex>
+                <TilesetName i:nil="true" />
+              </TileVisual>
+              <TileVisual>
+                <Description i:nil="true" />
+                <Height>0</Height>
+                <ID>00000000-0000-0000-0000-000000000000</ID>
+                <Name i:nil="true" />
+                <TilesetIndex>0</TilesetIndex>
+                <TilesetName i:nil="true" />
+              </TileVisual>
+            </d3p1:Rows>
+          </d3p1:Layer.ColumnOfTileVisualOD6pdfuP>
+        </d3p1:Columns>
+        <d3p1:Description></d3p1:Description>
+        <d3p1:ID>130e328b-096e-40a1-9e78-f95e12f91677</d3p1:ID>
+        <d3p1:IsVisble>true</d3p1:IsVisble>
+        <d3p1:Name>Tilemap Layer</d3p1:Name>
+        <d3p1:height>3</d3p1:height>
+        <d3p1:width>3</d3p1:width>
+      </d3p1:LayerOfTileVisualNcCATIYq>
+    </VisualLayers>
+    <Width>3</Width>
+  </Tilemap>
+</ArrayOfTilemap>

@@ -18,7 +18,8 @@ using System.Windows.Forms;
 
 namespace Osc.Rotch.Editor.Controllers
 {
-    public class EntitiesController : IEntitiesController, ISubscriber<OnCreateTilemapNode>, ISubscriber<OnEditTilemapNodeClicked>, ISubscriber<OnDeleteTilemapNodeClicked>
+    public class EntitiesController : IEntitiesController, ISubscriber<OnCreateTilemapNode>, ISubscriber<OnEditTilemapNodeClicked>, ISubscriber<OnDeleteTilemapNodeClicked>,
+        ISubscriber<OnTilemapPropertiesSaved>
     {
         private readonly IEntitiesView view;
 
@@ -59,6 +60,40 @@ namespace Osc.Rotch.Editor.Controllers
         }
 
 
+        public void OnEvent(OnTilemapPropertiesSaved item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Tilemap properties changed",
+                CanExecute = () => { return item != null && this.view.SelectedNode != null && tilemapRepository.Find(t => t.ID == item.ID) != null; },
+                Execute = () =>
+                {
+                    Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.ID);
+
+                    int previousWidth = tilemap.Width;
+                    int previousHeight = tilemap.Height;
+
+                    tilemap.Name = item.TilemapName;
+                    tilemap.Description = item.TilemapDescription;
+
+                    if (previousWidth != item.TilemapWidth || previousHeight != item.TilemapHeight)
+                    {
+                        tilemap.FindTilemapLayers(t => { return true; }).ForEach(layer =>
+                        {
+                            layer.Resize(item.TilemapWidth, item.TilemapHeight);
+                        });
+
+                        tilemap.CollisionLayer.Resize(item.TilemapWidth, item.TilemapHeight);
+
+                        tilemap.Width = item.TilemapWidth;
+                        tilemap.Height = item.TilemapHeight;
+                    }
+
+                    this.view.SelectedNode.Name = item.TilemapName;
+                },
+            }, false, item.ClassName());
+        }
+
         public void OnEvent(OnDeleteTilemapNodeClicked item)
         {
             commandManager.ExecuteCommand(new Command()
@@ -72,9 +107,6 @@ namespace Osc.Rotch.Editor.Controllers
                         Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
 
                         tilemapRepository.Remove(tilemap);
-
-                        //tilemapRepository.Save();
-
                         item.Node.Remove();
                     }
                 },
@@ -83,25 +115,30 @@ namespace Osc.Rotch.Editor.Controllers
 
         public void OnEvent(OnEditTilemapNodeClicked item)
         {
-            if (item == null)
-                return;
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Opened Tilemap Properties Window",
+                CanExecute = () => { return item != null && tilemapRepository.Find(t => t.ID == item.Node.ID) != null; },
+                Execute = () =>
+                {
+                    Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
 
-            Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.Node.ID);
+                    TilemapPropertiesView propertiesView = new TilemapPropertiesView(eventAggregator);
+                    propertiesView.TilemapWidth = tilemap.Width;
+                    propertiesView.TilemapHeight = tilemap.Height;
+                    propertiesView.TilemapName = tilemap.Name;
+                    propertiesView.TilemapDescription = tilemap.Description;
+                    propertiesView.ShowDialog();
 
-            int previousWidth = tilemap.Width;
-            int previousHeight = tilemap.Height;
+                },
+            }, false, item.ClassName());
 
-            if (tilemap == null)
-                return;
-
-            TilemapPropertiesView propertiesView = new TilemapPropertiesView(tilemap.Name, tilemap.Description, tilemap.Width, tilemap.Height);
-
-            DialogResult result = propertiesView.ShowDialog();
+            /* TODO: THIS is where i need to make the tilemaprop view quit suxing and have it contain its own event aggregatation
 
             commandManager.ExecuteCommand(new Command()
             {
                 Name = "Edited Tilemap",
-                CanExecute = () => { return item != null && item.Node != null && tilemap != null && result == DialogResult.OK && !string.IsNullOrEmpty(propertiesView.TilemapName); },
+                CanExecute = () => { return item != null && item.Node != null && tilemap != null && !string.IsNullOrEmpty(propertiesView.TilemapName); },
                 Execute = () =>
                 {
                     tilemap.Name = propertiesView.TilemapName;
@@ -122,7 +159,7 @@ namespace Osc.Rotch.Editor.Controllers
 
                     item.Node.Text = propertiesView.TilemapName;
                 },
-            }, false, item.ClassName());
+            }, false, item.ClassName());*/
         }
 
         public void OnEvent(OnCreateTilemapNode item)
@@ -181,18 +218,18 @@ namespace Osc.Rotch.Editor.Controllers
         private Task LoadTilemapNodes()
         {
             return Task.Run(() =>
+            {
+                EntitiesRootNode rootNode = view.TreeView.Nodes.FirstOrDefault(node => node is EntitiesRootNode && ((EntitiesRootNode)node).EntityType == Enums.EntityTypes.Tilemaps) as EntitiesRootNode;
+
+                if (rootNode == null)
+                    return;
+
+
+                tilemapRepository.FindAll(predicate => true).ForEach(tilemap =>
                 {
-                    EntitiesRootNode rootNode = view.TreeView.Nodes.FirstOrDefault(node => node is EntitiesRootNode && ((EntitiesRootNode)node).EntityType == Enums.EntityTypes.Tilemaps) as EntitiesRootNode;
-
-                    if (rootNode == null)
-                        return;
-
-
-                    tilemapRepository.FindAll(predicate => true).ForEach(tilemap =>
-                    {
-                        rootNode.Nodes.Add(new EntitiesChildNode() { ID = tilemap.ID, Text = tilemap.Name, EntityType = Enums.EntityTypes.Tilemaps, ContextMenu = this.view.ContextMenuChild });
-                    });
+                    rootNode.Nodes.Add(new EntitiesChildNode() { ID = tilemap.ID, Text = tilemap.Name, EntityType = Enums.EntityTypes.Tilemaps, ContextMenu = this.view.ContextMenuChild });
                 });
+            });                                                                                    
         }
     }
 }

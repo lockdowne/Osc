@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Telerik.WinControls;
@@ -22,6 +23,7 @@ namespace Osc.Rotch.Editor.Controllers
 
         public ApplicationController()
         {            
+
             // Set main theme for all telerik controls
             theme = new Telerik.WinControls.Themes.VisualStudio2012DarkTheme();
             ThemeResolutionService.ApplicationThemeName = "VisualStudio2012Dark";
@@ -46,12 +48,12 @@ namespace Osc.Rotch.Editor.Controllers
             IConsoleController consoleController = new ConsoleController(consoleView, logger, eventAggregator);
             
             // Create main view
-            IMainView mainView = new MainView();
-            MainController mainController = new MainController(mainView, entitiesController, new CommandManager(logger), logger, eventAggregator, tilemapRepository);
+            IMainView mainView = new MainView(eventAggregator);
+            MainController mainController = new MainController(mainView, new CommandManager(logger), logger, eventAggregator, tilemapRepository);
             mainController.DockWindow((DockWindow)consoleView, DockPosition.Bottom);
             mainController.DockWindow((DockWindow)projectView, DockPosition.Right);
             mainController.DockWindow((DockWindow)entitiesView, DockPosition.Right);
-
+                    
             logger.Log("Program Initialized");
 
             Application.Run((Form)mainView);

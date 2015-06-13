@@ -33,6 +33,8 @@ namespace Osc.Rotch.Engine.Common
 
         private object locker = new object();
 
+        private string logPath;
+
         public event Action<LogEntry> OnLogged;
 
         
@@ -40,11 +42,13 @@ namespace Osc.Rotch.Engine.Common
         {
             Logs = new List<LogEntry>();
 
-            if(CheckPath())
+            logPath = Consts.OscPaths.MainDirectory + @"\Log [" + DateTime.Today.ToString("d").Replace('/', '.') + "].xml";
+
+            if (CheckPath())
             {
-                if (File.Exists(Consts.OscPaths.Log))
+                if (File.Exists(logPath))
                 {
-                    Logs = Serializer.Deserialize<LogEntry[]>(Consts.OscPaths.Log).ToList();
+                    Logs = Serializer.Deserialize<LogEntry[]>(logPath).ToList();
                 }
             }
         }
@@ -87,7 +91,7 @@ namespace Osc.Rotch.Engine.Common
 
                     Logs.Add(logEntry);
 
-                    Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
+                    Serializer.SerializeAsync(Logs.ToArray(), logPath);
 
                     if (OnLogged != null)
                         OnLogged(logEntry);
@@ -106,7 +110,7 @@ namespace Osc.Rotch.Engine.Common
             {
                 try
                 {
-                    Serializer.SerializeAsync(Logs.ToArray(), Consts.OscPaths.Log);
+                    Serializer.SerializeAsync(Logs.ToArray(), logPath);
                 }
                 catch (Exception)
                 {

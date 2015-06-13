@@ -178,6 +178,9 @@ namespace Osc.Rotch.Editor.Views
             };
 
             this.CloseAction = DockWindowCloseAction.Hide;
+
+            Name = Consts.Editor.Windows.Entities;
+            Text = Consts.Editor.Windows.Entities;
         }
 
         private void InitializeComponent()
@@ -243,6 +246,7 @@ namespace Osc.Rotch.Editor.Views
             // 
             this.Controls.Add(this.radTreeView);
             this.Text = "Entities";
+            this.ToolCaptionButtons = Telerik.WinControls.UI.Docking.ToolStripCaptionButtons.AutoHide;
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView)).EndInit();
             this.ResumeLayout(false);
 
