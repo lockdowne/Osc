@@ -49,6 +49,10 @@ namespace Osc.Rotch.Editor.Views
                 eventAggregator.Publish(new OnProjectWindowVisibilityChanged() { IsVisible = chkProjectWindow.Checked });
             };
 
+            radDock.DockWindowClosed += (sender, e) =>
+            {
+                eventAggregator.Publish(new OnDocumentWindowClosed() { Window = e.DockWindow });
+            };
             
         }
 
@@ -100,6 +104,21 @@ namespace Osc.Rotch.Editor.Views
         private void btnRedo_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            eventAggregator.Publish(new OnSettingsClicked());
+        }
+
+        private void btnTheme_Click(object sender, EventArgs e)
+        {
+            eventAggregator.Publish(new OnThemeClicked());
+        }
+
+        private void btnResetSettings_Click(object sender, EventArgs e)
+        {
+            eventAggregator.Publish(new OnResetConfiguration());
         }
     }
 }

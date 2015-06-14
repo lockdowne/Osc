@@ -167,6 +167,18 @@
     <Compile Include="Views\ProjectView.Designer.cs">
       <DependentUpon>ProjectView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\SettingsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\SettingsView.Designer.cs">
+      <DependentUpon>SettingsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ThemeView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ThemeView.Designer.cs">
+      <DependentUpon>ThemeView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\TilemapDocumentView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -175,6 +187,12 @@
     </Compile>
     <Compile Include="Views\TilemapPropertiesView.Designer.cs">
       <DependentUpon>TilemapPropertiesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TilemapResizeView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\TilemapResizeView.Designer.cs">
+      <DependentUpon>TilemapResizeView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\TilesetListView.cs">
       <SubType>Form</SubType>
@@ -213,11 +231,20 @@
     <EmbeddedResource Include="Views\ProjectView.resx">
       <DependentUpon>ProjectView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\SettingsView.resx">
+      <DependentUpon>SettingsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ThemeView.resx">
+      <DependentUpon>ThemeView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\TilemapDocumentView.resx">
       <DependentUpon>TilemapDocumentView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TilemapPropertiesView.resx">
       <DependentUpon>TilemapPropertiesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TilemapResizeView.resx">
+      <DependentUpon>TilemapResizeView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TilesetListView.cs.resx">
       <DependentUpon>TilesetListView.cs</DependentUpon>
@@ -392,6 +419,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\osc-splash.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Resize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings-5-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\paint-brush-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\recurring-appointment-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assemblies\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

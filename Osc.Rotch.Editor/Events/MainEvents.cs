@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Telerik.WinControls.UI.Docking;
 
 namespace Osc.Rotch.Editor.Events
 {
@@ -29,5 +30,25 @@ namespace Osc.Rotch.Editor.Events
     public class OnEntitiesWindowVisibilityChanged
     {
         public bool IsVisible { get; set; }
+    }
+
+    public class OnDocumentWindowClosed
+    {
+        public DockWindow Window { get; set; }
+    }
+
+    public class OnSettingsClicked
+    {
+
+    }
+
+    public class OnThemeClicked
+    {
+
+    }
+
+    public class OnResetConfiguration
+    {
+
     }
 }

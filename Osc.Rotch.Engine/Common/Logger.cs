@@ -48,7 +48,7 @@ namespace Osc.Rotch.Engine.Common
             {
                 if (File.Exists(logPath))
                 {
-                    Logs = Serializer.Deserialize<LogEntry[]>(logPath).ToList();
+                    Logs = Serializer.Deserialize<List<LogEntry>>(logPath);
                 }
             }
         }
@@ -91,7 +91,7 @@ namespace Osc.Rotch.Engine.Common
 
                     Logs.Add(logEntry);
 
-                    Serializer.SerializeAsync(Logs.ToArray(), logPath);
+                    Serializer.SerializeAsync(Logs, logPath);
 
                     if (OnLogged != null)
                         OnLogged(logEntry);
@@ -110,7 +110,7 @@ namespace Osc.Rotch.Engine.Common
             {
                 try
                 {
-                    Serializer.SerializeAsync(Logs.ToArray(), logPath);
+                    Serializer.SerializeAsync(Logs, logPath);
                 }
                 catch (Exception)
                 {

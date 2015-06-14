@@ -16,6 +16,17 @@ namespace Osc.Rotch.Engine.Managers
 
         private readonly ILogger logger;
 
+        public bool CanUndo
+        {
+            get { return undo.Any(); }
+        }
+
+        public bool CanRedo
+        {
+            get { return redo.Any(); }
+        }
+
+
         public CommandManager(ILogger logger)
         {
             this.logger = logger;
@@ -44,43 +55,43 @@ namespace Osc.Rotch.Engine.Managers
             }
         }
 
-        public void Undo([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        public void Undo()
         {            
             try
             {
-                if (undo.Count <= 0)
+                if (!undo.Any())
                     return;
 
                 Command command = undo.Pop();
                 command.UnExecute();
 
-                logger.Log(command.Name, methodName, filePath, line);
+                logger.Log(command.Name);
 
                 redo.Push(command);
             }
             catch (Exception exception)
             {
-                logger.Log(exception.ToString(), methodName, filePath, line);
+                logger.Log(exception.ToString());
             }          
         }
 
-        public void Redo([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        public void Redo()
         {           
             try
             {
-                if (redo.Count <= 0)
+                if (!redo.Any())
                     return;
 
                 Command command = undo.Pop();
                 command.UnExecute();
 
-                logger.Log(command.Name, methodName, filePath, line);
+                logger.Log(command.Name);
 
                 redo.Push(command);
             }
             catch (Exception exception)
             {
-                logger.Log(exception.ToString(), methodName, filePath, line);
+                logger.Log(exception.ToString());
             }
         }  
 
@@ -111,48 +122,48 @@ namespace Osc.Rotch.Engine.Managers
                                
         }
 
-        public Task UndoAsync([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        public Task UndoAsync()
         {
             return Task.Run(() =>
                 {
                     try
                     {
-                        if (undo.Count <= 0)
+                        if (!undo.Any())
                             return;
 
                         Command command = undo.Pop();
                         command.UnExecute();
 
-                        logger.Log(command.Name, methodName, filePath, line);
+                        logger.Log(command.Name);
 
                         redo.Push(command);
                     }
                     catch (Exception exception)
                     {
-                        logger.Log(exception.ToString(), methodName, filePath, line);
+                        logger.Log(exception.ToString());
                     }
                 });           
         }
 
-        public Task RedoAsync([CallerMemberName]string methodName = "", [CallerFilePath]string filePath = "", [CallerLineNumber]int line = 0)
+        public Task RedoAsync()
         {
             return Task.Run(() =>
                 {
                     try
                     {
-                        if (redo.Count <= 0)
+                        if (!redo.Any())
                             return;
 
                         Command command = undo.Pop();
                         command.UnExecute();
 
-                        logger.Log(command.Name, methodName, filePath, line);
+                        logger.Log(command.Name);
 
                         redo.Push(command);
                     }
                     catch (Exception exception)
                     {
-                        logger.Log(exception.ToString(), methodName, filePath, line);
+                        logger.Log(exception.ToString());
                     }
                 });
         }        

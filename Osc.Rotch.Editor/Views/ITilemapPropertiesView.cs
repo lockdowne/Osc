@@ -10,8 +10,5 @@ namespace Osc.Rotch.Editor.Views
     {
         string TilemapName { get; set; }
         string TilemapDescription { get; set; }
-
-        int TilemapWidth { get; set; }
-        int TilemapHeight { get; set; }
     }
 }

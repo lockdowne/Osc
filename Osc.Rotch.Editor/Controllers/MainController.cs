@@ -18,7 +18,9 @@ using Telerik.WinControls;
 namespace Osc.Rotch.Editor.Controllers
 {
     public class MainController : ISubscriber<OnTilemapNodeDoubleClicked>, ISubscriber<OnConsoleWindowVisibilityChanged>,
-        ISubscriber<OnProjectWindowVisibilityChanged>, ISubscriber<OnEntitiesWindowVisibilityChanged>, ISubscriber<OnLocalClicked>, ISubscriber<OnSyncClicked>
+        ISubscriber<OnProjectWindowVisibilityChanged>, ISubscriber<OnEntitiesWindowVisibilityChanged>, ISubscriber<OnLocalClicked>, ISubscriber<OnSyncClicked>,
+        ISubscriber<OnTilemapPropertiesSaved>, ISubscriber<OnDocumentWindowClosed>, ISubscriber<OnDeleteTilemapNodeClicked>, ISubscriber<OnThemeClicked>, ISubscriber<OnSettingsClicked>,
+        ISubscriber<OnResetConfiguration>
         
     {
         private readonly IMainView view;
@@ -54,37 +56,89 @@ namespace Osc.Rotch.Editor.Controllers
 
         }
 
-        //public void OnEvent(OnTilemapPropertiesSaved item)
-        //{
-        //    commandManager.ExecuteCommand(new Command()
-        //    {
-        //        Name = "Tilemap properties changed",
-        //        CanExecute = () => { return item != null; },
-        //        Execute = () =>
-        //        {
-        //            Tilemap tilemap = tilemapRepository.Find(t => t.ID == item.ID);
+        public void OnEvent(OnResetConfiguration item)
+        {
+            var result = RadMessageBox.Show(Consts.AlertMessages.Messages.ResetConfiguration, Consts.AlertMessages.Captions.ResetConfiguration, System.Windows.Forms.MessageBoxButtons.YesNo, RadMessageIcon.Question);
+            
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Reset Configuration",
+                CanExecute = () => { return result == System.Windows.Forms.DialogResult.Yes; },
+                Execute = () =>
+                {
+                    Configuration.Settings = Settings.Default();
+                    Configuration.SaveSettings();
+                },
+            }, false, item.ClassName());
+            
+        }
 
-        //            int previousWidth = tilemap.Width;
-        //            int previousHeight = tilemap.Height;
+        public void OnEvent(OnSettingsClicked item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Opened Settings",
+                CanExecute = () => { return true; },
+                Execute = () =>
+                {
+                    SettingsView settings = new SettingsView();
+                    settings.ShowDialog();
+                },
+            }, false, item.ClassName());
+        }
 
-        //            tilemap.Name = item.TilemapName;
-        //            tilemap.Description = item.TilemapDescription;                    
+        public void OnEvent(OnThemeClicked item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Opened Theme",
+                CanExecute = () => { return true; },
+                Execute = () =>
+                {
+                    ThemeView theme = new ThemeView();
+                    theme.ShowDialog();
+                },
+            }, false, item.ClassName());
+        }
 
-        //            if (previousWidth != item.TilemapWidth || previousHeight != item.TilemapHeight)
-        //            {
-        //                tilemap.FindTilemapLayers(t => { return true; }).ForEach(layer =>
-        //                {
-        //                    layer.Resize(item.TilemapWidth, item.TilemapHeight);
-        //                });
+        public void OnEvent(OnDeleteTilemapNodeClicked item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Closed Window",
+                CanExecute = () => { return item != null && item.Node != null && this.view.DockManager.DockWindows.DocumentWindows.FirstOrDefault(window => window.Name == item.Node.ID.ToString()) != null; },
+                Execute = () =>
+                {
+                    this.view.DockManager.DockWindows.DocumentWindows.FirstOrDefault(window => window.Name == item.Node.ID.ToString()).Close();
+                },
+            }, false, item.ClassName());
+        }
 
-        //                tilemap.CollisionLayer.Resize(item.TilemapWidth, item.TilemapHeight);
+        public void OnEvent(OnDocumentWindowClosed item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Removed Window",
+                CanExecute = () => { return item != null && item.Window != null && activeControllers.FirstOrDefault(controller => controller.ID.ToString() == item.Window.Name) != null; },
+                Execute = () =>
+                {
+                    activeControllers.Remove(activeControllers.FirstOrDefault(controller => controller.ID.ToString() == item.Window.Name));
+                },
+            }, false, item.ClassName());
+        }
 
-        //                tilemap.Width = item.TilemapWidth;
-        //                tilemap.Height = item.TilemapHeight;
-        //            }                    
-        //        },
-        //    }, false, item.ClassName());
-        //}
+        public void OnEvent(OnTilemapPropertiesSaved item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Tilemap properties changed",
+                CanExecute = () => { return item != null && !string.IsNullOrEmpty(item.TilemapName) && this.view.DockManager.DockWindows.DocumentWindows.FirstOrDefault(window => window.Name == item.ID.ToString()) != null; },
+                Execute = () =>
+                {
+                    this.view.DockManager.DockWindows.DocumentWindows.FirstOrDefault(window => window.Name == item.ID.ToString()).Text = item.TilemapName;                 
+                },
+            }, false, item.ClassName());
+        }
 
         public void OnEvent(OnSyncClicked item)
         {
@@ -190,12 +244,13 @@ namespace Osc.Rotch.Editor.Controllers
 
                     IEventAggregator aggregator = new EventAggregator();
 
-                    ITilemapDocumentView documentView = new TilemapDocumentView(aggregator) { Tilemap = tilemap, Name = tilemap.Name };
-                    TilemapController tilemapController = new TilemapController(documentView, new CommandManager(logger), aggregator, tilemapRepository);
+                    ITilemapDocumentView documentView = new TilemapDocumentView(aggregator) { Tilemap = tilemap, Name = tilemap.ID.ToString(), Text = tilemap.Name };
+                    TilemapController tilemapController = new TilemapController(documentView, new CommandManager(logger), aggregator, tilemapRepository) { ID = tilemap.ID };
 
                     activeControllers.Add(tilemapController);
 
-                    DockWindow((DockWindow)documentView, DockPosition.Fill);
+                    if (!this.view.DockManager.DockWindows.DocumentWindows.Any(window => window.Name == tilemap.ID.ToString()))
+                        DockWindow((DockWindow)documentView, DockPosition.Fill);
                 },
                 UnExecute = () =>
                 {

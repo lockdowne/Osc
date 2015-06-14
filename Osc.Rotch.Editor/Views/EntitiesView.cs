@@ -9,12 +9,13 @@ using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
 using Osc.Rotch.Editor.Events;
 using Osc.Rotch.Engine.Aggregators;
+using Telerik.WinControls;
 
 namespace Osc.Rotch.Editor.Views
 {
     public class EntitiesView : ToolWindow, IEntitiesView
     {
-        private IEventAggregator eventAggregator;
+        private readonly IEventAggregator eventAggregator;
 
         private Telerik.WinControls.UI.RadContextMenu contextMenuRoot;
         private System.ComponentModel.IContainer components;
@@ -97,25 +98,28 @@ namespace Osc.Rotch.Editor.Views
                 if (child == null)
                     return;
 
-                switch (child.EntityType)
+                if (RadMessageBox.Show(Consts.AlertMessages.Messages.RemoveTilemap, Consts.AlertMessages.Captions.RemoveTilemap, System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
                 {
-                    case Enums.EntityTypes.Characters:
-                        break;
-                    case Enums.EntityTypes.Items:
-                        break;
-                    case Enums.EntityTypes.Quests:
-                        break;
-                    case Enums.EntityTypes.Tilemaps:
-                        this.eventAggregator.Publish(new OnDeleteTilemapNodeClicked() { Node = child });
-                        break;
-                    case Enums.EntityTypes.Nodes:
-                        break;
-                    case Enums.EntityTypes.BattleScenes:
-                        break;
-                    case Enums.EntityTypes.FreeRoamScenes:
-                        break;
-                    case Enums.EntityTypes.RandomBattleScenes:
-                        break;
+                    switch (child.EntityType)
+                    {
+                        case Enums.EntityTypes.Characters:
+                            break;
+                        case Enums.EntityTypes.Items:
+                            break;
+                        case Enums.EntityTypes.Quests:
+                            break;
+                        case Enums.EntityTypes.Tilemaps:
+                            this.eventAggregator.Publish(new OnDeleteTilemapNodeClicked() { Node = child });
+                            break;
+                        case Enums.EntityTypes.Nodes:
+                            break;
+                        case Enums.EntityTypes.BattleScenes:
+                            break;
+                        case Enums.EntityTypes.FreeRoamScenes:
+                            break;
+                        case Enums.EntityTypes.RandomBattleScenes:
+                            break;
+                    }
                 }
             };
 

@@ -78,15 +78,15 @@ namespace Osc.Rotch.Editor.Common
         {
             try
             {
-                if (IOMethods.CreateDirectory(Consts.OscPaths.Settings))
+                if (IOMethods.CreateDirectory(Consts.OscPaths.EditorSettings))
                 {
-                    if (!File.Exists(Consts.OscPaths.Settings))
+                    if (!File.Exists(Consts.OscPaths.EditorSettings))
                     {
                         Settings settings = Default();
-                        Serializer.Serialize(settings, Consts.OscPaths.Settings);
+                        Serializer.Serialize(settings, Consts.OscPaths.EditorSettings);
                     }
 
-                    return Serializer.Deserialize<Settings>(Consts.OscPaths.Settings);
+                    return Serializer.Deserialize<Settings>(Consts.OscPaths.EditorSettings);
                 }
             }
             catch(Exception)
@@ -97,7 +97,9 @@ namespace Osc.Rotch.Editor.Common
             return Default();
         }
 
-        private static Settings Default()
+        
+
+        public static Settings Default()
         {
             return new Settings()
             {

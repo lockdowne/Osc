@@ -247,4 +247,16 @@
   <data name="osc_splash" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\osc-splash.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Resize" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Resize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="settings_5_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings-5-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="paint_brush_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\paint-brush-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="recurring_appointment_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\recurring-appointment-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

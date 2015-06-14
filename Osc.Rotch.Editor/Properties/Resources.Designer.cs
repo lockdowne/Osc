@@ -313,6 +313,16 @@ namespace Osc.Rotch.Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap paint_brush_32 {
+            get {
+                object obj = ResourceManager.GetObject("paint_brush_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap paint_bucket_16 {
             get {
                 object obj = ResourceManager.GetObject("paint_bucket_16", resourceCulture);
@@ -373,6 +383,16 @@ namespace Osc.Rotch.Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap recurring_appointment_32 {
+            get {
+                object obj = ResourceManager.GetObject("recurring_appointment_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap redo_4_32 {
             get {
                 object obj = ResourceManager.GetObject("redo_4_32", resourceCulture);
@@ -393,6 +413,16 @@ namespace Osc.Rotch.Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Resize {
+            get {
+                object obj = ResourceManager.GetObject("Resize", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap save_32 {
             get {
                 object obj = ResourceManager.GetObject("save_32", resourceCulture);
@@ -406,6 +436,16 @@ namespace Osc.Rotch.Editor.Properties {
         internal static System.Drawing.Bitmap Saveall_6518 {
             get {
                 object obj = ResourceManager.GetObject("Saveall_6518", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap settings_5_32 {
+            get {
+                object obj = ResourceManager.GetObject("settings_5_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

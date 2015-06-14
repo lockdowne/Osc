@@ -27,5 +27,20 @@ namespace Osc.Rotch.Editor.Common
                 settings = value;
             }
         }
+        
+        public static void SaveSettings()
+        {
+            try
+            {
+                if(IOMethods.CreateDirectory(Consts.OscPaths.EditorSettings))
+                {
+                    Serializer.Serialize(settings, Consts.OscPaths.EditorSettings);
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
     }
 }

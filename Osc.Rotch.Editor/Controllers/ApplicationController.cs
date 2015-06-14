@@ -17,7 +17,7 @@ using Telerik.WinControls.UI.Docking;
 
 namespace Osc.Rotch.Editor.Controllers
 {
-    public class ApplicationController : IController
+    public class ApplicationController
     {
         private Telerik.WinControls.Themes.VisualStudio2012DarkTheme theme;
 

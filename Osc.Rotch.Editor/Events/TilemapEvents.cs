@@ -137,5 +137,18 @@ namespace Osc.Rotch.Editor.Events
         public ListViewDataItem Item { get; set; }
     }
 
+    public class OnTilemapUndoClicked
+    {
+        
+    }
 
+    public class OnTilemapRedoClicked
+    {
+
+    }
+
+    public class OnTilemapResizeClicked
+    {
+
+    }
 }

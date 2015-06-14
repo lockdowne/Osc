@@ -37,6 +37,8 @@
             this.btnSaveLocal = new Telerik.WinControls.UI.RadButtonElement();
             this.btnSaveSync = new Telerik.WinControls.UI.RadButtonElement();
             this.radRibbonBarGroup3 = new Telerik.WinControls.UI.RadRibbonBarGroup();
+            this.btnSettings = new Telerik.WinControls.UI.RadButtonElement();
+            this.btnTheme = new Telerik.WinControls.UI.RadButtonElement();
             this.ribbonTab2 = new Telerik.WinControls.UI.RibbonTab();
             this.radRibbonBarGroup2 = new Telerik.WinControls.UI.RadRibbonBarGroup();
             this.chkConsoleWindow = new Telerik.WinControls.UI.RadCheckBoxElement();
@@ -44,6 +46,7 @@
             this.chkEntitiesWindow = new Telerik.WinControls.UI.RadCheckBoxElement();
             this.radRibbonBarButtonGroup2 = new Telerik.WinControls.UI.RadRibbonBarButtonGroup();
             this.radRibbonBarButtonGroup3 = new Telerik.WinControls.UI.RadRibbonBarButtonGroup();
+            this.btnResetSettings = new Telerik.WinControls.UI.RadButtonElement();
             ((System.ComponentModel.ISupportInitialize)(this.radStatusStrip)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock)).BeginInit();
             this.radDock.SuspendLayout();
@@ -147,10 +150,36 @@
             // 
             // radRibbonBarGroup3
             // 
-            this.radRibbonBarGroup3.AccessibleDescription = "Commands";
-            this.radRibbonBarGroup3.AccessibleName = "Commands";
+            this.radRibbonBarGroup3.AccessibleDescription = "Configuration";
+            this.radRibbonBarGroup3.AccessibleName = "Configuration";
+            this.radRibbonBarGroup3.Items.AddRange(new Telerik.WinControls.RadItem[] {
+            this.btnSettings,
+            this.btnTheme,
+            this.btnResetSettings});
             this.radRibbonBarGroup3.Name = "radRibbonBarGroup3";
-            this.radRibbonBarGroup3.Text = "Commands";
+            this.radRibbonBarGroup3.Text = "Configuration";
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.AccessibleDescription = "Settings";
+            this.btnSettings.AccessibleName = "Settings";
+            this.btnSettings.Image = global::Osc.Rotch.Editor.Properties.Resources.settings_5_32;
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnSettings.Text = "Settings";
+            this.btnSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
+            // btnTheme
+            // 
+            this.btnTheme.AccessibleDescription = "Theme";
+            this.btnTheme.AccessibleName = "Theme";
+            this.btnTheme.Image = global::Osc.Rotch.Editor.Properties.Resources.paint_brush_32;
+            this.btnTheme.Name = "btnTheme";
+            this.btnTheme.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnTheme.Text = "Theme";
+            this.btnTheme.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnTheme.Click += new System.EventHandler(this.btnTheme_Click);
             // 
             // ribbonTab2
             // 
@@ -229,6 +258,17 @@
             this.radRibbonBarButtonGroup3.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.radRibbonBarButtonGroup3.Text = "radRibbonBarButtonGroup3";
             // 
+            // btnResetSettings
+            // 
+            this.btnResetSettings.AccessibleDescription = "Reset";
+            this.btnResetSettings.AccessibleName = "Reset";
+            this.btnResetSettings.Image = global::Osc.Rotch.Editor.Properties.Resources.recurring_appointment_32;
+            this.btnResetSettings.Name = "btnResetSettings";
+            this.btnResetSettings.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnResetSettings.Text = "Reset";
+            this.btnResetSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -272,6 +312,9 @@
         private Telerik.WinControls.UI.RadRibbonBarButtonGroup radRibbonBarButtonGroup2;
         private Telerik.WinControls.UI.RadRibbonBarButtonGroup radRibbonBarButtonGroup3;
         private Telerik.WinControls.UI.RadRibbonBarGroup radRibbonBarGroup3;
+        private Telerik.WinControls.UI.RadButtonElement btnSettings;
+        private Telerik.WinControls.UI.RadButtonElement btnTheme;
+        private Telerik.WinControls.UI.RadButtonElement btnResetSettings;
 
     }
 }

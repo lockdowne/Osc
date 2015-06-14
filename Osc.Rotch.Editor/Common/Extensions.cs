@@ -35,5 +35,15 @@ namespace Osc.Rotch.Editor.Common
             return obj == null ? string.Empty : obj.GetType().Name;
         }
 
+        public static System.Drawing.Color ToGdiColor(this Microsoft.Xna.Framework.Color color)
+        {
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        public static Microsoft.Xna.Framework.Color ToXnaColor(this System.Drawing.Color color)
+        {
+            return new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, color.A);
+        }
+
     }
 }
