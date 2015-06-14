@@ -63,25 +63,28 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Telerik.WinControls, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assemblies\Telerik.WinControls.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.WinControls.GridView, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assemblies\Telerik.WinControls.GridView.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.WinControls.RadDock, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assemblies\Telerik.WinControls.RadDock.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.WinControls.Themes.VisualStudio2012Dark, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assemblies\Telerik.WinControls.Themes.VisualStudio2012Dark.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.WinControls.UI, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Telerik.Windows.Zip, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assemblies\Telerik.WinControls.UI.dll</HintPath>
     </Reference>
     <Reference Include="TelerikCommon, Version=2015.1.225.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assemblies\TelerikCommon.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -432,9 +435,7 @@
   <ItemGroup>
     <None Include="Resources\recurring-appointment-32.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assemblies\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
