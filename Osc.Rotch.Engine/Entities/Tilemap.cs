@@ -81,6 +81,16 @@ namespace Osc.Rotch.Engine.Entities
         /// </summary>
         public bool IsDrawInformationData { get; set; }
 
+        /// <summary>
+        /// Gets the base Z value used for each tile
+        /// </summary>
+        public float TileDepthZValue { get { return (float)(1.0f / ((((float)Width * (float)Height) + 1.0f) * 10.0f)); } }
+
+        /// <summary>
+        /// Gets the base Z value used for each layer
+        /// </summary>
+        public float LayerDepthZValue { get { return (float)(1.0f / (TilemapLayers.Count + 1.0f)); } }
+
         public void Initialize(string name, string description, int tileWidth, int tileHeight, int tilemapWidth, int tilemapHeight)
         {
             if (tileWidth <= 0 || tileHeight <= 0 || tilemapWidth <= 0 || tilemapHeight <= 0)
@@ -222,36 +232,13 @@ namespace Osc.Rotch.Engine.Entities
             if (spriteBatch == null)
                 return;
 
+            float zLayer = 0f;
+
             for (int z = 0; z < TilemapLayers.Count; z++)
-            {
+            { 
+                //zLayer += LayerDepthZValue;
                 if (TilemapLayers[z].IsVisble)
                 {
-                    //for (int x = Width - 1; x >= 0; x--)
-                    //{
-                    //    for (int y = 0; y < Height; y++)
-                    //    {
-                    //        TileVisual tile = TilemapLayers[z].Columns[x].Rows[y];
-
-                    //        if (!string.IsNullOrEmpty(tile.TilesetName))
-                    //        {
-                    //            if (tile.TilesetIndex >= 0)
-                    //            {
-                    //                Tileset tileset = Tilesets.FirstOrDefault(set => set.TextureName == tile.TilesetName);
-
-                    //                if (tileset != null)
-                    //                {
-                    //                    Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight);
-
-                    //                    //spriteBatch.Draw(Pixel, position, Color.Red);
-                    //                    // TODO: Apply height decimal places to the alignment of Y axis
-                    //                    spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
-                    //                        tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //}
-
                     for (int x = 0; x < Width; x++)
                     {
                         for (int y = 0; y < Height; y++)
@@ -271,13 +258,20 @@ namespace Osc.Rotch.Engine.Entities
                                         //spriteBatch.Draw(Pixel, position, Color.Red);
                                         // TODO: Apply height decimal places to the alignment of Y axis
                                         spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
-                                            tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
+                                            tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, zLayer);
+
+                                        //if (x == 2 && y == 1 && z == 0)
+                                        //{
+                                        //    Console.WriteLine(zLayer);
+                                        //}
                                     }
                                 }
                             }
+                            zLayer += TileDepthZValue;
                         }
                     }
                 }
+                zLayer += LayerDepthZValue;
             }
 
             // TODO: Implement merged layers and if we want the old method of top tiles per cell

@@ -1,11 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Osc.Rotch.Engine.Managers;
 using Osc.Rotch.Engine.Common;
 using Osc.Rotch.Engine.Entities;
-using System.Linq;
-using System.Collections.Generic;
+using Osc.Rotch.Game.Screens;
 
 namespace Osc.Rotch.Game
 {
@@ -20,7 +22,7 @@ namespace Osc.Rotch.Game
 
         private ScreenManager screenManager;
 
-        
+        private Tilemap tilemap;
 
         public MainGame()
         {
@@ -34,8 +36,6 @@ namespace Osc.Rotch.Game
 
             //Services.AddService(typeof(SpriteBatch), spriteBatch);
 
-            var tilemap = Content.XnaDeserialize<List<Tilemap>>(@"C:\SourceCode\Rotch\Osc.Rotch.Game\Content\Tilemaps.xml").FirstOrDefault();
-
             // Add components
             screenManager = new ScreenManager(this);
             Components.Add(screenManager);        
@@ -46,6 +46,20 @@ namespace Osc.Rotch.Game
             IsMouseVisible = true;
 
             base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+
+            try
+            {
+                screenManager.AddScreen(new SampleScreen()); 
+            }
+            catch (Exception exception)
+            {
+
+            }
         }
     }
 }
