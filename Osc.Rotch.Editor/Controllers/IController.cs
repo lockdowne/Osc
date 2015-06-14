@@ -10,6 +10,6 @@ namespace Osc.Rotch.Editor.Controllers
 {
     public interface IController
     {
-        
+        Guid ID { get; set; }
     }
 }

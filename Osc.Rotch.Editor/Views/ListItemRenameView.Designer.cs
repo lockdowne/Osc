@@ -54,6 +54,7 @@
             // 
             // btnTilemapLayerCancel
             // 
+            this.btnTilemapLayerCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnTilemapLayerCancel.Location = new System.Drawing.Point(127, 38);
             this.btnTilemapLayerCancel.Name = "btnTilemapLayerCancel";
             this.btnTilemapLayerCancel.Size = new System.Drawing.Size(110, 24);
@@ -65,6 +66,7 @@
             this.AcceptButton = this.btnTilemapLayerOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnTilemapLayerCancel;
             this.ClientSize = new System.Drawing.Size(250, 71);
             this.Controls.Add(this.btnTilemapLayerCancel);
             this.Controls.Add(this.btnTilemapLayerOK);

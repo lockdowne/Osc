@@ -94,8 +94,11 @@ namespace Osc.Rotch.Editor.Controls
                 {
                     Console.WriteLine("Pixels: {0}", e.Location.ToString());
                     Console.WriteLine("Rounded: {0}", MathExtension.IsoSnap(e.Location.ToVector2(), Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ToString());
-                    MathExtension.IsoSelector(e.Location.ToVector2(), e.Location.ToVector2() + new Vector2(Configuration.Settings.TileWidth, 0), Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ForEach(t => Console.WriteLine("IsoSelector: {0}", t));
-                    Console.WriteLine("Coord: {0}", MathExtension.IsoPixelsToCoordinate(MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation), Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ToString());
+                    Vector2 vector = MathExtension.IsoSelector(e.Location.ToVector2(), Configuration.Settings.TileWidth, Configuration.Settings.TileHeight);
+                    
+                    Console.WriteLine("IsoSelector: {0}", vector.ToString());
+                    Console.WriteLine("Coords: {0}", MathExtension.IsoPixelsToCoordinate(vector, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight));
+                    //Console.WriteLine("Coord: {0}", MathExtension.IsoPixelsToCoordinate(MathExtension.InvertMatrixAtVector(e.Location.ToVector2(), camera.CameraTransformation), Configuration.Settings.TileWidth, Configuration.Settings.TileHeight).ToString());
                 }
 #endif
 

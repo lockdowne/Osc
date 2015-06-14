@@ -27,7 +27,7 @@ namespace Osc.Rotch.Editor.Controllers
         ISubscriber<OnMoveTilemapLayerUp>, ISubscriber<OnMoveTilemapLayerDown>, ISubscriber<OnRenameTilemapLayer>, ISubscriber<OnTilemapSelectionBoxClicked>,
         ISubscriber<OnTilemapDrawClicked>, ISubscriber<OnTilemapGridClicked>, ISubscriber<OnTilePatternGenerated>, ISubscriber<OnDrawModeMouseClicked>,
         ISubscriber<OnEraseModeMouseClicked>, ISubscriber<OnCollisionModeMouseClicked>, ISubscriber<OnTilemapEraseClicked>, ISubscriber<OnTilemapCollisionClicked>,
-        ISubscriber<OnTilemapLayerVisibilityChanged>
+        ISubscriber<OnTilemapLayerVisibilityChanged>, ISubscriber<OnTilemapResizeClicked>, ISubscriber<OnTilemapRedoClicked>, ISubscriber<OnTilemapUndoClicked>
     {
         private readonly ITilemapDocumentView view;
 
@@ -52,6 +52,67 @@ namespace Osc.Rotch.Editor.Controllers
             LoadTilemap();
         }
 
+        public Guid ID { get; set; }
+
+        public void OnEvent(OnTilemapUndoClicked item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Undo",
+                CanExecute = () => { return item != null && commandManager.CanUndo; },
+                Execute = () =>
+                {
+                    commandManager.Undo();
+                },
+            }, false, item.ClassName());
+        }
+
+        public void OnEvent(OnTilemapRedoClicked item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Redo",
+                CanExecute = () => { return item != null && commandManager.CanRedo; },
+                Execute = () =>
+                {
+                    commandManager.Redo();
+                },
+            }, false, item.ClassName());
+        }
+
+        public void OnEvent(OnTilemapResizeClicked item)
+        {
+            int previousWidth = this.view.Tilemap.Width;
+            int previousHeight = this.view.Tilemap.Height;
+
+            TilemapResizeView resize = new TilemapResizeView(this.view.Tilemap.Width, this.view.Tilemap.Height);
+
+            if (resize.ShowDialog() == DialogResult.OK)
+            {
+                commandManager.ExecuteCommand(new Command()
+                {
+                    Name = "Tilemap resized",
+                    CanExecute = () => { return item != null && (previousWidth != resize.TilemapWidth || previousHeight != resize.TilemapHeight); },
+                    Execute = () =>
+                    {
+                        this.view.Tilemap.FindTilemapLayers(t => { return true; }).ForEach(layer =>
+                        {
+                            layer.Resize(resize.TilemapWidth, resize.TilemapHeight);
+                        });
+
+                        this.view.Tilemap.CollisionLayer.Resize(resize.TilemapWidth, resize.TilemapHeight);
+
+                        this.view.Tilemap.Width = resize.TilemapWidth;
+                        this.view.Tilemap.Height = resize.TilemapHeight;
+                    },
+                    UnExecute = () =>
+                    {
+                        // TODO: undo resize
+                    },
+                }, true, item.ClassName());
+            }
+        }
+
         public void OnEvent(OnTilemapLayerVisibilityChanged item)
         {
             commandManager.ExecuteCommand(new Command()
@@ -72,7 +133,7 @@ namespace Osc.Rotch.Editor.Controllers
                     }
                 },
             }, false, item.ClassName());
-        }     
+        }
 
         public void OnEvent(OnTilemapCollisionClicked item)
         {

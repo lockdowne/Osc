@@ -38,7 +38,7 @@ namespace Osc.Rotch.Game
 
             // Add components
             screenManager = new ScreenManager(this);
-            Components.Add(screenManager);        
+            Components.Add(screenManager);
 
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 768;

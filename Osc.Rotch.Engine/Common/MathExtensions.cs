@@ -129,9 +129,7 @@ namespace Osc.Rotch.Engine.Common
         public static Vector2 IsoSelector(Vector2 vector, int tileWidth, int tileHeight)
         {
             return IsoSelector(vector, vector, tileWidth, tileHeight).FirstOrDefault();
-        }
-
-       
+        }      
 
         public static bool CoordinateWithinBounds(int x, int y, int width, int height)
         {

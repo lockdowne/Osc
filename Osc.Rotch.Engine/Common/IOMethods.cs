@@ -26,15 +26,15 @@ namespace Osc.Rotch.Engine.Common
         public static bool CreateDirectory(string path)
         {
             string directory = Path.GetDirectoryName(path);
+ 
+            if(!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
 
             if(!IsAccessable(directory))
             {
                 return false;
-            }
-
-            if(!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
             }
 
             return true;

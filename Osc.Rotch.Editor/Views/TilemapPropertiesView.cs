@@ -30,18 +30,6 @@ namespace Osc.Rotch.Editor.Views
             set { txtTilemapDescription.Text = value; }
         }
 
-        public int TilemapWidth
-        {
-            get { return (int)txtTilemapWidth.Value; }
-            set { txtTilemapWidth.Value = value; }
-        }
-
-        public int TilemapHeight
-        {
-            get { return (int)txtTilemapHeight.Value; }
-            set { txtTilemapHeight.Value = value; }
-        }
-
         public TilemapPropertiesView(IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
@@ -59,7 +47,7 @@ namespace Osc.Rotch.Editor.Views
         {
             DialogResult = System.Windows.Forms.DialogResult.OK;
 
-            eventAggregator.Publish(new OnTilemapPropertiesSaved() { ID = ID, TilemapDescription = TilemapDescription, TilemapHeight = TilemapHeight, TilemapName = TilemapName, TilemapWidth = TilemapWidth });
+            eventAggregator.Publish(new OnTilemapPropertiesSaved() { ID = ID, TilemapDescription = TilemapDescription, TilemapName = TilemapName,  });
        
         }
 

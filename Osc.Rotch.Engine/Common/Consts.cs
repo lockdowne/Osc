@@ -15,7 +15,7 @@ namespace Osc.Rotch.Engine.Common
             public static readonly string MainDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Rotch";
             public static readonly string EditorDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Rotch\Editor";
            // public static readonly string Log = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Game\Log.xml";
-            public static readonly string Settings = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Rotch\Settings.xml"; // TODO: Need to change
+            public static readonly string EditorSettings = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Osc\Rotch\Editor\Settings.xml";
         }
 
         public static class Repositories
@@ -54,6 +54,7 @@ namespace Osc.Rotch.Engine.Common
                 public const string RemoveTileset = "Are you sure you want to delete the selected tileset?";
                 public const string RemoveTilemap = "Are you sure you want to delete the selected tilemap?";
                 public const string NodeNameTaken = "Name is already in use.";
+                public const string ResetConfiguration = "Are you sure you want to reset the configuration";
             }
 
             public static class Captions
@@ -64,6 +65,7 @@ namespace Osc.Rotch.Engine.Common
                 public const string RemoveTileset = "Hey Listen";
                 public const string RemoveTilemap = "Hey Listen";
                 public const string NodeNameTaken = "Hey Listen";
+                public const string ResetConfiguration = "Hey Listen";
             }
         }
 
