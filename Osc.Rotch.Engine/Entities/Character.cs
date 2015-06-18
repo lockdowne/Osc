@@ -158,12 +158,23 @@ namespace Osc.Rotch.Engine.Entities
 
         public int MoveToken { get; set; }
 
-        public bool IsAlive
-        {
-            get { return Health > 0; }
-        }
+        public float DepthValue { get; set; }
 
         #endregion
 
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (!IsVisible)
+                return;
+
+            if (spriteBatch == null)
+                return;
+
+            if (CurrentAnimation == null)
+                return;
+
+            spriteBatch.Draw(CurrentAnimation.Texture, Position, CurrentAnimation.FrameBounds, Tint, Rotation, Vector2.Zero, Scale, SpriteEffects.None, DepthValue);
+        }
     }
 }

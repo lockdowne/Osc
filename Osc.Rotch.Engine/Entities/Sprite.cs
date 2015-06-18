@@ -179,7 +179,7 @@ namespace Osc.Rotch.Engine.Entities
             if (CurrentAnimation == null)
                 return;
 
-            spriteBatch.Draw(CurrentAnimation.Texture, Position, CurrentAnimation.FrameBounds, Tint, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(CurrentAnimation.Texture, Position, CurrentAnimation.FrameBounds, Tint, Rotation, Vector2.Zero, Scale, SpriteEffects.None, DepthValue);
         }
 
         /// <summary>
@@ -225,5 +225,7 @@ namespace Osc.Rotch.Engine.Entities
             else
                 nextAnimation.Enqueue(animationName);
         }
+
+        public float DepthValue { get; set; }
     }
 }

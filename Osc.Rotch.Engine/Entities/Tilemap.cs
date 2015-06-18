@@ -223,7 +223,7 @@ namespace Osc.Rotch.Engine.Entities
                 return;
 
             for (int z = 0; z < TilemapLayers.Count; z++)
-            {
+            { 
                 if (TilemapLayers[z].IsVisble)
                 {
                     for (int x = 0; x < Width; x++)
@@ -242,10 +242,17 @@ namespace Osc.Rotch.Engine.Entities
                                     {
                                         Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight);
 
+                                        float zLayer = (float)((1.0f / (Width + Height - 1)) * (x + y));
+                                        if(( x == 0 && y == 0)||( x == 1 && y == 1))
+                                        {
+                                            zLayer = (float)((1.0f / (Width + Height - 1)) * (1 + 1));
+                                        }
+
                                         //spriteBatch.Draw(Pixel, position, Color.Red);
                                         // TODO: Apply height decimal places to the alignment of Y axis
                                         spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
-                                            tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
+                                            tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, zLayer);
+
                                     }
                                 }
                             }
