@@ -226,32 +226,6 @@ namespace Osc.Rotch.Engine.Entities
             {
                 if (TilemapLayers[z].IsVisble)
                 {
-                    //for (int x = Width - 1; x >= 0; x--)
-                    //{
-                    //    for (int y = 0; y < Height; y++)
-                    //    {
-                    //        TileVisual tile = TilemapLayers[z].Columns[x].Rows[y];
-
-                    //        if (!string.IsNullOrEmpty(tile.TilesetName))
-                    //        {
-                    //            if (tile.TilesetIndex >= 0)
-                    //            {
-                    //                Tileset tileset = Tilesets.FirstOrDefault(set => set.TextureName == tile.TilesetName);
-
-                    //                if (tileset != null)
-                    //                {
-                    //                    Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight);
-
-                    //                    //spriteBatch.Draw(Pixel, position, Color.Red);
-                    //                    // TODO: Apply height decimal places to the alignment of Y axis
-                    //                    spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
-                    //                        tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //}
-
                     for (int x = 0; x < Width; x++)
                     {
                         for (int y = 0; y < Height; y++)

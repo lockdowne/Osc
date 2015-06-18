@@ -16,7 +16,7 @@ using Osc.Rotch.Engine.Aggregators;
 
 namespace Osc.Rotch.Editor.Views
 {
-    public class TilemapDocumentView : RadForm, ITilemapDocumentView
+    public class AssetCreationView : RadForm
     {
         private IEventAggregator eventAggregator;
 
@@ -113,7 +113,7 @@ namespace Osc.Rotch.Editor.Views
             get { return radDockTilemap2.DocumentManager.ActiveDocument; }
         }
 
-        public TilemapDocumentView(IEventAggregator eventAggregator)
+        public AssetCreationView(IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
 
@@ -149,7 +149,7 @@ namespace Osc.Rotch.Editor.Views
 
             this.radCheckedListBox1.ItemCheckedChanged += (sender, e) =>
             {
-                
+
             };
 
             this.radCheckedListBox1.ItemCheckedChanged += (sender, e) =>
@@ -786,7 +786,7 @@ namespace Osc.Rotch.Editor.Views
             this.ResumeLayout(false);
 
         }
-        
+
         private void tilemapRender_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             this.eventAggregator.Publish(new OnTilemapMouseWheel() { MouseEvent = e });
@@ -922,16 +922,16 @@ namespace Osc.Rotch.Editor.Views
 
         private void btnTilemapGrid_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void DeToggleMains(CommandBarToggleButton buttonToIgnore)
         {
-            if(buttonToIgnore != btnTilemapSelect)
+            if (buttonToIgnore != btnTilemapSelect)
                 this.btnTilemapSelect.ToggleState = ToggleState.Off;
-            if(buttonToIgnore != btnTilemapDraw)
+            if (buttonToIgnore != btnTilemapDraw)
                 this.btnTilemapDraw.ToggleState = ToggleState.Off;
-            if(buttonToIgnore != btnTilemapErase)
+            if (buttonToIgnore != btnTilemapErase)
                 this.btnTilemapErase.ToggleState = ToggleState.Off;
             if (buttonToIgnore != btnTilemapCollision)
                 this.btnTilemapCollision.ToggleState = ToggleState.Off;

@@ -91,7 +91,7 @@ namespace Osc.Rotch.Editor.Controls
                 _renderTarget = new SwapChainRenderTarget(GraphicsDevice, Handle, ClientSize.Width, ClientSize.Height);
 
                 // Register the service, so components like ContentManager can find it.
-                //services.AddService<IGraphicsDeviceService>(graphicsDeviceService);
+                services.AddService<IGraphicsDeviceService>(graphicsDeviceService);
 
                 // Give derived classes a chance to initialize themselves.
                 Initialize();
@@ -249,6 +249,9 @@ namespace Osc.Rotch.Editor.Controls
 
                     deviceNeedsReset = (ClientSize.Width != pp.BackBufferWidth) ||
                                        (ClientSize.Height != pp.BackBufferHeight);
+
+                     _renderTarget.Dispose();
+                    _renderTarget = new SwapChainRenderTarget(GraphicsDevice, Handle, ClientSize.Width, ClientSize.Height);
                     break;
             }
 
@@ -259,10 +262,12 @@ namespace Osc.Rotch.Editor.Controls
                 {
                     graphicsDeviceService.ResetDevice(_renderTarget.Width,
                                                       _renderTarget.Height);
-
+ 
+                    
+                  
                     //recreate window swapchain
-                    _renderTarget.Dispose();
-                    _renderTarget = new SwapChainRenderTarget(GraphicsDevice, Handle, ClientSize.Width, ClientSize.Height);
+                    //_renderTarget.Dispose();
+                    //_renderTarget = new SwapChainRenderTarget(GraphicsDevice, Handle, ClientSize.Width, ClientSize.Height);
                 }
                 catch (Exception e)
                 {

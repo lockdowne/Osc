@@ -51,6 +51,7 @@
     <Compile Include="Aggregators\ISubscriber.cs" />
     <Compile Include="Common\PerformanceCalculator.cs" />
     <Compile Include="DataStructures\CharacterCollection.cs" />
+    <Compile Include="Entities\TilemapAsset.cs" />
     <Compile Include="Entities\TilePlaceable.cs" />
     <Compile Include="Inputs\InputState.cs" />
     <Compile Include="Scenes\RandomBattleScene.cs" />

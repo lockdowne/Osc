@@ -184,6 +184,7 @@ namespace Osc.Rotch.Editor.Controls
 
         public void EndDraw()
         {
+            
             throw new NotImplementedException();
         }
 
