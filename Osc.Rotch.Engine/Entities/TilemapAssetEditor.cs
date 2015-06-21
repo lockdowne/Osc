@@ -92,6 +92,11 @@ namespace Osc.Rotch.Engine.Entities
 
         public void AddTilemapLayer(Guid id, string name, string description)
         {
+            AddTilemapLayer(id, name, description, Asset.VisualLayers.Count);
+        }
+
+        public void AddTilemapLayer(Guid id, string name, string description, int index)
+        {
             Layer<TileVisual> layer = new Layer<TileVisual>();
             layer.Initialize(Width, Height);
             layer.Name = name;
@@ -100,7 +105,7 @@ namespace Osc.Rotch.Engine.Entities
             layer.Alpha = 1.0f;
             layer.ID = id;
 
-            Asset.VisualLayers.Add(layer);
+            Asset.VisualLayers.Insert(index, layer);
         }
 
         public void RemoveTilemapLayer(Guid id)

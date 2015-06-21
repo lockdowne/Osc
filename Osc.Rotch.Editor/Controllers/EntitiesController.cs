@@ -215,7 +215,7 @@ namespace Osc.Rotch.Editor.Controllers
 
         public void OnEvent(OnCreateTilemapNode item)
         {
-            commandManager.ExecuteCommandAsync(new Command()
+            commandManager.ExecuteCommand(new Command()
             {
                 CanExecute = () =>
                 {

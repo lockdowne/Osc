@@ -253,7 +253,7 @@ namespace Osc.Rotch.Editor.Controls
                 Tint = Color.White,
                 Alpha = Configuration.Settings.TilePatternOpacity,
                 Origin = Vector2.Zero,
-                Pattern = layer,
+                Pattern = new List<Layer<TileVisual>>(new Layer<TileVisual>[] { layer }),
                 Position = Vector2.Zero,
                 TileHeight = tileHeight,
                 TileWidth = tileWidth,

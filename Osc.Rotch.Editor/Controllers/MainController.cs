@@ -14,13 +14,18 @@ using Osc.Rotch.Engine.Aggregators;
 using Osc.Rotch.Editor.Common;
 using System.Threading;
 using Telerik.WinControls;
+using Microsoft.Xna.Framework;
+using Osc.Rotch.Engine.Patterns;
+using Osc.Rotch.Editor.Controls;
+using System.IO;
 
 namespace Osc.Rotch.Editor.Controllers
 {
     public class MainController : ISubscriber<OnTilemapNodeDoubleClicked>, ISubscriber<OnConsoleWindowVisibilityChanged>,
         ISubscriber<OnProjectWindowVisibilityChanged>, ISubscriber<OnEntitiesWindowVisibilityChanged>, ISubscriber<OnLocalClicked>, ISubscriber<OnSyncClicked>,
         ISubscriber<OnTilemapPropertiesSaved>, ISubscriber<OnDocumentWindowClosed>, ISubscriber<OnDeleteTilemapNodeClicked>, ISubscriber<OnThemeClicked>, ISubscriber<OnSettingsClicked>,
-        ISubscriber<OnResetConfiguration>, ISubscriber<OnDeleteTilemapAssetsNodeClicked>, ISubscriber<OnTilemapAssetsNodeDoubleClicked>, ISubscriber<OnTilemapAssetPropertiesSaved>
+        ISubscriber<OnResetConfiguration>, ISubscriber<OnDeleteTilemapAssetsNodeClicked>, ISubscriber<OnTilemapAssetsNodeDoubleClicked>, ISubscriber<OnTilemapAssetPropertiesSaved>,
+        ISubscriber<OnTilemapAssetNodeClicked>
         
     {
         private readonly IMainView view;
@@ -58,13 +63,55 @@ namespace Osc.Rotch.Editor.Controllers
 
         }
 
+        public void OnEvent(OnTilemapAssetNodeClicked item)
+        {
+            TilemapDocumentView activeDocument = this.view.DockManager.DocumentManager.ActiveDocument as TilemapDocumentView;
+
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Tilemap Asset Selected",
+                CanExecute = () => { return item != null && item.Node != null && activeDocument != null && (activeControllers.Find(c => c.ID.ToString() == activeDocument.Name.ToString()) as TilemapController) != null && tilemapAssetRepository.Find(t => t.ID == item.Node.ID) != null; },
+                Execute = () =>
+                {
+                    TilemapController controller = activeControllers.Find(c => c.ID.ToString() == activeDocument.Name.ToString()) as TilemapController;
+
+                    TilemapAsset asset = tilemapAssetRepository.Find(t => t.ID == item.Node.ID);
+                    TilePattern pattern = new TilePattern()
+                    {
+                        ID = item.Node.ID,
+                        Tint = Color.White,
+                        Alpha = Configuration.Settings.TilePatternOpacity,
+                        Origin = Vector2.Zero,
+                        TileWidth = Configuration.Settings.TileWidth,
+                        TileHeight = Configuration.Settings.TileHeight,
+                        Pattern = new List<Layer<TileVisual>>(asset.VisualLayers),
+                        Tilesets = new List<Tileset>(),
+                    };
+
+                    pattern.FindAllTilesetNames().ForEach(str =>
+                    {
+                        pattern.Tilesets.Add(new Tileset()
+                        {
+                            ID = Guid.NewGuid(),
+                            Name = Path.GetFileNameWithoutExtension(str),
+                            TextureName = str,
+                            Texture = XnaHelper.Instance.LoadTexture(Consts.OscPaths.TexturesDirectory + @"\" + str),
+                        });
+                    });
+
+                    controller.ApplyTilePattern(pattern);
+
+                },
+            }, false, item.ClassName());
+            
+        }
+
         public void OnEvent(OnTilemapAssetsNodeDoubleClicked item)
         {
             commandManager.ExecuteCommand(new Command()
             {
                 CanExecute = () =>
                 {
-
                     return item != null && item.Node != null && tilemapAssetRepository.Find(tilemapAsset => tilemapAsset.ID == item.Node.ID) != null;
                 },
                 Execute = () =>
@@ -337,7 +384,7 @@ namespace Osc.Rotch.Editor.Controllers
                     IEventAggregator aggregator = new EventAggregator();
 
                     ITilemapDocumentView documentView = new TilemapDocumentView(aggregator) { Tilemap = tilemap, Name = tilemap.ID.ToString(), Text = tilemap.Name };
-                    TilemapController tilemapController = new TilemapController(documentView, new CommandManager(logger), aggregator, tilemapRepository) { ID = tilemap.ID };
+                    TilemapController tilemapController = new TilemapController(documentView, new CommandManager(logger), aggregator, tilemapRepository, tilemapAssetRepository) { ID = tilemap.ID };
 
                     activeControllers.Add(tilemapController);
 

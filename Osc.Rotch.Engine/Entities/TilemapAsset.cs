@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Osc.Rotch.Engine.Entities
 {
     [DataContract(Namespace="")]
-    public class TilemapAsset : IEntity
+    public class TilemapAsset : ITile
     {
         [DataMember]
         public Guid ID { get; set; }

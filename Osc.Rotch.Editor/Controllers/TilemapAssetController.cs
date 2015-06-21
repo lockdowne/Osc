@@ -59,7 +59,7 @@ namespace Osc.Rotch.Editor.Controllers
 
         public void OnEvent(OnTilemapTruncateClicked item)
         {
-            List<Layer<TileVisual>> previousAsset = new List<Layer<TileVisual>>(this.view.TilemapAssetEditor.Asset.VisualLayers);
+            List<Layer<TileVisual>> previousAsset = Serializer.Clone<List<Layer<TileVisual>>>(this.view.TilemapAssetEditor.Asset.VisualLayers);
             int previousWidth = this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault() == null ? Configuration.Settings.SceneWidth : this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault().Width;
             int previousHeight = this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault() == null ? Configuration.Settings.SceneHeight : this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault().Height;
 
@@ -106,7 +106,7 @@ namespace Osc.Rotch.Editor.Controllers
                         Origin = Vector2.Zero,
                         TileWidth = Configuration.Settings.TileWidth,
                         TileHeight = Configuration.Settings.TileHeight,
-                        Pattern = layer,
+                        Pattern = new List<Layer<TileVisual>>(new Layer<TileVisual>[] { layer }),
                         Position = Vector2.Zero,
                         Tilesets = new List<Tileset>(this.view.TilemapAssetEditor.Tilesets),
                     };
@@ -123,7 +123,7 @@ namespace Osc.Rotch.Editor.Controllers
                         }
                     });
 
-                    pattern.Pattern = MathExtension.Truncate(newLayer);
+                    pattern.Pattern = new List<Layer<TileVisual>>(new Layer<TileVisual>[] { MathExtension.Truncate(newLayer) });
 
                     this.view.TilePattern = pattern;
                     
@@ -159,7 +159,7 @@ namespace Osc.Rotch.Editor.Controllers
                         Origin = Vector2.Zero,
                         TileWidth = Configuration.Settings.TileWidth,
                         TileHeight = Configuration.Settings.TileHeight,
-                        Pattern = layer,
+                        Pattern = new List<Layer<TileVisual>>(new Layer<TileVisual>[] { layer }),
                         Position = Vector2.Zero,
                         Tilesets = new List<Tileset>(this.view.TilemapAssetEditor.Tilesets),
                     };
@@ -179,7 +179,7 @@ namespace Osc.Rotch.Editor.Controllers
                         }
                     });
 
-                    pattern.Pattern = MathExtension.Truncate(newLayer);
+                    pattern.Pattern = new List<Layer<TileVisual>>(new Layer<TileVisual>[] { MathExtension.Truncate(newLayer) });
 
                     this.view.TilePattern = pattern;
 
@@ -225,32 +225,41 @@ namespace Osc.Rotch.Editor.Controllers
 
         public void OnEvent(OnTilemapResizeClicked item)
         {
-            int previousWidth = this.view.TilemapAssetEditor.Width;
-            int previousHeight = this.view.TilemapAssetEditor.Height;
-
             TilemapResizeView resize = new TilemapResizeView(this.view.TilemapAssetEditor.Width, this.view.TilemapAssetEditor.Height);
 
+            List<Layer<TileVisual>> previousAsset = Serializer.Clone<List<Layer<TileVisual>>>(this.view.TilemapAssetEditor.Asset.VisualLayers);
+
+            int previousWidth = this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault() == null ? Configuration.Settings.SceneWidth : this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault().Width;
+            int previousHeight = this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault() == null ? Configuration.Settings.SceneHeight : this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault().Height;
+            
             if (resize.ShowDialog() == DialogResult.OK)
-            {
+            { 
+                int newWidth = resize.TilemapWidth;
+                int newHeight = resize.TilemapHeight;
+
                 commandManager.ExecuteCommand(new Command()
                 {
                     Name = "Tilemap resized",
-                    CanExecute = () => { return item != null && (previousWidth != resize.TilemapWidth || previousHeight != resize.TilemapHeight); },
+                    CanExecute = () => { return item != null && (previousWidth != newWidth || previousHeight != newHeight); },
                     Execute = () =>
                     {
                         this.view.TilemapAssetEditor.FindTilemapLayers(t => { return true; }).ForEach(layer =>
                         {
-                            layer.Resize(resize.TilemapWidth, resize.TilemapHeight);
+                            layer.Resize(newWidth, newHeight);
                         });
 
                         //this.view.TilemapAssetEditor.CollisionLayer.Resize(resize.TilemapWidth, resize.TilemapHeight);
 
-                        this.view.TilemapAssetEditor.Width = resize.TilemapWidth;
-                        this.view.TilemapAssetEditor.Height = resize.TilemapHeight;
+                        this.view.TilemapAssetEditor.Width = newWidth;
+                        this.view.TilemapAssetEditor.Height = newHeight;
                     },
                     UnExecute = () =>
                     {
-                        // TODO: undo resize
+                        this.view.TilemapAssetEditor.Asset.VisualLayers.Clear();
+                        this.view.TilemapAssetEditor.Asset.VisualLayers = new List<Layer<TileVisual>>(previousAsset);
+                        this.view.TilemapAssetEditor.Width = previousWidth;
+                        this.view.TilemapAssetEditor.Height = previousHeight;
+                        this.RefreshTilemapLayersControl();
                     },
                 }, true, item.ClassName());
             }
@@ -321,8 +330,14 @@ namespace Osc.Rotch.Editor.Controllers
             int startX = coordinates.X;
             int startY = coordinates.Y;
 
-            int width = this.view.TilePattern.Pattern.Width;
-            int height = this.view.TilePattern.Pattern.Height;
+            // This will ever by one layer in the pattern so pick the first one
+            Layer<TileVisual> patternLayer = pattern.Pattern.FirstOrDefault();
+
+            if (patternLayer == null)
+                return;
+
+            int width = patternLayer.Width;
+            int height = patternLayer.Height;
 
             TileVisual[,] oldSection = layer.FindSection(startX, startY, width, height);
 
@@ -340,8 +355,8 @@ namespace Osc.Rotch.Editor.Controllers
 
                             if (tile != null)
                             {
-                                tile.TilesetIndex = pattern.Pattern.Columns[x].Rows[y].TilesetIndex;
-                                tile.TilesetName = pattern.Pattern.Columns[x].Rows[y].TilesetName;
+                                tile.TilesetIndex = patternLayer.Columns[x].Rows[y].TilesetIndex;
+                                tile.TilesetName = patternLayer.Columns[x].Rows[y].TilesetName;
                             }
                         }
                     }
@@ -479,11 +494,11 @@ namespace Osc.Rotch.Editor.Controllers
         }
 
         public void OnEvent(OnRenameTilemapLayer item)
-        {
+        {          
             commandManager.ExecuteCommand(new Command()
             {
                 Name = "Renamed Layer",
-                CanExecute = () => { return item != null && item.Item != null && this.view.TilemapAssetEditor.FindTilemapLayers(l => l.Name == item.Item.Text).FirstOrDefault() != null; },
+                CanExecute = () => { return item != null && item.Item != null && (item.Item.Tag as Guid?) != null && this.view.TilemapAssetEditor.FindTilemapLayers(l => l.ID == (Guid)item.Item.Tag).FirstOrDefault() != null; },
                 Execute = () =>
                 {
                     ListItemRenameView renameView = new ListItemRenameView(item.Item.Text);
@@ -492,7 +507,7 @@ namespace Osc.Rotch.Editor.Controllers
                     {
                         string layerName = renameView.ItemValue;
 
-                        Layer<TileVisual> layer = this.view.TilemapAssetEditor.FindTilemapLayers(l => l.Name == item.Item.Text).FirstOrDefault();
+                        Layer<TileVisual> layer = this.view.TilemapAssetEditor.FindTilemapLayers(l => l.ID == (Guid)item.Item.Tag).FirstOrDefault();
 
                         if (string.IsNullOrEmpty(layerName))
                             return;
@@ -566,71 +581,110 @@ namespace Osc.Rotch.Editor.Controllers
 
         public void OnEvent(OnRemoveTilemapLayer item)
         {
-            Layer<TileVisual> previousLayer = this.view.TilemapAssetEditor.FindTilemapLayers(t => t.ID == (Guid)item.Item.Tag).FirstOrDefault();
+            Guid? id = item.Item.Tag as Guid?;
+
+            if (id == null)
+                return;
+
+            Layer<TileVisual> layer = this.view.TilemapAssetEditor.FindTilemapLayers(t => t.ID == (Guid)item.Item.Tag).FirstOrDefault();
+
+            if (layer == null)
+                return;
+
+            int index = this.view.TilemapAssetEditor.FindLayerIndex(layer);
+
+            Layer<TileVisual> previousLayer = Serializer.Clone<Layer<TileVisual>>(layer);
    
             commandManager.ExecuteCommand(new Command()
             {
                 Name = "Removed Tilemap Layer",
-                CanExecute = () => { return item != null && item.Item != null && (item.Item.Tag as Guid?) != null; },
+                CanExecute = () => { return item != null && item.Item != null && id != null; },
                 Execute = () =>
                 {
-                    Guid id = (Guid)item.Item.Tag;
-
-                    this.view.TilemapAssetEditor.RemoveTilemapLayer(id);
-                    this.view.TilemapLayersListBox.Items.Remove(item.Item);
+                    this.view.TilemapAssetEditor.RemoveTilemapLayer(id.Value);
+                    this.view.TilemapLayersListBox.Items.RemoveAt(index);
                 },
-                UnExecute = () => { },
-            }, false, item.ClassName());
+                UnExecute = () =>
+                {
+                    this.view.TilemapAssetEditor.AddTilemapLayer(previousLayer.ID, previousLayer.Name, previousLayer.Description, index);
+                    this.view.TilemapLayersListBox.Items.Insert(index, new ListViewDataItem() { Text = previousLayer.Name, Tag = previousLayer.ID, CheckState = ToggleState.On });
+                },
+            }, true, item.ClassName());
         }
 
         public void OnEvent(OnAddTilemapLayer item)
         {
+            Guid id = Guid.NewGuid();
+
+            int index = this.view.TilemapAssetEditor.FindTilemapLayers(t => { return true; }).Count();
+
             commandManager.ExecuteCommand(new Command()
             {
                 Name = "Added Tilemap Layer",
                 CanExecute = () => { return true; },
                 Execute = () =>
                 {
-                    Guid id = Guid.NewGuid();
-
                     this.view.TilemapAssetEditor.AddTilemapLayer(id, Consts.Editor.TilemapLayerName, string.Empty);
                     this.view.TilemapLayersListBox.Items.Add(new ListViewDataItem() { Text = Consts.Editor.TilemapLayerName, Tag = id, CheckState = ToggleState.On });
                 },
-                UnExecute = () => { },
-            }, false, item.ClassName());
+                UnExecute = () =>
+                {
+                    this.view.TilemapAssetEditor.RemoveTilemapLayer(id);
+                    this.view.TilemapLayersListBox.Items.RemoveAt(index);
+                },
+            }, true, item.ClassName());
         }
 
         public void OnEvent(OnRemoveTileset item)
         {
-            string name = item.ClassName();
+            DialogResult dialog = RadMessageBox.Show(Consts.AlertMessages.Messages.RemoveTileset, Consts.AlertMessages.Captions.RemoveTileset, MessageBoxButtons.YesNo, RadMessageIcon.Question, MessageBoxDefaultButton.Button2);
+
+            Tileset tileset = this.view.TilemapAssetEditor.FindTilesets(t => t.TextureName == item.Page.Name).FirstOrDefault();
+            Tileset previousTileset = Serializer.Clone<Tileset>(tileset);
+            previousTileset.Texture = tileset.Texture;
+
+            Guid id = tileset.ID;
+            int index = this.view.TilesetPages.Pages.IndexOf(this.view.TilesetPages.SelectedPage);
+
+            List<Layer<TileVisual>> previousAsset = Serializer.Clone<List<Layer<TileVisual>>>(this.view.TilemapAssetEditor.Asset.VisualLayers);
+            int previousWidth = this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault() == null ? Configuration.Settings.SceneWidth : this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault().Width;
+            int previousHeight = this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault() == null ? Configuration.Settings.SceneHeight : this.view.TilemapAssetEditor.Asset.VisualLayers.FirstOrDefault().Height;
+
 
             commandManager.ExecuteCommand(new Command()
             {
-                Name = name,
-                CanExecute = () => { return item != null && item.Page != null; },
+                Name = "Removed Tileset",
+                CanExecute = () => { return item != null && item.Page != null && dialog == DialogResult.Yes && index >= 0; },
                 Execute = () =>
                 {
-                    DialogResult dialog = RadMessageBox.Show(Consts.AlertMessages.Messages.RemoveTileset, Consts.AlertMessages.Captions.RemoveTileset, MessageBoxButtons.YesNo, RadMessageIcon.Question, MessageBoxDefaultButton.Button2);
-
-                    if (dialog == DialogResult.Yes)
-                    {
-                        // Get id of tileset
-                        Tileset tileset = this.view.TilemapAssetEditor.FindTilesets(t => t.TextureName == item.Page.Name).FirstOrDefault();
-
-                        TilemapAssetEditor tilemap = this.view.TilemapAssetEditor;
+                    TilemapAssetEditor tilemap = this.view.TilemapAssetEditor;
                         
-                        // Remove from model
-                        this.view.TilemapAssetEditor.RemoveTileset(tileset.ID);
+                    // Remove from model
+                    this.view.TilemapAssetEditor.RemoveTileset(id);
 
-                        // Remove from toolbox
-                        this.view.TilesetPages.Pages.Remove(item.Page);
+                    // Remove from toolbox                    
+                    this.view.TilesetPages.Pages.RemoveAt(index);
 
-                        this.view.TilePattern = null;
-                    }
+                    this.view.TilePattern = null;                    
                 },
-                UnExecute = () => { },
+                UnExecute = () =>
+                {
+                    this.view.TilemapAssetEditor.AddTileset(tileset);
+                    this.view.TilesetPages.Pages.Insert(index, new TilesetPage(eventAggregator)
+                    {
+                        Tileset = tileset,
+                        Text = Path.GetFileNameWithoutExtension(tileset.TextureName),
+                        Name = tileset.TextureName,
+                    });
 
-            }, false, name);
+                    this.view.TilemapAssetEditor.Asset.VisualLayers.Clear();
+                    this.view.TilemapAssetEditor.Asset.VisualLayers = new List<Layer<TileVisual>>(previousAsset);
+                    this.view.TilemapAssetEditor.Width = previousWidth;
+                    this.view.TilemapAssetEditor.Height = previousHeight;
+                    this.RefreshTilemapLayersControl();
+                },
+
+            }, true, item.ClassName());
         }
 
         public void OnEvent(OnAddTilesetTexture item)
@@ -682,7 +736,9 @@ namespace Osc.Rotch.Editor.Controllers
 
         public void OnEvent(OnSelectTilesetTexture item)
         {
-            string name = item.ClassName();
+            Guid id = Guid.NewGuid();
+
+            int index = this.view.TilesetPages.Pages.Count;
 
             commandManager.ExecuteCommand(new Command()
             {
@@ -693,7 +749,7 @@ namespace Osc.Rotch.Editor.Controllers
                     // Create new tileset
                     Tileset tileset = new Tileset()
                     {
-                        ID = Guid.NewGuid(),
+                        ID = id,
                         Name = Path.GetFileNameWithoutExtension(item.FileName),
                         TextureName = item.FileName,
                         Texture = XnaHelper.Instance.LoadTexture(Consts.OscPaths.TexturesDirectory + @"\" + item.FileName),
@@ -708,8 +764,12 @@ namespace Osc.Rotch.Editor.Controllers
 
                     this.view.TilemapAssetEditor.AddTileset(tileset);
                 },
-                UnExecute = () => { },
-            }, false, name);
+                UnExecute = () =>
+                {
+                    this.view.TilemapAssetEditor.RemoveTileset(id);
+                    this.view.TilesetPages.Pages.RemoveAt(index);
+                },
+            }, true, item.ClassName());
         }
 
         public void OnEvent(OnAddTileset item)

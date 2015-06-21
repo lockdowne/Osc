@@ -34,11 +34,11 @@ namespace Osc.Rotch.Editor.Controllers
             {
                 if (view.Grid.InvokeRequired)
                 {
-                    view.Grid.Invoke(new Action(() => { view.Grid.Rows.Add(view.Grid.Rows.Count.ToString().PadLeft(4, '0'), entry.Message, entry.ClassName, entry.MethodName, entry.LineNumber, entry.DateTime); }));
+                    view.Grid.Invoke(new Action(() => { view.Grid.Rows.Add(view.Grid.Rows.Count.ToString().PadLeft(5, '0'), entry.Message, entry.ClassName, entry.MethodName, entry.LineNumber, entry.DateTime); }));
                 }
                 else
                 {
-                    view.Grid.Rows.Add(view.Grid.Rows.Count.ToString().PadLeft(4, '0'), entry.Message, entry.ClassName, entry.MethodName, entry.LineNumber, entry.DateTime);
+                    view.Grid.Rows.Add(view.Grid.Rows.Count.ToString().PadLeft(5, '0'), entry.Message, entry.ClassName, entry.MethodName, entry.LineNumber, entry.DateTime);
                 }
             };
             

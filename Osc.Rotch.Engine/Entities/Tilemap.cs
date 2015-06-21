@@ -17,8 +17,11 @@ namespace Osc.Rotch.Engine.Entities
         [DataMember(Name = "Tilesets")]
         private List<Tileset> Tilesets { get; set; }
 
-        [DataMember(Name = "VisualLayers")]
-        private List<Layer<TileVisual>> TilemapLayers { get; set; }
+        [DataMember(Name = "ObjectLayer")]
+        public Layer<TilemapAsset> ObjectLayer { get; set; }
+
+        [DataMember(Name = "GroundLayer")]
+        public Layer<TilemapAsset> GroundLayer { get; set; }
 
         [DataMember(Name = "CollisionLayer")]
         public Layer<TileCollision> CollisionLayer { get; set; }
@@ -88,12 +91,34 @@ namespace Osc.Rotch.Engine.Entities
 
             //ID = Guid.NewGuid();
 
-            TilemapLayers = new List<Layer<TileVisual>>();
+     
 
             Tilesets = new List<Tileset>();
 
             CollisionLayer = new Layer<TileCollision>();
             CollisionLayer.Initialize(tilemapWidth, tilemapHeight);
+
+            GroundLayer = new Layer<TilemapAsset>();
+            GroundLayer.Initialize(tilemapWidth, tilemapHeight);
+            GroundLayer.Name = "Ground Layer";
+            GroundLayer.ID = Guid.NewGuid();
+            GroundLayer.IsVisble = true;  
+            
+            ObjectLayer = new Layer<TilemapAsset>();
+            ObjectLayer.Initialize(tilemapWidth, tilemapHeight);
+            ObjectLayer.Name = "Object Layer";
+            ObjectLayer.ID = Guid.NewGuid();
+            ObjectLayer.IsVisble = true;
+
+            for (int x = 0; x < tilemapWidth; x++)
+            {
+                for (int y = 0; y < tilemapHeight; y++)
+                {
+                    GroundLayer.Columns[x].Rows[y].VisualLayers = new List<Layer<TileVisual>>();
+                    ObjectLayer.Columns[x].Rows[y].VisualLayers = new List<Layer<TileVisual>>();                 
+                }
+            }
+
 
             Name = name;
             Description = description;
@@ -106,61 +131,9 @@ namespace Osc.Rotch.Engine.Entities
 
         }
 
-        public void AddTilemapLayer(Guid id, string name, string description)
-        {
-            Layer<TileVisual> layer = new Layer<TileVisual>();
-            layer.Initialize(Width, Height);
-            layer.Name = name;
-            layer.Description = description;
-            layer.IsVisble = true;
-            layer.Alpha = 1.0f;
-            layer.ID = id;
-
-            TilemapLayers.Add(layer);
-        }
-
-        public void RemoveTilemapLayer(Guid id)
-        {
-            TilemapLayers.RemoveAll(layer => layer.ID == id);
-        }
-
-        public IEnumerable<Layer<TileVisual>> FindTilemapLayers(Func<Layer<TileVisual>, bool> predicate)
-        {
-            return TilemapLayers.Where(layer => predicate(layer));
-        }
-
-        public int FindLayerIndex(Layer<TileVisual> layer)
-        {
-            return TilemapLayers.IndexOf(layer);
-        }
-
-        public Layer<TileVisual> FindLayerByIndex(int index)
-        {
-            if (index < 0 || index >= TilemapLayers.Count)
-                return null;
-
-            return TilemapLayers[index];
-        }
-
-        public void MoveLayerUp(int index)
-        {
-            if (index < 0 || index >= TilemapLayers.Count || (index - 1) < 0)
-                return;
-
-            TilemapLayers.Swap(index, index - 1);
-        }
-
-        public void MoveLayerDown(int index)
-        {
-            if (index < 0 || index >= TilemapLayers.Count || (index + 1) >= TilemapLayers.Count)
-                return;
-
-            TilemapLayers.Swap(index, index + 1);
-        }
-
         public void AddTileset(Tileset tileset)
         {
-            if (Tilesets.Any(set => set.Name == tileset.Name))
+            if (Tilesets.Any(set => set.TextureName == tileset.TextureName))
                 throw new Exception("Tileset with that name already exists");
 
             Tilesets.Add(tileset);
@@ -187,22 +160,22 @@ namespace Osc.Rotch.Engine.Entities
             if (removeTileset == null)
                 return;
 
-            TilemapLayers.ForEach(layer =>
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    for (int y = 0; y < Height; y++)
-                    {
+            //TilemapAssets.ForEach(layer =>
+            //{
+            //    for (int x = 0; x < Width; x++)
+            //    {
+            //        for (int y = 0; y < Height; y++)
+            //        {
 
-                        if (layer.Columns[x].Rows[y].TilesetName == removeTileset.Name)
-                        {
-                            layer.Columns[x].Rows[y].TilesetIndex = -1;
-                            layer.Columns[x].Rows[y].TilesetName = string.Empty;
-                        }
+            //            if (layer.Columns[x].Rows[y].TilesetName == removeTileset.Name)
+            //            {
+            //                layer.Columns[x].Rows[y].TilesetIndex = -1;
+            //                layer.Columns[x].Rows[y].TilesetName = string.Empty;
+            //            }
 
-                    }
-                }
-            });
+            //        }
+            //    }
+            //});
 
             Tilesets.Remove(removeTileset);
         }
@@ -222,37 +195,40 @@ namespace Osc.Rotch.Engine.Entities
             if (spriteBatch == null)
                 return;
 
-            for (int z = 0; z < TilemapLayers.Count; z++)
-            { 
-                if (TilemapLayers[z].IsVisble)
+            if(GroundLayer.IsVisble)
+            {
+                for (int x = 0; x < GroundLayer.Width; x++)
                 {
-                    for (int x = 0; x < Width; x++)
+                    for (int y = 0; y < GroundLayer.Height; y++)
                     {
-                        for (int y = 0; y < Height; y++)
+                        TilemapAsset tile = GroundLayer.Columns[x].Rows[y];
+
+                        for (int tileZ = 0; tileZ < tile.VisualLayers.Count; tileZ++)
                         {
-                            TileVisual tile = TilemapLayers[z].Columns[x].Rows[y];
-
-                            if (!string.IsNullOrEmpty(tile.TilesetName))
+                            for (int tileX = 0; tileX < tile.VisualLayers[tileZ].Width; tileX++)
                             {
-                                if (tile.TilesetIndex >= 0)
+                                for (int tileY = 0; tileY < tile.VisualLayers[tileZ].Height; tileY++)
                                 {
-                                    Tileset tileset = Tilesets.FirstOrDefault(set => set.TextureName == tile.TilesetName);
+                                    TileVisual tileAsset = tile.VisualLayers[tileZ].Columns[tileX].Rows[tileY];
 
-                                    if (tileset != null)
+                                    if (!string.IsNullOrEmpty(tileAsset.TilesetName))
                                     {
-                                        Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight);
-
-                                        float zLayer = (float)((1.0f / (Width + Height - 1)) * (x + y));
-                                        if(( x == 0 && y == 0)||( x == 1 && y == 1))
+                                        if (tileAsset.TilesetIndex >= 0)
                                         {
-                                            zLayer = (float)((1.0f / (Width + Height - 1)) * (1 + 1));
+                                            Tileset tileset = Tilesets.FirstOrDefault(set => set.TextureName == tileAsset.TilesetName);
+
+                                            if (tileset != null)
+                                            {
+                                                Vector2 position = MathExtension.IsoCoordinateToPixels(x + tileX, y + tileY, TileWidth, TileHeight);
+
+                                                float zLayer = (1.0f / (Width + Height - 1)) * (x + y);
+
+                                                // TODO: Apply height decimal places to the alignment of Y axis
+                                                spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
+                                                    tileset.GetSourceRectangle(tileAsset.TilesetIndex, TileWidth, TileHeight), Color.White * tile.Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, zLayer);
+
+                                            }
                                         }
-
-                                        //spriteBatch.Draw(Pixel, position, Color.Red);
-                                        // TODO: Apply height decimal places to the alignment of Y axis
-                                        spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
-                                            tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Color.White * TilemapLayers[z].Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, zLayer);
-
                                     }
                                 }
                             }
@@ -261,6 +237,51 @@ namespace Osc.Rotch.Engine.Entities
                 }
             }
 
+            if (ObjectLayer.IsVisble)
+            {
+                for (int x = 0; x < ObjectLayer.Width; x++)
+                {
+                    for (int y = 0; y < ObjectLayer.Height; y++)
+                    {
+                        TilemapAsset tile = ObjectLayer.Columns[x].Rows[y];
+
+                        for (int tileZ = 0; tileZ < tile.VisualLayers.Count; tileZ++)
+                        {
+                            for (int tileX = 0; tileX < tile.VisualLayers[tileZ].Width; tileX++)
+                            {
+                                for (int tileY = 0; tileY < tile.VisualLayers[tileZ].Height; tileY++)
+                                {
+                                    TileVisual tileAsset = tile.VisualLayers[tileZ].Columns[tileX].Rows[tileY];
+
+                                    if (!string.IsNullOrEmpty(tileAsset.TilesetName))
+                                    {
+                                        if (tileAsset.TilesetIndex >= 0)
+                                        {
+                                            Tileset tileset = Tilesets.FirstOrDefault(set => set.TextureName == tileAsset.TilesetName);
+
+                                            if (tileset != null)
+                                            {
+                                                int width = tile.VisualLayers[tileZ].Width;
+                                                int height = tile.VisualLayers[tileZ].Height;
+
+                                                Vector2 position = MathExtension.IsoCoordinateToPixels(x + tileX - width, y + tileY - height, TileWidth, TileHeight);
+
+                                                float zLayer = (1.0f / (Width + Height - 1)) * (x + y);
+
+                                                // TODO: Apply height decimal places to the alignment of Y axis
+                                                spriteBatch.Draw(tileset.Texture, new Rectangle((int)position.X, (int)position.Y, TileWidth, TileHeight),
+                                                    tileset.GetSourceRectangle(tileAsset.TilesetIndex, TileWidth, TileHeight), Color.White * tile.Alpha, 0.0f, Vector2.Zero, SpriteEffects.None, zLayer);
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+         
             // TODO: Implement merged layers and if we want the old method of top tiles per cell
 
             DrawGrid(spriteBatch);

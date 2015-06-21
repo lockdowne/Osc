@@ -22,9 +22,8 @@ using Microsoft.Xna.Framework;
 
 namespace Osc.Rotch.Editor.Controllers
 {
-    public class TilemapController : IController, ISubscriber<OnAddTileset>, ISubscriber<OnSelectTilesetTexture>,
-        ISubscriber<OnAddTilesetTexture>, ISubscriber<OnRemoveTileset>, ISubscriber<OnAddTilemapLayer>, ISubscriber<OnRemoveTilemapLayer>,
-        ISubscriber<OnMoveTilemapLayerUp>, ISubscriber<OnMoveTilemapLayerDown>, ISubscriber<OnRenameTilemapLayer>, ISubscriber<OnTilemapSelectionBoxClicked>,
+    public class TilemapController : IController,      
+        ISubscriber<OnTilemapSelectionBoxClicked>,
         ISubscriber<OnTilemapDrawClicked>, ISubscriber<OnTilemapGridClicked>, ISubscriber<OnTilePatternGenerated>, ISubscriber<OnDrawModeMouseClicked>,
         ISubscriber<OnEraseModeMouseClicked>, ISubscriber<OnCollisionModeMouseClicked>, ISubscriber<OnTilemapEraseClicked>, ISubscriber<OnTilemapCollisionClicked>,
         ISubscriber<OnTilemapLayerVisibilityChanged>, ISubscriber<OnTilemapResizeClicked>, ISubscriber<OnTilemapRedoClicked>, ISubscriber<OnTilemapUndoClicked>
@@ -35,9 +34,10 @@ namespace Osc.Rotch.Editor.Controllers
 
         private readonly IEventAggregator eventAggregator;
 
-        private readonly IRepository<Tilemap> repository;
+        private readonly IRepository<Tilemap> tilemapRepository;
+        private readonly IRepository<TilemapAsset> tilemapAssetRepository;
 
-        public TilemapController(ITilemapDocumentView tilemapDocumentView, ICommandManager commandManager, IEventAggregator eventAggregator, IRepository<Tilemap> tilemapRepository)
+        public TilemapController(ITilemapDocumentView tilemapDocumentView, ICommandManager commandManager, IEventAggregator eventAggregator, IRepository<Tilemap> tilemapRepository, IRepository<TilemapAsset> tilemapAssetRepository)
         {
             this.view = tilemapDocumentView;
 
@@ -45,7 +45,8 @@ namespace Osc.Rotch.Editor.Controllers
 
             this.eventAggregator = eventAggregator;
 
-            this.repository = tilemapRepository;
+            this.tilemapRepository = tilemapRepository;
+            this.tilemapAssetRepository = tilemapAssetRepository;
 
             this.eventAggregator.Subscribe(this);
 
@@ -95,15 +96,13 @@ namespace Osc.Rotch.Editor.Controllers
                     CanExecute = () => { return item != null && (previousWidth != resize.TilemapWidth || previousHeight != resize.TilemapHeight); },
                     Execute = () =>
                     {
-                        this.view.Tilemap.FindTilemapLayers(t => { return true; }).ForEach(layer =>
-                        {
-                            layer.Resize(resize.TilemapWidth, resize.TilemapHeight);
-                        });
-
                         this.view.Tilemap.CollisionLayer.Resize(resize.TilemapWidth, resize.TilemapHeight);
 
                         this.view.Tilemap.Width = resize.TilemapWidth;
                         this.view.Tilemap.Height = resize.TilemapHeight;
+
+                        this.view.Tilemap.GroundLayer.Resize(resize.TilemapWidth, resize.TilemapHeight);
+                        this.view.Tilemap.ObjectLayer.Resize(resize.TilemapWidth, resize.TilemapHeight);
                     },
                     UnExecute = () =>
                     {
@@ -125,11 +124,25 @@ namespace Osc.Rotch.Editor.Controllers
 
                     if (item.Item.CheckState == ToggleState.On)
                     {
-                        this.view.Tilemap.FindTilemapLayers(l => l.ID == id).FirstOrDefault().IsVisble = true;
+                        if(this.view.Tilemap.GroundLayer.ID == id)
+                        {
+                            this.view.Tilemap.GroundLayer.IsVisble = true;
+                        }
+                        else if (this.view.Tilemap.ObjectLayer.ID == id)
+                        {
+                            this.view.Tilemap.ObjectLayer.IsVisble = true;
+                        }
                     }
                     else if(item.Item.CheckState == ToggleState.Off)
                     {
-                        this.view.Tilemap.FindTilemapLayers(l => l.ID == id).FirstOrDefault().IsVisble = false;
+                        if (this.view.Tilemap.GroundLayer.ID == id)
+                        {
+                            this.view.Tilemap.GroundLayer.IsVisble = false;
+                        }
+                        else if (this.view.Tilemap.ObjectLayer.ID == id)
+                        {
+                            this.view.Tilemap.ObjectLayer.IsVisble = false;
+                        }
                     }
                 },
             }, false, item.ClassName());
@@ -191,60 +204,49 @@ namespace Osc.Rotch.Editor.Controllers
 
         public void OnEvent(OnDrawModeMouseClicked item)
         {
-            Layer<TileVisual> layer = this.view.Tilemap.FindLayerByIndex(this.view.TilemapLayersListBox.SelectedIndex);
+            var node = this.view.TilemapLayersListBox.SelectedItem;
 
-            TilePattern pattern = this.view.TilePattern;
-
-            if (layer == null || pattern == null)
-                return;
-
-            Point coordinates = MathExtension.IsoPixelsToCoordinate(this.view.TilePattern.Position, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight);
-
-            int startX = coordinates.X;
-            int startY = coordinates.Y;
-
-            //int width = this.view.TilePattern.Pattern.GetLength(0);
-            //int height = this.view.TilePattern.Pattern.GetLength(1);
-
-            //TileVisual[,] oldSection = layer.FindSection(startX, startY, width, height);
-            
             commandManager.ExecuteCommand(new Command()
             {
-                Name = "Drawn Pattern",
-                CanExecute = () => { return item != null && this.view.TilePattern != null && layer != null; },
+                Name = "Drawn Tilemap Asset",
+                CanExecute = () => { return item != null && this.view.TilePattern != null  && tilemapAssetRepository.Find(t => t.ID == this.view.TilePattern.ID) != null && node != null; },
                 Execute = () =>
-                {  
-                    //for(int x = 0; x < width; x++)
-                    //{
-                    //    for(int y = 0; y < height; y++)
-                    //    {
-                    //        //layer.Columns[x + startX].Rows[y + startY].TilesetIndex = pattern.Pattern[x, y];
-                    //        //layer.Columns[x + startX].Rows[y + startY].TilesetName = pattern.Tileset.TextureName;
+                {
+                    TilemapAsset asset = tilemapAssetRepository.Find(t => t.ID == this.view.TilePattern.ID);
 
-                    //        //TileVisual tile = layer.GetTile(x + startX, y + startY);
+                    this.view.TilePattern.FindAllTilesetNames().ForEach(t =>
+                    {
+                        AddTileset(t);
+                    });
 
-                    //        //Point isoCoordinate = MathExtension.OrthogonalToIsoCoordinate(x + startX, y + startY, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight);
+                    Layer<TilemapAsset> layer = null;
 
-                    //        //TileVisual tile = layer.GetTile(isoCoordinate.X, isoCoordinate.Y);
+                    if(this.view.Tilemap.GroundLayer.ID.ToString() == node.Tag.ToString())
+                    {
+                        layer = this.view.Tilemap.GroundLayer;
+                    }
+                    else if(this.view.Tilemap.ObjectLayer.ID.ToString() == node.Tag.ToString())
+                    {
+                        layer = this.view.Tilemap.ObjectLayer;
+                    }
+                    // Invert Camera
+                    Point coordinate = MathExtension.IsoPixelsToCoordinate(this.view.TilePattern.Position, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight);
 
-                    //        //if (tile != null)
-                    //        //{
-                    //        //    tile.TilesetIndex = pattern.Pattern[x, y];
-                    //        //    tile.TilesetName = pattern.Tileset.TextureName;
-                    //        //}
-                    //    }
-                    //}
+                    if(MathExtension.CoordinateWithinBounds(coordinate.X, coordinate.Y, layer.Width, layer.Height))
+                    {
+                        layer.Columns[coordinate.X].Rows[coordinate.Y] = asset;
+                    }
                 },
                 UnExecute = () =>
                 {
-                    
+
                 }
             }, true, item.ClassName());
         }
 
         public void OnEvent(OnEraseModeMouseClicked item)
         {
-            Layer<TileVisual> layer = this.view.Tilemap.FindLayerByIndex(this.view.TilemapLayersListBox.SelectedIndex);
+            /*Layer<TileVisual> layer = this.view.Tilemap.FindLayerByIndex(this.view.TilemapLayersListBox.SelectedIndex);
                        
             if (layer == null)
                 return;
@@ -305,7 +307,7 @@ namespace Osc.Rotch.Editor.Controllers
                         }
                     });
                 }
-            }, true, item.ClassName());
+            }, true, item.ClassName());*/
         }
 
         public void OnEvent(OnTilePatternGenerated item)
@@ -368,297 +370,65 @@ namespace Osc.Rotch.Editor.Controllers
                     this.view.TilemapState = Enums.TilemapStates.Selection;
                 },
             }, false, item.ClassName());
-        }
+        }      
 
-        public void OnEvent(OnRenameTilemapLayer item)
+        public void ApplyTilePattern(TilePattern pattern)
         {
             commandManager.ExecuteCommand(new Command()
             {
-                Name = "Renamed Layer",
-                CanExecute = () => { return item != null && item.Item != null && this.view.Tilemap.FindTilemapLayers(l => l.Name == item.Item.Text).FirstOrDefault() != null; },
+                Name = "Pattern Changed",
+                CanExecute = () => { return pattern != null && pattern.Pattern != null && pattern.Pattern.Any(); },
                 Execute = () =>
                 {
-                    ListItemRenameView renameView = new ListItemRenameView(item.Item.Text);
-
-                    if(renameView.ShowDialog() == DialogResult.OK)
-                    {
-                        string layerName = renameView.ItemValue;
-
-                        Layer<TileVisual> layer = this.view.Tilemap.FindTilemapLayers(l => l.Name == item.Item.Text).FirstOrDefault();
-
-                        if (string.IsNullOrEmpty(layerName))
-                            return;
-
-                        layer.Name = layerName;
-                        item.Item.Text = layerName;
-                    }
+                    this.view.TilePattern = pattern;
                 },
-            }, false, item.ClassName());
-        }
-
-        public void OnEvent(OnMoveTilemapLayerDown item)
-        {
-            commandManager.ExecuteCommand(new Command()
-            {
-                Name = "Moved Layer Down",
-                CanExecute = () => { return item != null && item.Item != null && this.view.SelectedTilemapLayer != null; },
-                Execute = () =>
-                {
-                    Guid id = (Guid)this.view.SelectedTilemapLayer.Tag;
-
-                    Layer<TileVisual> layer = this.view.Tilemap.FindTilemapLayers(l => l.ID == id).FirstOrDefault();
-
-                    int index = this.view.Tilemap.FindLayerIndex(layer);
-
-                    //this.view.TilemapLayersListBox.Items.Swap(index, index + 1);
-                    this.view.Tilemap.MoveLayerDown(index);
-
-                    this.RefreshTilemapLayersControl();
-                },
-                UnExecute = () => { },
-            }, false, item.ClassName());
-        }
-
-        public void OnEvent(OnMoveTilemapLayerUp item)
-        {
-            commandManager.ExecuteCommand(new Command()
-            {
-                Name = "Moved Layer Up",
-                CanExecute = () => { return item != null && item.Item != null && this.view.SelectedTilemapLayer != null; },
-                Execute = () =>
-                {
-                    Guid id = (Guid)this.view.SelectedTilemapLayer.Tag;
-
-                    Layer<TileVisual> layer = this.view.Tilemap.FindTilemapLayers(l => l.ID == id).FirstOrDefault();
-
-                    int index = this.view.Tilemap.FindLayerIndex(layer);
-
-                    //this.view.TilemapLayersListBox.Items.Swap(index, index - 1);
-                    this.view.Tilemap.MoveLayerUp(index);
-
-                    this.RefreshTilemapLayersControl();
-                },
-                UnExecute = () => { },
-            }, false, item.ClassName());
-        }
-
-        public void OnEvent(OnRemoveTilemapLayer item)
-        {
-            string name = item.ClassName();
-
-            commandManager.ExecuteCommand(new Command()
-            {
-                Name = name,
-                CanExecute = () => { return item != null && item.Item != null && (item.Item.Tag as Guid?) != null; },
-                Execute = () =>
-                {
-                    Guid id = (Guid)item.Item.Tag;
-
-                    this.view.Tilemap.RemoveTilemapLayer(id);
-                    this.view.TilemapLayersListBox.Items.Remove(item.Item);
-                },
-                UnExecute = () => { },
-            }, false, name);
-        }
-
-        public void OnEvent(OnAddTilemapLayer item)
-        {
-            string name = item.ClassName();
-
-            commandManager.ExecuteCommand(new Command()
-            {
-                Name = name,
-                CanExecute = () => { return true; },
-                Execute = () =>
-                {
-                    Guid id = Guid.NewGuid();
-
-                    this.view.Tilemap.AddTilemapLayer(id, Consts.Editor.TilemapLayerName, string.Empty);
-                    this.view.TilemapLayersListBox.Items.Add(new ListViewDataItem() { Text = Consts.Editor.TilemapLayerName, Tag = id, CheckState = ToggleState.On });
-                },
-                UnExecute = () => { },
-            }, false, name);
-        }
-
-        public void OnEvent(OnRemoveTileset item)
-        {
-            string name = item.ClassName();
-
-            commandManager.ExecuteCommand(new Command()
-            {
-                Name = name,
-                CanExecute = () => { return item != null && item.Page != null; },
-                Execute = () =>
-                {
-                    DialogResult dialog = RadMessageBox.Show(Consts.AlertMessages.Messages.RemoveTileset, Consts.AlertMessages.Captions.RemoveTileset, MessageBoxButtons.YesNo, RadMessageIcon.Question, MessageBoxDefaultButton.Button2);
-
-                    if (dialog == DialogResult.Yes)
-                    {
-                        // Get id of tileset
-                        Guid tilesetID = this.view.Tilemap.FindTilesets(t => t.TextureName == item.Page.Name).FirstOrDefault().ID;
-
-                        // Remove from model
-                        this.view.Tilemap.RemoveTileset(tilesetID);
-
-                        // Remove from toolbox
-                        this.view.TilesetPages.Pages.Remove(item.Page);
-
-                        this.view.TilePattern = null;
-                    }
-                },
-                UnExecute = () => { },
-
-            }, false, name);
-        }
-
-        public void OnEvent(OnAddTilesetTexture item)
-        {
-            string name = item.ClassName();
-
-            commandManager.ExecuteCommand(new Command()
-            {
-                Name = name,
-                CanExecute = () => { return true; },
-                Execute = () =>
-                {
-                    // Open file dialog to find png
-                    using (OpenFileDialog dialog = new OpenFileDialog())
-                    {
-                        dialog.Filter = "Image Files (.png)|*.png;";
-                        dialog.Multiselect = false;
-                        dialog.RestoreDirectory = true;
-
-                        if (dialog.ShowDialog() == DialogResult.OK)
-                        {
-                            // Get filepath
-                            string filePath = dialog.FileName;
-                            string fileName = Path.GetFileName(filePath);
-
-                            // Check paths
-                            if (!Directory.Exists(Consts.OscPaths.TexturesDirectory))
-                            {
-                                Directory.CreateDirectory(Consts.OscPaths.TexturesDirectory);
-                            }
-
-
-                            if (File.Exists(Consts.OscPaths.TexturesDirectory + @"\" + fileName))
-                            {
-                                RadMessageBox.Show(Consts.AlertMessages.Messages.ImageAlreadyExists, Consts.AlertMessages.Captions.ImageAlreadyExists, MessageBoxButtons.OK, RadMessageIcon.Exclamation);
-                            }
-                            else
-                            {
-                                // Copy file into osc path
-                                File.Copy(filePath, Consts.OscPaths.TexturesDirectory + @"\" + fileName);
-                                item.List.Items.Add(fileName);
-                            }
-                        }
-                    }
-                },
-                UnExecute = () => { },
-            }, false, name);
-        }
-
-        public void OnEvent(OnSelectTilesetTexture item)
-        {
-            string name = item.ClassName();
-
-            commandManager.ExecuteCommand(new Command()
-            {
-                Name = "Added tileset object to tilemap",
-                CanExecute = () => { return true; },
-                Execute = () =>
-                {
-                    // Create new tileset
-                    Tileset tileset = new Tileset()
-                    {
-                        ID = Guid.NewGuid(),
-                        Name = Path.GetFileNameWithoutExtension(item.FileName),
-                        TextureName = item.FileName,
-                        Texture = XnaHelper.Instance.LoadTexture(Consts.OscPaths.TexturesDirectory + @"\" + item.FileName),
-                    };
-
-                    this.view.TilesetPages.Pages.Add(new TilesetPage(eventAggregator)
-                    {
-                        Tileset = tileset,
-                        Text = Path.GetFileNameWithoutExtension(item.FileName),
-                        Name = item.FileName,
-                    });
-
-                    this.view.Tilemap.AddTileset(tileset);
-                },
-                UnExecute = () => { },
-            }, false, name);
-        }
-
-        public void OnEvent(OnAddTileset item)
-        {
-            string name = item.ClassName();
-
-            commandManager.ExecuteCommand(new Command()
-            {
-                Name = "Opened tileset dialog",
-                CanExecute = () => { return true; },
-                Execute = () =>
-                {
-                    TilesetListView dialog = new TilesetListView(eventAggregator);
-                    dialog.ShowDialog();
-                },
-                UnExecute = () => { },
-            }, false, name);
+            }, false);
         }
 
         private void LoadTilemap()
         {
             
-                commandManager.ExecuteCommand(new Command()
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Loaded Tilemap",
+                CanExecute = () => { return this.view.Tilemap != null; },
+                Execute = () =>
                 {
-                    Name = "Loaded Tilemap",
-                    CanExecute = () => { return this.view.Tilemap != null; },
-                    Execute = () =>
-                    {
-                        Tilemap tilemap = this.view.Tilemap;
-
-                        tilemap.FindTilemapLayers(t => { return true; }).ForEach(layer =>
-                        {
-                            int index = tilemap.FindLayerIndex(layer);
-
-                            this.view.TilemapLayersListBox.Items.Insert(index, new ListViewDataItem() { Text = layer.Name, Tag = layer.ID, CheckState = ToggleState.On });
-
-                            layer.IsVisble = true;
-                        });
-
-                        tilemap.FindTilesets(t => { return true; }).ForEach(tileset =>
-                        {
+                    Tilemap tilemap = this.view.Tilemap;
+                   
+                    this.view.TilemapLayersListBox.Items.Insert(this.view.TilemapLayersListBox.Items.Count, new ListViewDataItem() { Text = tilemap.GroundLayer.Name, Tag = tilemap.GroundLayer.ID, CheckState = ToggleState.On });
+                    this.view.TilemapLayersListBox.Items.Insert(this.view.TilemapLayersListBox.Items.Count, new ListViewDataItem() { Text = tilemap.ObjectLayer.Name, Tag = tilemap.ObjectLayer.ID, CheckState = ToggleState.On });
+                    //tilemap.FindTilesets(t => { return true; }).ForEach(tileset =>
+                    //{
                            
-                                this.view.TilesetPages.Pages.Add(new TilesetPage(eventAggregator)
-                                {
-                                    Tileset = tileset,
-                                    Text = tileset.TextureName,
-                                    Name = tileset.TextureName,
-                                });
+                    //        this.view.TilesetPages.Pages.Add(new TilesetPage(eventAggregator)
+                    //        {
+                    //            Tileset = tileset,
+                    //            Text = tileset.TextureName,
+                    //            Name = tileset.TextureName,
+                    //        });
                           
-                        });
-                    },
-                }, false);
+                    //});
+                },
+            }, false);
            
             
         }
 
-        private void RefreshTilemapLayersControl()
+        private void AddTileset(string name)
         {
-            this.view.TilemapLayersListBox.Items.Clear();
+            if (view.Tilemap.FindTilesets(t => t.TextureName == name).Any())
+                return;
 
-            Tilemap tilemap = this.view.Tilemap;
-
-            tilemap.FindTilemapLayers(t => { return true; }).ForEach(layer =>
+            Tileset tileset = new Tileset()
             {
-                int index = tilemap.FindLayerIndex(layer);
+                ID = Guid.NewGuid(),
+                Name = Path.GetFileNameWithoutExtension(name),
+                TextureName = name,
+                Texture = XnaHelper.Instance.LoadTexture(Consts.OscPaths.TexturesDirectory + @"\" + name),
+            };
 
-                this.view.TilemapLayersListBox.Items.Insert(index, new ListViewDataItem() { Text = layer.Name, Tag = layer.ID, CheckState = ToggleState.On });
-
-                layer.IsVisble = true;
-
-            });
+            this.view.Tilemap.AddTileset(tileset);
         }
     }
 }

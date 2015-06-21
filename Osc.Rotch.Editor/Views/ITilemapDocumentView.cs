@@ -15,14 +15,10 @@ namespace Osc.Rotch.Editor.Views
         Guid ID { get; set; }
         Tilemap Tilemap { get; set; }
 
-        RadPageView TilesetPages { get; set; }
-        TilesetPage SelectedTilesetPage { get; }
         ListViewDataItem SelectedTilemapLayer { get; }
         RadCheckedListBox TilemapLayersListBox { get; }
 
         Osc.Rotch.Engine.Common.Enums.TilemapStates TilemapState { get; set; }
         TilePattern TilePattern { get; set; }
-
-        void HideCloseButtonForPage(RadPageViewPage page);
     }
 }

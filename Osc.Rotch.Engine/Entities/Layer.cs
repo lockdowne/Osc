@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace Osc.Rotch.Engine.Entities
 {
-    [DataContract]
+    [DataContract(Namespace="")]
     public class Layer<T> : IEntity where T : ITile
     {
         [DataContract]

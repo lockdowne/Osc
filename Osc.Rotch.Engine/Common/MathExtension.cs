@@ -48,7 +48,7 @@ namespace Osc.Rotch.Engine.Common
 
         public static Vector2 IsoCoordinateToPixels(int x, int y, int tileWidth, int tileHeight, int offsetX, int offsetY)
         {
-            return new Vector2((x - y) * (tileWidth / 2) - (offsetX), (x + y) * (tileHeight / 2) - (offsetY));
+            return new Vector2((int)((x - y) * (tileWidth / 2) - (offsetX)), (int)((x + y) * (tileHeight / 2) - (offsetY)));
         }
 
         /// <summary>

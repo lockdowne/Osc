@@ -175,6 +175,6 @@ namespace Osc.Rotch.Engine.Entities
                 return;
 
             spriteBatch.Draw(CurrentAnimation.Texture, Position, CurrentAnimation.FrameBounds, Tint, Rotation, Vector2.Zero, Scale, SpriteEffects.None, DepthValue);
-        }
-    }
+        }         
+    } 
 }

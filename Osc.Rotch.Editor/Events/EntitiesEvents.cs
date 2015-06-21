@@ -71,4 +71,9 @@ namespace Osc.Rotch.Editor.Events
 
         public string Name { get; set; }
     }
+
+    public class OnTilemapAssetNodeClicked
+    {
+        public EntitiesChildNode Node { get; set; }
+    }
 }

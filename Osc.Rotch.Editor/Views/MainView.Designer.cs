@@ -68,14 +68,14 @@
             this.radDock.Controls.Add(this.documentContainer1);
             this.radDock.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radDock.IsCleanUpTarget = true;
-            this.radDock.Location = new System.Drawing.Point(0, 167);
+            this.radDock.Location = new System.Drawing.Point(0, 162);
             this.radDock.MainDocumentContainer = this.documentContainer1;
             this.radDock.Name = "radDock";
             // 
             // 
             // 
             this.radDock.RootElement.MinSize = new System.Drawing.Size(0, 0);
-            this.radDock.Size = new System.Drawing.Size(792, 377);
+            this.radDock.Size = new System.Drawing.Size(792, 382);
             this.radDock.TabIndex = 2;
             this.radDock.TabStop = false;
             this.radDock.Text = "radDock1";
@@ -99,7 +99,7 @@
             this.ribbonTab2});
             this.radRibbonBar1.Location = new System.Drawing.Point(0, 0);
             this.radRibbonBar1.Name = "radRibbonBar1";
-            this.radRibbonBar1.Size = new System.Drawing.Size(792, 167);
+            this.radRibbonBar1.Size = new System.Drawing.Size(792, 162);
             this.radRibbonBar1.TabIndex = 3;
             this.radRibbonBar1.Text = "Rotch Editor";
             this.radRibbonBar1.Click += new System.EventHandler(this.radRibbonBar1_Click);

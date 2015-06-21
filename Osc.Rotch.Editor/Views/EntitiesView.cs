@@ -200,6 +200,19 @@ namespace Osc.Rotch.Editor.Views
                 }
             };
 
+            this.radTreeView.NodeMouseClick += (sender, e) =>
+            {
+                EntitiesChildNode child = SelectedNode as EntitiesChildNode;
+
+                if (child == null)
+                    return;
+
+                if(child.EntityType == Enums.EntityTypes.TilemapAssets)
+                {
+                    this.eventAggregator.Publish(new OnTilemapAssetNodeClicked() { Node = child });
+                }
+            };
+
             this.CloseAction = DockWindowCloseAction.Hide;
 
             Name = Consts.Editor.Windows.Entities;

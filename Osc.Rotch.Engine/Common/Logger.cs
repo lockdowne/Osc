@@ -44,12 +44,19 @@ namespace Osc.Rotch.Engine.Common
 
             logPath = Consts.OscPaths.MainDirectory + @"\Log [" + DateTime.Today.ToString("d").Replace('/', '.') + "].xml";
 
-            if (CheckPath())
+            try
             {
-                if (File.Exists(logPath))
+                if (CheckPath())
                 {
-                    Logs = Serializer.Deserialize<List<LogEntry>>(logPath);
+                    if (File.Exists(logPath))
+                    {
+                        Logs = Serializer.Deserialize<List<LogEntry>>(logPath);
+                    }
                 }
+            }
+            catch(Exception)
+            {
+
             }
         }
 
@@ -91,7 +98,7 @@ namespace Osc.Rotch.Engine.Common
 
                     Logs.Add(logEntry);
 
-                    Serializer.SerializeAsync(Logs, logPath);
+                    Serializer.Serialize(Logs, logPath);
 
                     if (OnLogged != null)
                         OnLogged(logEntry);
