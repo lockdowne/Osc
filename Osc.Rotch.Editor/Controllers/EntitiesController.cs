@@ -19,21 +19,24 @@ using System.Windows.Forms;
 namespace Osc.Rotch.Editor.Controllers
 {
     public class EntitiesController : IEntitiesController, ISubscriber<OnCreateTilemapNode>, ISubscriber<OnEditTilemapNodeClicked>, ISubscriber<OnDeleteTilemapNodeClicked>,
-        ISubscriber<OnTilemapPropertiesSaved>
+        ISubscriber<OnTilemapPropertiesSaved>, ISubscriber<OnCreateTilemapAssetsNode>, ISubscriber<OnEditTilemapAssetsNodeClicked>, ISubscriber<OnDeleteTilemapAssetsNodeClicked>,
+        ISubscriber<OnTilemapAssetPropertiesSaved>
     {
         private readonly IEntitiesView view;
 
         private readonly ICommandManager commandManager;
 
         private readonly IRepository<Tilemap> tilemapRepository;
+        private readonly IRepository<TilemapAsset> tilemapAssetRepository;
 
         private readonly IEventAggregator eventAggregator;
 
-        public EntitiesController(IEntitiesView entitiesView, ICommandManager commandManager, IRepository<Tilemap> tilemapRepository, IEventAggregator eventAggregator)
+        public EntitiesController(IEntitiesView entitiesView, ICommandManager commandManager, IEventAggregator eventAggregator, IRepository<Tilemap> tilemapRepository, IRepository<TilemapAsset> tilemapAssetRepository)
         {
             this.view = entitiesView;
             this.commandManager = commandManager;
             this.tilemapRepository = tilemapRepository;
+            this.tilemapAssetRepository = tilemapAssetRepository;
             this.eventAggregator = eventAggregator;
 
             this.eventAggregator.Subscribe(this);
@@ -58,7 +61,85 @@ namespace Osc.Rotch.Editor.Controllers
                 Description = "Populate all created nodes",
             }, false);
         }
+        public void OnEvent(OnDeleteTilemapAssetsNodeClicked item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Deleted Tilemap Asset",
+                CanExecute = () => { return item != null && item.Node != null && tilemapAssetRepository.Find(t => t.ID == item.Node.ID) != null; },
+                Execute = () =>
+                {
+                    TilemapAsset tilemapAsset = tilemapAssetRepository.Find(t => t.ID == item.Node.ID);
 
+                    tilemapAssetRepository.Remove(tilemapAsset);
+                    item.Node.Remove();
+                },
+            }, false, item.ClassName());
+        }
+
+        public void OnEvent(OnCreateTilemapAssetsNode item)
+        {
+            commandManager.ExecuteCommandAsync(new Command()
+            {
+                CanExecute = () =>
+                {
+                    return item != null && item.Root != null && item.Node != null;
+                },
+                Execute = () =>
+                {
+                    // Create empty tilemap
+                    TilemapAsset tilemapAsset = new TilemapAsset()
+                    {
+                        ID = item.Node.ID,
+                        Alpha = 1.0f,
+                        Name = Consts.Nodes.TilemapAsset,
+                        VisualLayers = new List<Layer<TileVisual>>(),
+                    };
+                    // Add to repo
+                    tilemapAssetRepository.Add(tilemapAsset);
+
+                    // Save tilemap
+                    //tilemapRepository.Save();
+
+                    // Add node to tree
+                    //item.Root.Nodes.Add(item.Node);
+                    if (this.view.TreeView.InvokeRequired)
+                    {
+                        this.view.TreeView.Invoke(new Action(() => { item.Root.Nodes.Add(item.Node); }));
+                    }
+                    else
+                    {
+                        item.Root.Nodes.Add(item.Node);
+                    }
+                },
+                UnExecute = () =>
+                {
+
+                },
+                Name = "Created New Tilemap Asset",
+                ID = Guid.NewGuid(),
+            }, false, item.ClassName());
+        }
+
+        public void OnEvent(OnEditTilemapAssetsNodeClicked item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Opened Tilemap Asset Properties Window",
+                CanExecute = () => { return item != null && tilemapAssetRepository.Find(t => t.ID == item.Node.ID) != null; },
+                Execute = () =>
+                {
+                    TilemapAsset tilemap = tilemapAssetRepository.Find(t => t.ID == item.Node.ID);
+
+                    TilemapAssetPropertiesView propertiesView = new TilemapAssetPropertiesView(eventAggregator);
+                    propertiesView.ID = tilemap.ID;
+                    propertiesView.TilemapAssetName = tilemap.Name;
+                    propertiesView.TilemapAssetDescription = tilemap.Description;
+                    propertiesView.ShowDialog();
+
+                },
+            }, false, item.ClassName());     
+        }
 
         public void OnEvent(OnTilemapPropertiesSaved item)
         {
@@ -74,6 +155,24 @@ namespace Osc.Rotch.Editor.Controllers
                     tilemap.Description = item.TilemapDescription;                                       
 
                     this.view.SelectedNode.Text = item.TilemapName;
+                },
+            }, false, item.ClassName());
+        }
+
+        public void OnEvent(OnTilemapAssetPropertiesSaved item)
+        {
+            commandManager.ExecuteCommand(new Command()
+            {
+                Name = "Tilemap properties changed",
+                CanExecute = () => { return item != null && !string.IsNullOrEmpty(item.TilemapAssetName) && this.view.SelectedNode != null && tilemapAssetRepository.Find(t => t.ID == item.ID) != null; },
+                Execute = () =>
+                {
+                    TilemapAsset tilemap = tilemapAssetRepository.Find(t => t.ID == item.ID);
+
+                    tilemap.Name = item.TilemapAssetName;
+                    tilemap.Description = item.TilemapAssetDescription;
+
+                    this.view.SelectedNode.Text = item.TilemapAssetName;
                 },
             }, false, item.ClassName());
         }
@@ -111,8 +210,7 @@ namespace Osc.Rotch.Editor.Controllers
                     propertiesView.ShowDialog();
 
                 },
-            }, false, item.ClassName());
-                       
+            }, false, item.ClassName());                       
         }
 
         public void OnEvent(OnCreateTilemapNode item)
@@ -134,7 +232,7 @@ namespace Osc.Rotch.Editor.Controllers
                         ID = item.Node.ID,
                         IsGridVisible = true,
                     };
-                    tilemap.Initialize(Consts.Nodes.EmptyTilemap, string.Empty, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Configuration.Settings.SceneWidth, Configuration.Settings.SceneHeight);
+                    tilemap.Initialize(Consts.Nodes.Tilemap, string.Empty, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight, Configuration.Settings.SceneWidth, Configuration.Settings.SceneHeight);
 
                     // Add to repo
                     tilemapRepository.Add(tilemap);
@@ -165,24 +263,30 @@ namespace Osc.Rotch.Editor.Controllers
 
         private async void LoadAllNodes()
         {
-            await LoadTilemapNodes();
-        }
-
-        private Task LoadTilemapNodes()
-        {
-            return Task.Run(() =>
+            await Task.Run(() =>
             {
-                EntitiesRootNode rootNode = view.TreeView.Nodes.FirstOrDefault(node => node is EntitiesRootNode && ((EntitiesRootNode)node).EntityType == Enums.EntityTypes.Tilemaps) as EntitiesRootNode;
+                // Tilemaps
+                EntitiesRootNode tilemapRootNode = view.TreeView.Nodes.FirstOrDefault(node => node is EntitiesRootNode && ((EntitiesRootNode)node).EntityType == Enums.EntityTypes.Tilemaps) as EntitiesRootNode;
 
-                if (rootNode == null)
+                if (tilemapRootNode == null)
                     return;
-
 
                 tilemapRepository.FindAll(predicate => true).ForEach(tilemap =>
                 {
-                    rootNode.Nodes.Add(new EntitiesChildNode() { ID = tilemap.ID, Name = tilemap.ID.ToString(), Text = tilemap.Name, EntityType = Enums.EntityTypes.Tilemaps, ContextMenu = this.view.ContextMenuChild });
+                    tilemapRootNode.Nodes.Add(new EntitiesChildNode() { ID = tilemap.ID, Name = tilemap.ID.ToString(), Text = tilemap.Name, EntityType = Enums.EntityTypes.Tilemaps, ContextMenu = this.view.ContextMenuChild });
                 });
-            });                                                                                    
+
+                // Tilemap Assets
+                EntitiesRootNode tilemapAssetRootNode = view.TreeView.Nodes.FirstOrDefault(node => node is EntitiesRootNode && ((EntitiesRootNode)node).EntityType == Enums.EntityTypes.TilemapAssets) as EntitiesRootNode;
+
+                if (tilemapAssetRootNode == null)
+                    return;
+
+                tilemapAssetRepository.FindAll(predicate => true).ForEach(tilemap =>
+                {
+                    tilemapAssetRootNode.Nodes.Add(new EntitiesChildNode() { ID = tilemap.ID, Name = tilemap.ID.ToString(), Text = tilemap.Name, EntityType = Enums.EntityTypes.TilemapAssets, ContextMenu = this.view.ContextMenuChild });
+                });
+            });    
         }
     }
 }

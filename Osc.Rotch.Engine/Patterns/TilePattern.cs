@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Osc.Rotch.Engine.Common;
 using Osc.Rotch.Engine.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,13 @@ namespace Osc.Rotch.Engine.Patterns
 {
     public class TilePattern
     {
-        public int[,] Pattern { get; set; }
+        public Layer<TileVisual> Pattern { get; set; }
 
         public Vector2 Position { get; set; }
 
         public Vector2 Origin { get; set; }
 
-        public Tileset Tileset { get; set; }
+        public List<Tileset> Tilesets { get; set; }
 
         public int TileWidth { get; set; }
         public int TileHeight { get; set; }
@@ -31,22 +32,23 @@ namespace Osc.Rotch.Engine.Patterns
             if (Pattern == null)
                 return;
 
-            if (Tileset == null)
-                return;
-
-            if (Tileset.Texture == null)
-                return;
-
-            for(int x = 0; x < Pattern.GetLength(0); x++)
+            for(int x = 0; x < Pattern.Width; x++)
             {
-                for(int y = 0; y < Pattern.GetLength(1); y++)
+                for(int y = 0; y < Pattern.Height; y++)
                 {
-                    int indexValue = Pattern[x, y];
+                    TileVisual tile = Pattern.Columns[x].Rows[y];
 
-                    if(indexValue >= 0)
+                    if(!string.IsNullOrEmpty(tile.TilesetName))
                     {
-                        spriteBatch.Draw(Tileset.Texture, new Vector2(((x * TileWidth) + Position.X) - Origin.X, ((y * TileHeight) + Position.Y) - Origin.Y),
-                            Tileset.GetSourceRectangle(indexValue, TileWidth, TileHeight), Tint * Alpha);
+                        if(tile.TilesetIndex >= 0)
+                        {
+                            Tileset tileset = Tilesets.FirstOrDefault(set => set.TextureName == tile.TilesetName);
+
+                            Vector2 position = MathExtension.IsoCoordinateToPixels(x, y, TileWidth, TileHeight);
+
+                            spriteBatch.Draw(tileset.Texture, new Vector2(position.X + Position.X - Origin.X, position.Y + Position.Y - Origin.Y),
+                                tileset.GetSourceRectangle(tile.TilesetIndex, TileWidth, TileHeight), Tint * Alpha);
+                        }
                     }
                 }
             }

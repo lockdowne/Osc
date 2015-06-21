@@ -151,4 +151,9 @@ namespace Osc.Rotch.Editor.Events
     {
 
     }
+
+    public class OnTilemapTruncateClicked
+    {
+
+    }
 }

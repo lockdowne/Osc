@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Osc.Rotch.Engine.Entities;
 
-namespace oEngine.Common
+namespace Osc.Rotch.Engine.Common
 {
     public static class MathExtension
     {
@@ -19,7 +20,7 @@ namespace oEngine.Common
         {
             return InvertMatrixAtVector(new Vector2(x, y), matrix);
         }
-        
+
         /// <summary>
         /// Applies correction to screen pixels to a matrix transformation
         /// </summary>
@@ -43,7 +44,7 @@ namespace oEngine.Common
         public static Vector2 IsoCoordinateToPixels(int x, int y, int tileWidth, int tileHeight)
         {
             return IsoCoordinateToPixels(x, y, tileWidth, tileHeight, 0, 0);
-        }        
+        }
 
         public static Vector2 IsoCoordinateToPixels(int x, int y, int tileWidth, int tileHeight, int offsetX, int offsetY)
         {
@@ -61,6 +62,12 @@ namespace oEngine.Common
         {
             return new Point((int)Math.Round(((vector.X / (tileWidth / 2)) + (vector.Y / (tileHeight / 2))) / 2),
                (int)Math.Round(((vector.Y / (tileHeight / 2)) - (vector.X / (tileWidth / 2))) / 2));
+        }
+
+        public static Point OrthogonalToIsoCoordinate(int x, int y, int tileWidth, int tileHeight)
+        {
+            Vector2 isoPixels = IsoCoordinateToPixels(x, y, tileWidth, tileHeight);
+            return IsoPixelsToCoordinate(isoPixels, tileWidth, tileHeight);
         }
 
         /// <summary>
@@ -105,43 +112,117 @@ namespace oEngine.Common
             // Prevent division by zero instead of throwing exception
             if (tileWidth <= 0 || tileHeight <= 0)
                 yield break;
-          
+
             int startX = Math.Min(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).X, IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).X);
             int startY = Math.Min(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).Y, IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).Y);
-            int width = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).X - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).X) ;
-            int height = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).Y - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).Y) ;         
+            int width = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).X - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).X);
+            int height = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).Y - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).Y);
 
             for (int x = startX - 1; x < startX + width; x++)
             {
-                for(int y = startY; y <= startY + height; y++)
-                {                    
+                for (int y = startY; y <= startY + height; y++)
+                {
                     yield return IsoCoordinateToPixels(x, y, tileWidth, tileHeight);
                 }
             }
         }
 
-        /// <summary>
-        /// Randomizes the elements within the list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        public static void Shuffle<T>(this IList<T> list)
+        public static Vector2 IsoSelector(Vector2 vector, int tileWidth, int tileHeight)
         {
-            Random rng = new Random();
-            int n = list.Count;
-            while (n > 1)
+            return IsoSelector(vector, vector, tileWidth, tileHeight).FirstOrDefault();
+        }      
+
+        public static IEnumerable<Point> CoordSelector(Vector2 startVector, Vector2 endVector, int tileWidth, int tileHeight)
+        {
+            // Prevent division by zero instead of throwing exception
+            if (tileWidth <= 0 || tileHeight <= 0)
+                yield break;
+
+            int startX = Math.Min(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).X, IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).X);
+            int startY = Math.Min(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).Y, IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).Y);
+            int width = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).X - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).X);
+            int height = Math.Abs(IsoPixelsToCoordinate(startVector, tileWidth, tileHeight).Y - IsoPixelsToCoordinate(endVector, tileWidth, tileHeight).Y);
+
+            for (int x = startX - 1; x < startX + width; x++)
             {
-                n--;
-                int k = rng.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+                for (int y = startY; y <= startY + height; y++)
+                {
+                    yield return new Point(x, y);
+                }
             }
+        }
+
+        public static Point CoordSelector(Vector2 vector, int tileWidth, int tileHeight)
+        {
+            return CoordSelector(vector, vector, tileWidth, tileHeight).FirstOrDefault();
         }
 
         public static bool CoordinateWithinBounds(int x, int y, int width, int height)
         {
             return x >= 0 && y >= 0 && x < width && y < height;
         }
+
+        public static Layer<TileVisual> Truncate(Layer<TileVisual> layer)
+        {
+            int? startX = null;
+            int? startY = null;
+            int? width = null;
+            int? height = null;
+
+            for (int x = 0; x < layer.Width; x++)
+            {
+                for (int y = 0; y < layer.Height; y++)
+                {
+                    if (!string.IsNullOrEmpty(layer.Columns[x].Rows[y].TilesetName))
+                    {
+                        if (startY == null)
+                            startY = y;
+
+                        startY = Math.Min(startY.Value, y);
+
+                        if (startX == null)
+                            startX = x;
+
+                        startX = Math.Min(startX.Value, x);
+
+                        if (width == null)
+                            width = x;
+
+                        width = Math.Max(width.Value, x);
+
+                        if (height == null)
+                            height = y;
+
+                        height = Math.Max(height.Value, y);
+                    }
+                }
+            }
+
+            if (startX == null || startY == null || width == null || height == null)
+                return layer;
+
+            int newWidth = width.Value - startX.Value + 1;
+            int newHeight = height.Value - startY.Value + 1;
+            
+            TileVisual[,] box = layer.FindSection(startX.Value, startY.Value, newWidth, newHeight);
+            Layer<TileVisual> newLayer = new Layer<TileVisual>();
+            newLayer.Initialize(newWidth, newHeight);
+            newLayer.IsVisble = layer.IsVisble;
+            newLayer.Alpha = layer.Alpha;
+            newLayer.ID = layer.ID;
+            newLayer.Name = layer.Name;
+
+            for (int x = 0; x < newWidth; x++)
+            {
+                for (int y = 0; y < newHeight; y++)
+                {
+                    newLayer.Columns[x].Rows[y].TilesetIndex = box[x, y].TilesetIndex;
+                    newLayer.Columns[x].Rows[y].TilesetName = box[x, y].TilesetName;
+                }
+            }
+
+            return newLayer;
+
+        }      
     }
 }

@@ -39,6 +39,7 @@
             this.radRibbonBarGroup3 = new Telerik.WinControls.UI.RadRibbonBarGroup();
             this.btnSettings = new Telerik.WinControls.UI.RadButtonElement();
             this.btnTheme = new Telerik.WinControls.UI.RadButtonElement();
+            this.btnResetSettings = new Telerik.WinControls.UI.RadButtonElement();
             this.ribbonTab2 = new Telerik.WinControls.UI.RibbonTab();
             this.radRibbonBarGroup2 = new Telerik.WinControls.UI.RadRibbonBarGroup();
             this.chkConsoleWindow = new Telerik.WinControls.UI.RadCheckBoxElement();
@@ -46,7 +47,6 @@
             this.chkEntitiesWindow = new Telerik.WinControls.UI.RadCheckBoxElement();
             this.radRibbonBarButtonGroup2 = new Telerik.WinControls.UI.RadRibbonBarButtonGroup();
             this.radRibbonBarButtonGroup3 = new Telerik.WinControls.UI.RadRibbonBarButtonGroup();
-            this.btnResetSettings = new Telerik.WinControls.UI.RadButtonElement();
             ((System.ComponentModel.ISupportInitialize)(this.radStatusStrip)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock)).BeginInit();
             this.radDock.SuspendLayout();
@@ -68,14 +68,14 @@
             this.radDock.Controls.Add(this.documentContainer1);
             this.radDock.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radDock.IsCleanUpTarget = true;
-            this.radDock.Location = new System.Drawing.Point(0, 162);
+            this.radDock.Location = new System.Drawing.Point(0, 167);
             this.radDock.MainDocumentContainer = this.documentContainer1;
             this.radDock.Name = "radDock";
             // 
             // 
             // 
             this.radDock.RootElement.MinSize = new System.Drawing.Size(0, 0);
-            this.radDock.Size = new System.Drawing.Size(792, 382);
+            this.radDock.Size = new System.Drawing.Size(792, 377);
             this.radDock.TabIndex = 2;
             this.radDock.TabStop = false;
             this.radDock.Text = "radDock1";
@@ -99,9 +99,9 @@
             this.ribbonTab2});
             this.radRibbonBar1.Location = new System.Drawing.Point(0, 0);
             this.radRibbonBar1.Name = "radRibbonBar1";
-            this.radRibbonBar1.Size = new System.Drawing.Size(792, 162);
+            this.radRibbonBar1.Size = new System.Drawing.Size(792, 167);
             this.radRibbonBar1.TabIndex = 3;
-            this.radRibbonBar1.Text = "MainView";
+            this.radRibbonBar1.Text = "Rotch Editor";
             this.radRibbonBar1.Click += new System.EventHandler(this.radRibbonBar1_Click);
             // 
             // ribbonTab1
@@ -181,6 +181,17 @@
             this.btnTheme.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnTheme.Click += new System.EventHandler(this.btnTheme_Click);
             // 
+            // btnResetSettings
+            // 
+            this.btnResetSettings.AccessibleDescription = "Reset";
+            this.btnResetSettings.AccessibleName = "Reset";
+            this.btnResetSettings.Image = global::Osc.Rotch.Editor.Properties.Resources.recurring_appointment_32;
+            this.btnResetSettings.Name = "btnResetSettings";
+            this.btnResetSettings.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnResetSettings.Text = "Reset";
+            this.btnResetSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
+            // 
             // ribbonTab2
             // 
             this.ribbonTab2.AccessibleDescription = "View";
@@ -257,17 +268,6 @@
             this.radRibbonBarButtonGroup3.Name = "radRibbonBarButtonGroup3";
             this.radRibbonBarButtonGroup3.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.radRibbonBarButtonGroup3.Text = "radRibbonBarButtonGroup3";
-            // 
-            // btnResetSettings
-            // 
-            this.btnResetSettings.AccessibleDescription = "Reset";
-            this.btnResetSettings.AccessibleName = "Reset";
-            this.btnResetSettings.Image = global::Osc.Rotch.Editor.Properties.Resources.recurring_appointment_32;
-            this.btnResetSettings.Name = "btnResetSettings";
-            this.btnResetSettings.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnResetSettings.Text = "Reset";
-            this.btnResetSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
             // 
             // MainView
             // 

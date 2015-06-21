@@ -82,12 +82,12 @@ namespace Osc.Rotch.Engine.Managers
                 if (!redo.Any())
                     return;
 
-                Command command = undo.Pop();
-                command.UnExecute();
+                Command command = redo.Pop();
+                command.Execute();
 
                 logger.Log(command.Name);
 
-                redo.Push(command);
+                undo.Push(command);
             }
             catch (Exception exception)
             {

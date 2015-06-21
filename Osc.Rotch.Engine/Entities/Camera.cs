@@ -37,7 +37,7 @@ namespace Osc.Rotch.Engine.Entities
         /// Gets or sets rotation
         /// NOTE: Currently unused
         /// </summary>
-        private float Rotation { get; set; }
+        public float Rotation { get; set; }
 
         /// <summary>
         /// Gets or sets the cameras linear interpoliation amount

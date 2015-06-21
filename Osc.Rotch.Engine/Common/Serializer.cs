@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -81,17 +82,29 @@ namespace Osc.Rotch.Engine.Common
         public static Task SerializeAsync<T>(T obj, string path)
         {
             return Task.Run(() =>
+            {
+                DataContractSerializer xml = new DataContractSerializer(typeof(T));
+
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+
+                using (XmlWriter writer = XmlWriter.Create(path, settings))
                 {
-                    DataContractSerializer xml = new DataContractSerializer(typeof(T));
-
-                    XmlWriterSettings settings = new XmlWriterSettings();
-                    settings.Indent = true;
-
-                    using (XmlWriter writer = XmlWriter.Create(path, settings))
-                    {
-                        xml.WriteObject(writer, obj);
-                    }
-                });
+                    xml.WriteObject(writer, obj);
+                }
+            });
         }     
+
+        public static T Clone<T>(T obj)
+        {
+            DataContractSerializer xml = new DataContractSerializer(typeof(T));
+
+            using(MemoryStream stream = new MemoryStream())
+            {
+                xml.WriteObject(stream, obj);
+                stream.Seek(0, SeekOrigin.Begin);
+                return (T)xml.ReadObject(stream);
+            }
+        }
     }
 }

@@ -253,6 +253,16 @@ namespace Osc.Rotch.Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FrameSelected {
+            get {
+                object obj = ResourceManager.GetObject("FrameSelected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap grid_Toggle_16xLG {
             get {
                 object obj = ResourceManager.GetObject("grid_Toggle_16xLG", resourceCulture);

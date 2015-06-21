@@ -22,6 +22,7 @@ namespace Osc.Rotch.Engine.Common
         {
             public static readonly string Tilemaps = Directory.GetCurrentDirectory() + @"\Tilemaps.xml";
             public static readonly string Characters = Directory.GetCurrentDirectory() + @"\Characters.xml";
+            public static readonly string TilemapAssets = Directory.GetCurrentDirectory() + @"\TilemapAssets.xml";
         }
 
         public static class Nodes
@@ -30,6 +31,7 @@ namespace Osc.Rotch.Engine.Common
             public const string Tilemap = "Tilemap";
             public const string Character = "Character";
             public const string EmptyTilemap = "EmptyTilemap";
+            public const string TilemapAsset = "TilemapAsset";
         }       
 
         public static class Editor
@@ -52,7 +54,7 @@ namespace Osc.Rotch.Engine.Common
                 public const string ImageAlreadyExists = "An image with the same name already exists";
                 public const string SelectTilesetImage = "Select a tileset";
                 public const string RemoveTileset = "Are you sure you want to delete the selected tileset?";
-                public const string RemoveTilemap = "Are you sure you want to delete the selected tilemap?";
+                public const string RemoveEntity = "Are you sure you want to delete the selected entity?";
                 public const string NodeNameTaken = "Name is already in use.";
                 public const string ResetConfiguration = "Are you sure you want to reset the configuration";
             }
@@ -63,7 +65,7 @@ namespace Osc.Rotch.Engine.Common
                 public const string ImageAlreadyExists = "Hey Listen";
                 public const string SelectTilesetImage = "Hey Listen";
                 public const string RemoveTileset = "Hey Listen";
-                public const string RemoveTilemap = "Hey Listen";
+                public const string RemoveEntity = "Hey Listen";
                 public const string NodeNameTaken = "Hey Listen";
                 public const string ResetConfiguration = "Hey Listen";
             }

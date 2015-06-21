@@ -87,7 +87,7 @@ namespace Osc.Rotch.Engine.Entities
                 Column column = new Column();
 
                 for (int y = 0; y < height; y++)
-                {
+                {                    
                     column.Rows.Add((T)Activator.CreateInstance(typeof(T)));
                 }
 

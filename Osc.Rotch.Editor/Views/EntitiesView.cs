@@ -59,6 +59,13 @@ namespace Osc.Rotch.Editor.Views
                 ContextMenu = contextMenuRoot,
             });
 
+            radTreeView.Nodes.Add(new EntitiesRootNode()
+            {
+                EntityType = Enums.EntityTypes.TilemapAssets,
+                Text = Enums.EntityTypes.TilemapAssets.ToString(),
+                ContextMenu = contextMenuRoot,
+            });
+
             radTreeView.NodeMouseDoubleClick += (sender, e) =>
             {
                 EntitiesChildNode selectedNode = SelectedNode as EntitiesChildNode;
@@ -74,6 +81,9 @@ namespace Osc.Rotch.Editor.Views
                     case Enums.EntityTypes.Items:
                         break;
                     case Enums.EntityTypes.Quests:
+                        break;
+                    case Enums.EntityTypes.TilemapAssets:
+                        this.eventAggregator.Publish(new OnTilemapAssetsNodeDoubleClicked() { Node = selectedNode });
                         break;
                     case Enums.EntityTypes.Tilemaps:
                         this.eventAggregator.Publish(new OnTilemapNodeDoubleClicked() { Node = selectedNode });
@@ -98,7 +108,7 @@ namespace Osc.Rotch.Editor.Views
                 if (child == null)
                     return;
 
-                if (RadMessageBox.Show(Consts.AlertMessages.Messages.RemoveTilemap, Consts.AlertMessages.Captions.RemoveTilemap, System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                if (RadMessageBox.Show(Consts.AlertMessages.Messages.RemoveEntity, Consts.AlertMessages.Captions.RemoveEntity, System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
                 {
                     switch (child.EntityType)
                     {
@@ -107,6 +117,9 @@ namespace Osc.Rotch.Editor.Views
                         case Enums.EntityTypes.Items:
                             break;
                         case Enums.EntityTypes.Quests:
+                            break;
+                        case Enums.EntityTypes.TilemapAssets:
+                            this.eventAggregator.Publish(new OnDeleteTilemapAssetsNodeClicked() { Node = child });
                             break;
                         case Enums.EntityTypes.Tilemaps:
                             this.eventAggregator.Publish(new OnDeleteTilemapNodeClicked() { Node = child });
@@ -138,6 +151,9 @@ namespace Osc.Rotch.Editor.Views
                         break;
                     case Enums.EntityTypes.Quests:
                         break;
+                    case Enums.EntityTypes.TilemapAssets:
+                        this.eventAggregator.Publish(new OnEditTilemapAssetsNodeClicked() { Node = child });
+                        break;
                     case Enums.EntityTypes.Tilemaps:
                         this.eventAggregator.Publish(new OnEditTilemapNodeClicked() { Node = child });
                         break;
@@ -166,6 +182,9 @@ namespace Osc.Rotch.Editor.Views
                     case Enums.EntityTypes.Items:
                         break;
                     case Enums.EntityTypes.Quests:
+                        break;
+                    case Enums.EntityTypes.TilemapAssets:
+                        this.eventAggregator.Publish(new OnCreateTilemapAssetsNode() { Root = root, Node = new EntitiesChildNode() { Text = Consts.Nodes.TilemapAsset, ID = Guid.NewGuid(), ContextMenu = contextMenuChild, EntityType = Enums.EntityTypes.TilemapAssets } });
                         break;
                     case Enums.EntityTypes.Tilemaps:
                         this.eventAggregator.Publish(new OnCreateTilemapNode() { Root = root, Node = new EntitiesChildNode() { Text = Consts.Nodes.Tilemap, ID = Guid.NewGuid(), ContextMenu = contextMenuChild, EntityType = Enums.EntityTypes.Tilemaps } });

@@ -185,7 +185,7 @@ namespace Osc.Rotch.Editor.Controls
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.CameraTransformation);
 
             spriteBatch.Draw(Tileset.Texture, Vector2.Zero, null, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);          
-            spriteBatch.Draw(pixel, SelectionOrthogonalBox, Configuration.Settings.SelectionBoxColor * Configuration.Settings.SelectionBoxOpacity);
+            spriteBatch.Draw(pixel, SelectionOrthogonalBox, Configuration.Settings.SelectionBoxColor * Configuration.Settings.SelectionBoxOpacity);          
 
             spriteBatch.End();
         }
@@ -241,16 +241,23 @@ namespace Osc.Rotch.Editor.Controls
                 index += (Tileset.Texture.Width / tileWidth);
             }
 
+            // Above code isn't used for tilesets, instead we only allow for a selection of a single tile
+
+            Layer<TileVisual> layer = new Layer<TileVisual>();
+            layer.Initialize(1, 1);
+            layer.Columns[0].Rows[0].TilesetIndex = box[0, 0];
+            layer.Columns[0].Rows[0].TilesetName = Tileset.TextureName;
+
             return new TilePattern()
             {
                 Tint = Color.White,
                 Alpha = Configuration.Settings.TilePatternOpacity,
                 Origin = Vector2.Zero,
-                Pattern = box,
+                Pattern = layer,
                 Position = Vector2.Zero,
                 TileHeight = tileHeight,
                 TileWidth = tileWidth,
-                Tileset = Tileset
+                Tilesets = new List<Tileset>(new Tileset[] {  Tileset }),
             };
 
         }

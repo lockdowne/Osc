@@ -127,6 +127,7 @@
             this.Controls.Add(this.numericWidth);
             this.Controls.Add(this.radLabel2);
             this.Controls.Add(this.radLabel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "TilemapResizeView";
             // 
             // 

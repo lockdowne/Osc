@@ -13,12 +13,13 @@ using Osc.Rotch.Editor.Events;
 using Telerik.WinControls.Enumerations;
 using Osc.Rotch.Engine.Patterns;
 using Osc.Rotch.Engine.Aggregators;
+using Microsoft.Xna.Framework;
 
 namespace Osc.Rotch.Editor.Views
 {
-    public class AssetCreationView : RadForm
+    public class TilemapAssetDocumentView : DocumentWindow, ITilemapAssetDocumentView
     {
-        private IEventAggregator eventAggregator;
+        private readonly IEventAggregator eventAggregator;
 
         private RadDock radDockTilemap;
         private ToolWindow toolWindow1;
@@ -48,31 +49,40 @@ namespace Osc.Rotch.Editor.Views
         private CommandBarButton btnRemoveTilemapLayer;
         private CommandBarButton btnMoveTilemapLayerUp;
         private CommandBarButton btnMoveTilemapLayerDown;
-        private CommandBarButton btnMergeTilemapLayer;
         private CommandBarButton btnRenameTilemap;
         private CommandBarButton btnUndoTilemap;
         private CommandBarButton btnRedoTilemap;
-        private CommandBarButton btnResizeTilemap;
         private CommandBarToggleButton btnTilemapSelect;
         private CommandBarToggleButton btnTilemapDraw;
         private CommandBarToggleButton btnTilemapErase;
-        private CommandBarToggleButton btnTilemapCollision;
-        private CommandBarToggleButton btnTilemapHeight;
-        private CommandBarSeparator commandBarSeparator1;
-        private CommandBarButton btnTilemapCopy;
-        private CommandBarButton btnTilemapCut;
         private CommandBarSeparator commandBarSeparator2;
         private CommandBarSeparator commandBarSeparator3;
         private CommandBarToggleButton btnTilemapGrid;
         private CommandBarToggleButton commandBarToggleButton1;
-        private TilemapRender tilemapRender;
+        private CommandBarSeparator commandBarSeparator1;
+        private CommandBarButton btnCopyTilemap;
+        private CommandBarButton btnCutTilemap;
+        private CommandBarSeparator commandBarSeparator4;
+        private CommandBarButton btnTruncateTilemap;
+        private CommandBarButton btnTilemapResize;
+        private TilemapAssetRender tilemapRender;
 
         public Guid ID { get; set; }
 
-        public Tilemap Tilemap
+        public TilemapAssetEditor TilemapAssetEditor
         {
             get { return tilemapRender.Tilemap; }
             set { tilemapRender.Tilemap = value; }
+        }
+
+        public Vector2? SelectionBoxStart
+        {
+            get { return tilemapRender.SelectionBoxStart; }
+        }
+
+        public Vector2? SelectionBoxEnd
+        {
+            get { return tilemapRender.SelectionBoxEnd; }
         }
 
         public Osc.Rotch.Engine.Common.Enums.TilemapStates TilemapState
@@ -113,7 +123,7 @@ namespace Osc.Rotch.Editor.Views
             get { return radDockTilemap2.DocumentManager.ActiveDocument; }
         }
 
-        public AssetCreationView(IEventAggregator eventAggregator)
+        public TilemapAssetDocumentView(IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
 
@@ -160,19 +170,10 @@ namespace Osc.Rotch.Editor.Views
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TilemapDocumentView));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TilemapAssetDocumentView));
             this.radDockTilemap = new Telerik.WinControls.UI.Docking.RadDock();
             this.toolWindow1 = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.radDockTilemap2 = new Telerik.WinControls.UI.Docking.RadDock();
-            this.documentWindow4 = new Telerik.WinControls.UI.Docking.DocumentWindow();
-            this.radPageView1 = new Telerik.WinControls.UI.RadPageView();
-            this.radCommandBar2 = new Telerik.WinControls.UI.RadCommandBar();
-            this.commandBarRowElement2 = new Telerik.WinControls.UI.CommandBarRowElement();
-            this.commandBarStripElement2 = new Telerik.WinControls.UI.CommandBarStripElement();
-            this.btnAddTileset = new Telerik.WinControls.UI.CommandBarButton();
-            this.btnRemoveTileset = new Telerik.WinControls.UI.CommandBarButton();
-            this.documentContainer2 = new Telerik.WinControls.UI.Docking.DocumentContainer();
-            this.documentTabStrip2 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
             this.documentWindow3 = new Telerik.WinControls.UI.Docking.DocumentWindow();
             this.radCheckedListBox1 = new Telerik.WinControls.UI.RadCheckedListBox();
             this.radCommandBar3 = new Telerik.WinControls.UI.RadCommandBar();
@@ -182,12 +183,21 @@ namespace Osc.Rotch.Editor.Views
             this.btnRemoveTilemapLayer = new Telerik.WinControls.UI.CommandBarButton();
             this.btnMoveTilemapLayerUp = new Telerik.WinControls.UI.CommandBarButton();
             this.btnMoveTilemapLayerDown = new Telerik.WinControls.UI.CommandBarButton();
-            this.btnMergeTilemapLayer = new Telerik.WinControls.UI.CommandBarButton();
             this.btnRenameTilemap = new Telerik.WinControls.UI.CommandBarButton();
+            this.documentContainer2 = new Telerik.WinControls.UI.Docking.DocumentContainer();
+            this.documentTabStrip2 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
+            this.documentWindow4 = new Telerik.WinControls.UI.Docking.DocumentWindow();
+            this.radPageView1 = new Telerik.WinControls.UI.RadPageView();
+            this.radCommandBar2 = new Telerik.WinControls.UI.RadCommandBar();
+            this.commandBarRowElement2 = new Telerik.WinControls.UI.CommandBarRowElement();
+            this.commandBarStripElement2 = new Telerik.WinControls.UI.CommandBarStripElement();
+            this.btnAddTileset = new Telerik.WinControls.UI.CommandBarButton();
+            this.btnRemoveTileset = new Telerik.WinControls.UI.CommandBarButton();
             this.toolTabStrip1 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
             this.documentContainer1 = new Telerik.WinControls.UI.Docking.DocumentContainer();
             this.documentTabStrip1 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
             this.documentWindow1 = new Telerik.WinControls.UI.Docking.DocumentWindow();
+            this.tilemapRender = new Osc.Rotch.Editor.Controls.TilemapAssetRender();
             this.radCommandBar1 = new Telerik.WinControls.UI.RadCommandBar();
             this.commandBarRowElement1 = new Telerik.WinControls.UI.CommandBarRowElement();
             this.commandBarStripElement1 = new Telerik.WinControls.UI.CommandBarStripElement();
@@ -197,31 +207,30 @@ namespace Osc.Rotch.Editor.Views
             this.btnTilemapSelect = new Telerik.WinControls.UI.CommandBarToggleButton();
             this.btnTilemapDraw = new Telerik.WinControls.UI.CommandBarToggleButton();
             this.btnTilemapErase = new Telerik.WinControls.UI.CommandBarToggleButton();
-            this.btnTilemapCollision = new Telerik.WinControls.UI.CommandBarToggleButton();
-            this.btnTilemapHeight = new Telerik.WinControls.UI.CommandBarToggleButton();
-            this.commandBarSeparator1 = new Telerik.WinControls.UI.CommandBarSeparator();
-            this.btnTilemapCopy = new Telerik.WinControls.UI.CommandBarButton();
-            this.btnTilemapCut = new Telerik.WinControls.UI.CommandBarButton();
-            this.btnResizeTilemap = new Telerik.WinControls.UI.CommandBarButton();
             this.commandBarSeparator2 = new Telerik.WinControls.UI.CommandBarSeparator();
+            this.btnCopyTilemap = new Telerik.WinControls.UI.CommandBarButton();
+            this.btnCutTilemap = new Telerik.WinControls.UI.CommandBarButton();
+            this.commandBarSeparator1 = new Telerik.WinControls.UI.CommandBarSeparator();
             this.btnTilemapGrid = new Telerik.WinControls.UI.CommandBarToggleButton();
-            this.tilemapRender = new Osc.Rotch.Editor.Controls.TilemapRender();
+            this.commandBarSeparator4 = new Telerik.WinControls.UI.CommandBarSeparator();
+            this.btnTruncateTilemap = new Telerik.WinControls.UI.CommandBarButton();
             this.commandBarToggleButton1 = new Telerik.WinControls.UI.CommandBarToggleButton();
+            this.btnTilemapResize = new Telerik.WinControls.UI.CommandBarButton();
             ((System.ComponentModel.ISupportInitialize)(this.radDockTilemap)).BeginInit();
             this.radDockTilemap.SuspendLayout();
             this.toolWindow1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radDockTilemap2)).BeginInit();
             this.radDockTilemap2.SuspendLayout();
-            this.documentWindow4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).BeginInit();
+            this.documentWindow3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckedListBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer2)).BeginInit();
             this.documentContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip2)).BeginInit();
             this.documentTabStrip2.SuspendLayout();
-            this.documentWindow3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckedListBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar3)).BeginInit();
+            this.documentWindow4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip1)).BeginInit();
             this.toolTabStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).BeginInit();
@@ -230,7 +239,6 @@ namespace Osc.Rotch.Editor.Views
             this.documentTabStrip1.SuspendLayout();
             this.documentWindow1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // radDockTilemap
@@ -265,7 +273,7 @@ namespace Osc.Rotch.Editor.Views
             // 
             // radDockTilemap2
             // 
-            this.radDockTilemap2.ActiveWindow = this.documentWindow4;
+            this.radDockTilemap2.ActiveWindow = this.documentWindow3;
             this.radDockTilemap2.Controls.Add(this.documentContainer2);
             this.radDockTilemap2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radDockTilemap2.IsCleanUpTarget = true;
@@ -280,6 +288,135 @@ namespace Osc.Rotch.Editor.Views
             this.radDockTilemap2.TabIndex = 0;
             this.radDockTilemap2.TabStop = false;
             this.radDockTilemap2.Text = "radDock2";
+            // 
+            // documentWindow3
+            // 
+            this.documentWindow3.Controls.Add(this.radCheckedListBox1);
+            this.documentWindow3.Controls.Add(this.radCommandBar3);
+            this.documentWindow3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.documentWindow3.Location = new System.Drawing.Point(6, 29);
+            this.documentWindow3.Name = "documentWindow3";
+            this.documentWindow3.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
+            this.documentWindow3.Size = new System.Drawing.Size(503, 370);
+            this.documentWindow3.Text = "Layers";
+            // 
+            // radCheckedListBox1
+            // 
+            this.radCheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radCheckedListBox1.Location = new System.Drawing.Point(0, 30);
+            this.radCheckedListBox1.Name = "radCheckedListBox1";
+            this.radCheckedListBox1.Size = new System.Drawing.Size(503, 340);
+            this.radCheckedListBox1.TabIndex = 1;
+            this.radCheckedListBox1.Text = "radCheckedListBox1";
+            // 
+            // radCommandBar3
+            // 
+            this.radCommandBar3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.radCommandBar3.Location = new System.Drawing.Point(0, 0);
+            this.radCommandBar3.Name = "radCommandBar3";
+            this.radCommandBar3.Rows.AddRange(new Telerik.WinControls.UI.CommandBarRowElement[] {
+            this.commandBarRowElement3});
+            this.radCommandBar3.Size = new System.Drawing.Size(503, 30);
+            this.radCommandBar3.TabIndex = 0;
+            this.radCommandBar3.Text = "radCommandBar3";
+            // 
+            // commandBarRowElement3
+            // 
+            this.commandBarRowElement3.MinSize = new System.Drawing.Size(25, 25);
+            this.commandBarRowElement3.Strips.AddRange(new Telerik.WinControls.UI.CommandBarStripElement[] {
+            this.commandBarStripElement3});
+            // 
+            // commandBarStripElement3
+            // 
+            this.commandBarStripElement3.DisplayName = "commandBarStripElement3";
+            this.commandBarStripElement3.Items.AddRange(new Telerik.WinControls.UI.RadCommandBarBaseItem[] {
+            this.btnAddTilemapLayer,
+            this.btnRemoveTilemapLayer,
+            this.btnMoveTilemapLayerUp,
+            this.btnMoveTilemapLayerDown,
+            this.btnRenameTilemap});
+            this.commandBarStripElement3.Name = "commandBarStripElement3";
+            // 
+            // btnAddTilemapLayer
+            // 
+            this.btnAddTilemapLayer.AccessibleDescription = "commandBarButton1";
+            this.btnAddTilemapLayer.AccessibleName = "commandBarButton1";
+            this.btnAddTilemapLayer.DisplayName = "commandBarButton1";
+            this.btnAddTilemapLayer.Image = global::Osc.Rotch.Editor.Properties.Resources.AddMark_10580;
+            this.btnAddTilemapLayer.Name = "btnAddTilemapLayer";
+            this.btnAddTilemapLayer.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnAddTilemapLayer.Text = "commandBarButton1";
+            this.btnAddTilemapLayer.Click += new System.EventHandler(this.btnAddTilemapLayer_Click);
+            // 
+            // btnRemoveTilemapLayer
+            // 
+            this.btnRemoveTilemapLayer.AccessibleDescription = "commandBarButton2";
+            this.btnRemoveTilemapLayer.AccessibleName = "commandBarButton2";
+            this.btnRemoveTilemapLayer.DisplayName = "commandBarButton2";
+            this.btnRemoveTilemapLayer.Image = global::Osc.Rotch.Editor.Properties.Resources.Clearallrequests_8816;
+            this.btnRemoveTilemapLayer.Name = "btnRemoveTilemapLayer";
+            this.btnRemoveTilemapLayer.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnRemoveTilemapLayer.Text = "commandBarButton2";
+            this.btnRemoveTilemapLayer.Click += new System.EventHandler(this.btnRemoveTilemapLayer_Click);
+            // 
+            // btnMoveTilemapLayerUp
+            // 
+            this.btnMoveTilemapLayerUp.AccessibleDescription = "commandBarButton1";
+            this.btnMoveTilemapLayerUp.AccessibleName = "commandBarButton1";
+            this.btnMoveTilemapLayerUp.DisplayName = "commandBarButton1";
+            this.btnMoveTilemapLayerUp.Image = global::Osc.Rotch.Editor.Properties.Resources.arrow_Up_16xLG;
+            this.btnMoveTilemapLayerUp.Name = "btnMoveTilemapLayerUp";
+            this.btnMoveTilemapLayerUp.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnMoveTilemapLayerUp.Text = "commandBarButton1";
+            this.btnMoveTilemapLayerUp.Click += new System.EventHandler(this.btnMoveTilemapLayerUp_Click);
+            // 
+            // btnMoveTilemapLayerDown
+            // 
+            this.btnMoveTilemapLayerDown.AccessibleDescription = "commandBarButton2";
+            this.btnMoveTilemapLayerDown.AccessibleName = "commandBarButton2";
+            this.btnMoveTilemapLayerDown.DisplayName = "commandBarButton2";
+            this.btnMoveTilemapLayerDown.Image = global::Osc.Rotch.Editor.Properties.Resources.arrow_Down_16xLG;
+            this.btnMoveTilemapLayerDown.Name = "btnMoveTilemapLayerDown";
+            this.btnMoveTilemapLayerDown.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnMoveTilemapLayerDown.Text = "commandBarButton2";
+            this.btnMoveTilemapLayerDown.Click += new System.EventHandler(this.btnMoveTilemapLayerDown_Click);
+            // 
+            // btnRenameTilemap
+            // 
+            this.btnRenameTilemap.AccessibleDescription = "commandBarButton4";
+            this.btnRenameTilemap.AccessibleName = "commandBarButton4";
+            this.btnRenameTilemap.DisplayName = "commandBarButton4";
+            this.btnRenameTilemap.Image = global::Osc.Rotch.Editor.Properties.Resources.Rename_6779;
+            this.btnRenameTilemap.Name = "btnRenameTilemap";
+            this.btnRenameTilemap.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnRenameTilemap.Text = "commandBarButton4";
+            this.btnRenameTilemap.Click += new System.EventHandler(this.btnRenameTilemap_Click);
+            // 
+            // documentContainer2
+            // 
+            this.documentContainer2.Controls.Add(this.documentTabStrip2);
+            this.documentContainer2.Name = "documentContainer2";
+            // 
+            // 
+            // 
+            this.documentContainer2.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.documentContainer2.SizeInfo.SizeMode = Telerik.WinControls.UI.Docking.SplitPanelSizeMode.Fill;
+            // 
+            // documentTabStrip2
+            // 
+            this.documentTabStrip2.CanUpdateChildIndex = true;
+            this.documentTabStrip2.Controls.Add(this.documentWindow4);
+            this.documentTabStrip2.Controls.Add(this.documentWindow3);
+            this.documentTabStrip2.Location = new System.Drawing.Point(0, 0);
+            this.documentTabStrip2.Name = "documentTabStrip2";
+            // 
+            // 
+            // 
+            this.documentTabStrip2.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.documentTabStrip2.SelectedIndex = 1;
+            this.documentTabStrip2.Size = new System.Drawing.Size(515, 405);
+            this.documentTabStrip2.TabIndex = 0;
+            this.documentTabStrip2.TabStop = false;
             // 
             // documentWindow4
             // 
@@ -350,147 +487,6 @@ namespace Osc.Rotch.Editor.Views
             this.btnRemoveTileset.ToolTipText = "Remove Tileset";
             this.btnRemoveTileset.Click += new System.EventHandler(this.btnRemoveTileset_Click);
             // 
-            // documentContainer2
-            // 
-            this.documentContainer2.Controls.Add(this.documentTabStrip2);
-            this.documentContainer2.Name = "documentContainer2";
-            // 
-            // 
-            // 
-            this.documentContainer2.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.documentContainer2.SizeInfo.SizeMode = Telerik.WinControls.UI.Docking.SplitPanelSizeMode.Fill;
-            // 
-            // documentTabStrip2
-            // 
-            this.documentTabStrip2.CanUpdateChildIndex = true;
-            this.documentTabStrip2.Controls.Add(this.documentWindow4);
-            this.documentTabStrip2.Controls.Add(this.documentWindow3);
-            this.documentTabStrip2.Location = new System.Drawing.Point(0, 0);
-            this.documentTabStrip2.Name = "documentTabStrip2";
-            // 
-            // 
-            // 
-            this.documentTabStrip2.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.documentTabStrip2.SelectedIndex = 0;
-            this.documentTabStrip2.Size = new System.Drawing.Size(515, 405);
-            this.documentTabStrip2.TabIndex = 0;
-            this.documentTabStrip2.TabStop = false;
-            // 
-            // documentWindow3
-            // 
-            this.documentWindow3.Controls.Add(this.radCheckedListBox1);
-            this.documentWindow3.Controls.Add(this.radCommandBar3);
-            this.documentWindow3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.documentWindow3.Location = new System.Drawing.Point(6, 29);
-            this.documentWindow3.Name = "documentWindow3";
-            this.documentWindow3.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.documentWindow3.Size = new System.Drawing.Size(503, 370);
-            this.documentWindow3.Text = "Layers";
-            // 
-            // radCheckedListBox1
-            // 
-            this.radCheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radCheckedListBox1.Location = new System.Drawing.Point(0, 30);
-            this.radCheckedListBox1.Name = "radCheckedListBox1";
-            this.radCheckedListBox1.Size = new System.Drawing.Size(503, 340);
-            this.radCheckedListBox1.TabIndex = 1;
-            this.radCheckedListBox1.Text = "radCheckedListBox1";
-            // 
-            // radCommandBar3
-            // 
-            this.radCommandBar3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.radCommandBar3.Location = new System.Drawing.Point(0, 0);
-            this.radCommandBar3.Name = "radCommandBar3";
-            this.radCommandBar3.Rows.AddRange(new Telerik.WinControls.UI.CommandBarRowElement[] {
-            this.commandBarRowElement3});
-            this.radCommandBar3.Size = new System.Drawing.Size(503, 30);
-            this.radCommandBar3.TabIndex = 0;
-            this.radCommandBar3.Text = "radCommandBar3";
-            // 
-            // commandBarRowElement3
-            // 
-            this.commandBarRowElement3.MinSize = new System.Drawing.Size(25, 25);
-            this.commandBarRowElement3.Strips.AddRange(new Telerik.WinControls.UI.CommandBarStripElement[] {
-            this.commandBarStripElement3});
-            // 
-            // commandBarStripElement3
-            // 
-            this.commandBarStripElement3.DisplayName = "commandBarStripElement3";
-            this.commandBarStripElement3.Items.AddRange(new Telerik.WinControls.UI.RadCommandBarBaseItem[] {
-            this.btnAddTilemapLayer,
-            this.btnRemoveTilemapLayer,
-            this.btnMoveTilemapLayerUp,
-            this.btnMoveTilemapLayerDown,
-            this.btnMergeTilemapLayer,
-            this.btnRenameTilemap});
-            this.commandBarStripElement3.Name = "commandBarStripElement3";
-            // 
-            // btnAddTilemapLayer
-            // 
-            this.btnAddTilemapLayer.AccessibleDescription = "commandBarButton1";
-            this.btnAddTilemapLayer.AccessibleName = "commandBarButton1";
-            this.btnAddTilemapLayer.DisplayName = "commandBarButton1";
-            this.btnAddTilemapLayer.Image = global::Osc.Rotch.Editor.Properties.Resources.AddMark_10580;
-            this.btnAddTilemapLayer.Name = "btnAddTilemapLayer";
-            this.btnAddTilemapLayer.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnAddTilemapLayer.Text = "commandBarButton1";
-            this.btnAddTilemapLayer.Click += new System.EventHandler(this.btnAddTilemapLayer_Click);
-            // 
-            // btnRemoveTilemapLayer
-            // 
-            this.btnRemoveTilemapLayer.AccessibleDescription = "commandBarButton2";
-            this.btnRemoveTilemapLayer.AccessibleName = "commandBarButton2";
-            this.btnRemoveTilemapLayer.DisplayName = "commandBarButton2";
-            this.btnRemoveTilemapLayer.Image = global::Osc.Rotch.Editor.Properties.Resources.Clearallrequests_8816;
-            this.btnRemoveTilemapLayer.Name = "btnRemoveTilemapLayer";
-            this.btnRemoveTilemapLayer.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnRemoveTilemapLayer.Text = "commandBarButton2";
-            this.btnRemoveTilemapLayer.Click += new System.EventHandler(this.btnRemoveTilemapLayer_Click);
-            // 
-            // btnMoveTilemapLayerUp
-            // 
-            this.btnMoveTilemapLayerUp.AccessibleDescription = "commandBarButton1";
-            this.btnMoveTilemapLayerUp.AccessibleName = "commandBarButton1";
-            this.btnMoveTilemapLayerUp.DisplayName = "commandBarButton1";
-            this.btnMoveTilemapLayerUp.Image = global::Osc.Rotch.Editor.Properties.Resources.arrow_Up_16xLG;
-            this.btnMoveTilemapLayerUp.Name = "btnMoveTilemapLayerUp";
-            this.btnMoveTilemapLayerUp.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnMoveTilemapLayerUp.Text = "commandBarButton1";
-            this.btnMoveTilemapLayerUp.Click += new System.EventHandler(this.btnMoveTilemapLayerUp_Click);
-            // 
-            // btnMoveTilemapLayerDown
-            // 
-            this.btnMoveTilemapLayerDown.AccessibleDescription = "commandBarButton2";
-            this.btnMoveTilemapLayerDown.AccessibleName = "commandBarButton2";
-            this.btnMoveTilemapLayerDown.DisplayName = "commandBarButton2";
-            this.btnMoveTilemapLayerDown.Image = global::Osc.Rotch.Editor.Properties.Resources.arrow_Down_16xLG;
-            this.btnMoveTilemapLayerDown.Name = "btnMoveTilemapLayerDown";
-            this.btnMoveTilemapLayerDown.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnMoveTilemapLayerDown.Text = "commandBarButton2";
-            this.btnMoveTilemapLayerDown.Click += new System.EventHandler(this.btnMoveTilemapLayerDown_Click);
-            // 
-            // btnMergeTilemapLayer
-            // 
-            this.btnMergeTilemapLayer.AccessibleDescription = "commandBarButton3";
-            this.btnMergeTilemapLayer.AccessibleName = "commandBarButton3";
-            this.btnMergeTilemapLayer.DisplayName = "commandBarButton3";
-            this.btnMergeTilemapLayer.Image = global::Osc.Rotch.Editor.Properties.Resources.Merge_13256;
-            this.btnMergeTilemapLayer.Name = "btnMergeTilemapLayer";
-            this.btnMergeTilemapLayer.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnMergeTilemapLayer.Text = "commandBarButton3";
-            this.btnMergeTilemapLayer.Click += new System.EventHandler(this.btnMergeTilemapLayer_Click);
-            // 
-            // btnRenameTilemap
-            // 
-            this.btnRenameTilemap.AccessibleDescription = "commandBarButton4";
-            this.btnRenameTilemap.AccessibleName = "commandBarButton4";
-            this.btnRenameTilemap.DisplayName = "commandBarButton4";
-            this.btnRenameTilemap.Image = global::Osc.Rotch.Editor.Properties.Resources.Rename_6779;
-            this.btnRenameTilemap.Name = "btnRenameTilemap";
-            this.btnRenameTilemap.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnRenameTilemap.Text = "commandBarButton4";
-            this.btnRenameTilemap.Click += new System.EventHandler(this.btnRenameTilemap_Click);
-            // 
             // toolTabStrip1
             // 
             this.toolTabStrip1.CanUpdateChildIndex = true;
@@ -538,14 +534,25 @@ namespace Osc.Rotch.Editor.Views
             // 
             // documentWindow1
             // 
-            this.documentWindow1.Controls.Add(this.radCommandBar1);
             this.documentWindow1.Controls.Add(this.tilemapRender);
+            this.documentWindow1.Controls.Add(this.radCommandBar1);
             this.documentWindow1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.documentWindow1.Location = new System.Drawing.Point(6, 29);
             this.documentWindow1.Name = "documentWindow1";
             this.documentWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
             this.documentWindow1.Size = new System.Drawing.Size(522, 406);
-            this.documentWindow1.Text = "Tilemap";
+            this.documentWindow1.Text = "Tilemap Asset";
+            // 
+            // tilemapRender
+            // 
+            this.tilemapRender.CurrentState = Osc.Rotch.Engine.Common.Enums.TilemapStates.Selection;
+            this.tilemapRender.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tilemapRender.Location = new System.Drawing.Point(0, 55);
+            this.tilemapRender.Name = "tilemapRender";
+            this.tilemapRender.Size = new System.Drawing.Size(522, 351);
+            this.tilemapRender.TabIndex = 3;
+            this.tilemapRender.Tilemap = null;
+            this.tilemapRender.TilePattern = null;
             // 
             // radCommandBar1
             // 
@@ -574,14 +581,14 @@ namespace Osc.Rotch.Editor.Views
             this.btnTilemapSelect,
             this.btnTilemapDraw,
             this.btnTilemapErase,
-            this.btnTilemapCollision,
-            this.btnTilemapHeight,
-            this.commandBarSeparator1,
-            this.btnTilemapCopy,
-            this.btnTilemapCut,
-            this.btnResizeTilemap,
             this.commandBarSeparator2,
-            this.btnTilemapGrid});
+            this.btnCopyTilemap,
+            this.btnCutTilemap,
+            this.btnTilemapResize,
+            this.commandBarSeparator1,
+            this.btnTilemapGrid,
+            this.commandBarSeparator4,
+            this.btnTruncateTilemap});
             this.commandBarStripElement1.Name = "commandBarStripElement1";
             // 
             // btnUndoTilemap
@@ -640,68 +647,8 @@ namespace Osc.Rotch.Editor.Views
             this.btnTilemapErase.Name = "btnTilemapErase";
             this.btnTilemapErase.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnTilemapErase.Text = "commandBarToggleButton3";
+            this.btnTilemapErase.ToolTipText = "Erase";
             this.btnTilemapErase.Click += new System.EventHandler(this.btnTilemapErase_Click);
-            // 
-            // btnTilemapCollision
-            // 
-            this.btnTilemapCollision.AccessibleDescription = "commandBarToggleButton4";
-            this.btnTilemapCollision.AccessibleName = "commandBarToggleButton4";
-            this.btnTilemapCollision.DisplayName = "commandBarToggleButton4";
-            this.btnTilemapCollision.Image = global::Osc.Rotch.Editor.Properties.Resources.Partition_16xLG;
-            this.btnTilemapCollision.Name = "btnTilemapCollision";
-            this.btnTilemapCollision.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnTilemapCollision.Text = "commandBarToggleButton4";
-            this.btnTilemapCollision.Click += new System.EventHandler(this.btnTilemapCollision_Click);
-            // 
-            // btnTilemapHeight
-            // 
-            this.btnTilemapHeight.AccessibleDescription = "commandBarToggleButton5";
-            this.btnTilemapHeight.AccessibleName = "commandBarToggleButton5";
-            this.btnTilemapHeight.DisplayName = "commandBarToggleButton5";
-            this.btnTilemapHeight.Image = global::Osc.Rotch.Editor.Properties.Resources.template_Frameset_16xLG;
-            this.btnTilemapHeight.Name = "btnTilemapHeight";
-            this.btnTilemapHeight.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnTilemapHeight.Text = "commandBarToggleButton5";
-            this.btnTilemapHeight.Click += new System.EventHandler(this.btnTilemapHeight_Click);
-            // 
-            // commandBarSeparator1
-            // 
-            this.commandBarSeparator1.AccessibleDescription = "commandBarSeparator1";
-            this.commandBarSeparator1.AccessibleName = "commandBarSeparator1";
-            this.commandBarSeparator1.DisplayName = "commandBarSeparator1";
-            this.commandBarSeparator1.Name = "commandBarSeparator1";
-            this.commandBarSeparator1.VisibleInOverflowMenu = false;
-            // 
-            // btnTilemapCopy
-            // 
-            this.btnTilemapCopy.AccessibleDescription = "commandBarButton1";
-            this.btnTilemapCopy.AccessibleName = "commandBarButton1";
-            this.btnTilemapCopy.DisplayName = "commandBarButton1";
-            this.btnTilemapCopy.Image = global::Osc.Rotch.Editor.Properties.Resources.Copy_6524;
-            this.btnTilemapCopy.Name = "btnTilemapCopy";
-            this.btnTilemapCopy.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnTilemapCopy.Text = "commandBarButton1";
-            this.btnTilemapCopy.Click += new System.EventHandler(this.btnTilemapCopy_Click);
-            // 
-            // btnTilemapCut
-            // 
-            this.btnTilemapCut.AccessibleDescription = "commandBarButton2";
-            this.btnTilemapCut.AccessibleName = "commandBarButton2";
-            this.btnTilemapCut.DisplayName = "commandBarButton2";
-            this.btnTilemapCut.Image = global::Osc.Rotch.Editor.Properties.Resources.Cut_6523;
-            this.btnTilemapCut.Name = "btnTilemapCut";
-            this.btnTilemapCut.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnTilemapCut.Text = "commandBarButton2";
-            this.btnTilemapCut.Click += new System.EventHandler(this.btnTilemapCut_Click);
-            // 
-            // btnResizeTilemap
-            // 
-            this.btnResizeTilemap.AccessibleDescription = "commandBarButtonResize";
-            this.btnResizeTilemap.AccessibleName = "commandBarButtonResize";
-            this.btnResizeTilemap.Image = global::Osc.Rotch.Editor.Properties.Resources.Resize;
-            this.btnResizeTilemap.Name = "btnResizeTilemap";
-            this.btnResizeTilemap.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnResizeTilemap.Click += new System.EventHandler(this.btnResizeTilemap_Click);
             // 
             // commandBarSeparator2
             // 
@@ -710,6 +657,38 @@ namespace Osc.Rotch.Editor.Views
             this.commandBarSeparator2.DisplayName = "commandBarSeparator2";
             this.commandBarSeparator2.Name = "commandBarSeparator2";
             this.commandBarSeparator2.VisibleInOverflowMenu = false;
+            // 
+            // btnCopyTilemap
+            // 
+            this.btnCopyTilemap.AccessibleDescription = "commandBarButton1";
+            this.btnCopyTilemap.AccessibleName = "commandBarButton1";
+            this.btnCopyTilemap.DisplayName = "commandBarButton1";
+            this.btnCopyTilemap.Image = global::Osc.Rotch.Editor.Properties.Resources.Copy_6524;
+            this.btnCopyTilemap.Name = "btnCopyTilemap";
+            this.btnCopyTilemap.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnCopyTilemap.Text = "commandBarButton1";
+            this.btnCopyTilemap.ToolTipText = "Copy";
+            this.btnCopyTilemap.Click += new System.EventHandler(this.btnCopyTilemap_Click);
+            // 
+            // btnCutTilemap
+            // 
+            this.btnCutTilemap.AccessibleDescription = "commandBarButton1";
+            this.btnCutTilemap.AccessibleName = "commandBarButton1";
+            this.btnCutTilemap.DisplayName = "commandBarButton1";
+            this.btnCutTilemap.Image = ((System.Drawing.Image)(resources.GetObject("btnCutTilemap.Image")));
+            this.btnCutTilemap.Name = "btnCutTilemap";
+            this.btnCutTilemap.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnCutTilemap.Text = "commandBarButton1";
+            this.btnCutTilemap.ToolTipText = "Cut";
+            this.btnCutTilemap.Click += new System.EventHandler(this.btnCutTilemap_Click);
+            // 
+            // commandBarSeparator1
+            // 
+            this.commandBarSeparator1.AccessibleDescription = "commandBarSeparator1";
+            this.commandBarSeparator1.AccessibleName = "commandBarSeparator1";
+            this.commandBarSeparator1.DisplayName = "commandBarSeparator1";
+            this.commandBarSeparator1.Name = "commandBarSeparator1";
+            this.commandBarSeparator1.VisibleInOverflowMenu = false;
             // 
             // btnTilemapGrid
             // 
@@ -724,17 +703,23 @@ namespace Osc.Rotch.Editor.Views
             this.btnTilemapGrid.ToggleState = Telerik.WinControls.Enumerations.ToggleState.On;
             this.btnTilemapGrid.Click += new System.EventHandler(this.btnTilemapGrid_Click);
             // 
-            // tilemapRender
+            // commandBarSeparator4
             // 
-            this.tilemapRender.BackColor = System.Drawing.Color.Black;
-            this.tilemapRender.CurrentState = Osc.Rotch.Engine.Common.Enums.TilemapStates.Selection;
-            this.tilemapRender.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tilemapRender.Location = new System.Drawing.Point(0, 0);
-            this.tilemapRender.Name = "tilemapRender";
-            this.tilemapRender.Size = new System.Drawing.Size(522, 406);
-            this.tilemapRender.TabIndex = 1;
-            this.tilemapRender.Tilemap = null;
-            this.tilemapRender.TilePattern = null;
+            this.commandBarSeparator4.AccessibleDescription = "commandBarSeparator4";
+            this.commandBarSeparator4.AccessibleName = "commandBarSeparator4";
+            this.commandBarSeparator4.DisplayName = "commandBarSeparator4";
+            this.commandBarSeparator4.Name = "commandBarSeparator4";
+            this.commandBarSeparator4.VisibleInOverflowMenu = false;
+            // 
+            // btnTruncateTilemap
+            // 
+            this.btnTruncateTilemap.DisplayName = "commandBarButton1";
+            this.btnTruncateTilemap.Image = ((System.Drawing.Image)(resources.GetObject("btnTruncateTilemap.Image")));
+            this.btnTruncateTilemap.Name = "btnTruncateTilemap";
+            this.btnTruncateTilemap.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnTruncateTilemap.Text = "";
+            this.btnTruncateTilemap.ToolTipText = "Truncate";
+            this.btnTruncateTilemap.Click += new System.EventHandler(this.btnTruncateTilemap_Click);
             // 
             // commandBarToggleButton1
             // 
@@ -742,37 +727,48 @@ namespace Osc.Rotch.Editor.Views
             this.commandBarToggleButton1.AccessibleName = "commandBarToggleButton1";
             this.commandBarToggleButton1.DisabledTextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.commandBarToggleButton1.DisplayName = "commandBarToggleButton1";
-            this.commandBarToggleButton1.Image = ((System.Drawing.Image)(resources.GetObject("commandBarToggleButton1.Image")));
+            this.commandBarToggleButton1.Image = null;
             this.commandBarToggleButton1.Name = "commandBarToggleButton1";
             this.commandBarToggleButton1.Text = "commandBarToggleButton1";
             this.commandBarToggleButton1.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             // 
-            // TilemapDocumentView
+            // btnTilemapResize
+            // 
+            this.btnTilemapResize.AccessibleDescription = "commandBarButton1";
+            this.btnTilemapResize.AccessibleName = "commandBarButton1";
+            this.btnTilemapResize.DisplayName = "commandBarButton1";
+            this.btnTilemapResize.Image = ((System.Drawing.Image)(resources.GetObject("btnTilemapResize.Image")));
+            this.btnTilemapResize.Name = "btnTilemapResize";
+            this.btnTilemapResize.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnTilemapResize.Text = "commandBarButton1";
+            this.btnTilemapResize.ToolTipText = "Resize";
+            this.btnTilemapResize.Click += new System.EventHandler(this.btnTilemapResize_Click);
+            // 
+            // TilemapAssetDocumentView
             // 
             this.ClientSize = new System.Drawing.Size(1075, 451);
             this.Controls.Add(this.radDockTilemap);
-            this.Name = "TilemapDocumentView";
+            this.Name = "TilemapAssetDocumentView";
             // 
             // 
             // 
-            this.RootElement.ApplyShapeToControl = true;
             ((System.ComponentModel.ISupportInitialize)(this.radDockTilemap)).EndInit();
             this.radDockTilemap.ResumeLayout(false);
             this.toolWindow1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.radDockTilemap2)).EndInit();
             this.radDockTilemap2.ResumeLayout(false);
-            this.documentWindow4.ResumeLayout(false);
-            this.documentWindow4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.documentContainer2)).EndInit();
-            this.documentContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip2)).EndInit();
-            this.documentTabStrip2.ResumeLayout(false);
             this.documentWindow3.ResumeLayout(false);
             this.documentWindow3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radCheckedListBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.documentContainer2)).EndInit();
+            this.documentContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip2)).EndInit();
+            this.documentTabStrip2.ResumeLayout(false);
+            this.documentWindow4.ResumeLayout(false);
+            this.documentWindow4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCommandBar2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip1)).EndInit();
             this.toolTabStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).EndInit();
@@ -782,7 +778,6 @@ namespace Osc.Rotch.Editor.Views
             this.documentWindow1.ResumeLayout(false);
             this.documentWindow1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -865,44 +860,26 @@ namespace Osc.Rotch.Editor.Views
         private void btnTilemapSelect_Click(object sender, EventArgs e)
         {
             DeToggleMains(this.btnTilemapSelect);
-            //btnTilemapSelect.ToggleState = ToggleState.On;
+            //btnTilemapSelect.ToggleState = ToggleState.On;          
             EnabledNonSelectableButtons();
-
             this.eventAggregator.Publish(new OnTilemapSelectionBoxClicked());
         }
 
         private void btnTilemapDraw_Click(object sender, EventArgs e)
         {
             DeToggleMains(this.btnTilemapDraw);
-            //btnTilemapDraw.ToggleState = ToggleState.On;
+            //btnTilemapDraw.ToggleState = ToggleState.On;      
             DisableNonSelectableButtons();
-
             this.eventAggregator.Publish(new OnTilemapDrawClicked());
         }
 
         private void btnTilemapErase_Click(object sender, EventArgs e)
         {
             DeToggleMains(this.btnTilemapErase);
-            //btnTilemapErase.ToggleState = ToggleState.On;
+            //btnTilemapErase.ToggleState = ToggleState.On;        
             DisableNonSelectableButtons();
 
             this.eventAggregator.Publish(new OnTilemapEraseClicked());
-        }
-
-        private void btnTilemapCollision_Click(object sender, EventArgs e)
-        {
-            DeToggleMains(this.btnTilemapCollision);
-            //btnTilemapCollision.ToggleState = ToggleState.On;
-            DisableNonSelectableButtons();
-
-            this.eventAggregator.Publish(new OnTilemapCollisionClicked());
-        }
-
-        private void btnTilemapHeight_Click(object sender, EventArgs e)
-        {
-            DeToggleMains(this.btnTilemapHeight);
-            DisableNonSelectableButtons();
-            this.eventAggregator.Publish(new OnTilemapHeightMapClicked());
         }
 
         private void btnTilemapCopy_Click(object sender, EventArgs e)
@@ -925,6 +902,16 @@ namespace Osc.Rotch.Editor.Views
 
         }
 
+        private void ToggleMains(CommandBarToggleButton buttonToIgnore)
+        {
+            if (buttonToIgnore != btnTilemapSelect)
+                this.btnTilemapSelect.ToggleState = ToggleState.On;
+            if (buttonToIgnore != btnTilemapDraw)
+                this.btnTilemapDraw.ToggleState = ToggleState.On;
+            if (buttonToIgnore != btnTilemapErase)
+                this.btnTilemapErase.ToggleState = ToggleState.On;
+        }
+
         private void DeToggleMains(CommandBarToggleButton buttonToIgnore)
         {
             if (buttonToIgnore != btnTilemapSelect)
@@ -933,22 +920,18 @@ namespace Osc.Rotch.Editor.Views
                 this.btnTilemapDraw.ToggleState = ToggleState.Off;
             if (buttonToIgnore != btnTilemapErase)
                 this.btnTilemapErase.ToggleState = ToggleState.Off;
-            if (buttonToIgnore != btnTilemapCollision)
-                this.btnTilemapCollision.ToggleState = ToggleState.Off;
-            if (buttonToIgnore != btnTilemapHeight)
-                this.btnTilemapHeight.ToggleState = ToggleState.Off;
         }
 
         private void DisableNonSelectableButtons()
         {
-            this.btnTilemapCopy.Enabled = false;
-            this.btnTilemapCut.Enabled = false;
+            this.btnCopyTilemap.Enabled = false;
+            this.btnCutTilemap.Enabled = false;
         }
 
         private void EnabledNonSelectableButtons()
         {
-            this.btnTilemapCopy.Enabled = true;
-            this.btnTilemapCut.Enabled = true;
+            this.btnCopyTilemap.Enabled = true;
+            this.btnCutTilemap.Enabled = true;
         }
 
         public void HideCloseButtonForPage(RadPageViewPage page)
@@ -962,7 +945,32 @@ namespace Osc.Rotch.Editor.Views
             }
         }
 
-        private void tilemapRender_Load(object sender, EventArgs e)
+        private void btnSaveTilemapAsset_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCopyTilemap_Click(object sender, EventArgs e)
+        {
+            this.eventAggregator.Publish(new OnTilemapCopyClicked());
+        }
+
+        private void btnCutTilemap_Click(object sender, EventArgs e)
+        {
+            this.eventAggregator.Publish(new OnTilemapCutClicked());
+        }
+
+        private void btnTruncateTilemap_Click(object sender, EventArgs e)
+        {
+            this.eventAggregator.Publish(new OnTilemapTruncateClicked());
+        }
+
+        private void btnTilemapResize_Click(object sender, EventArgs e)
+        {
+            this.eventAggregator.Publish(new OnTilemapResizeClicked());
+        }
+
+        public void SetActiveToggleButton()
         {
 
         }

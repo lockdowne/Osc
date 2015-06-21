@@ -16,7 +16,7 @@ using Osc.Rotch.Engine.Aggregators;
 
 namespace Osc.Rotch.Editor.Views
 {
-    public class TilemapDocumentView : RadForm, ITilemapDocumentView
+    public class TilemapDocumentView : DocumentWindow, ITilemapDocumentView
     {
         private IEventAggregator eventAggregator;
 
@@ -230,7 +230,6 @@ namespace Osc.Rotch.Editor.Views
             this.documentTabStrip1.SuspendLayout();
             this.documentWindow1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // radDockTilemap
@@ -755,7 +754,6 @@ namespace Osc.Rotch.Editor.Views
             // 
             // 
             // 
-            this.RootElement.ApplyShapeToControl = true;
             ((System.ComponentModel.ISupportInitialize)(this.radDockTilemap)).EndInit();
             this.radDockTilemap.ResumeLayout(false);
             this.toolWindow1.ResumeLayout(false);
@@ -782,7 +780,6 @@ namespace Osc.Rotch.Editor.Views
             this.documentWindow1.ResumeLayout(false);
             this.documentWindow1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radCommandBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -94,6 +94,7 @@
     <Compile Include="Common\Settings.cs" />
     <Compile Include="Common\XnaSerializer.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
+    <Compile Include="Controllers\TilemapAssetController.cs" />
     <Compile Include="Controllers\ConsoleController.cs" />
     <Compile Include="Controllers\EntitiesController.cs" />
     <Compile Include="Controllers\IConsoleController.cs" />
@@ -113,6 +114,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ServiceContainer.cs" />
+    <Compile Include="Controls\TilemapAssetRender.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\TilemapRender.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -133,9 +137,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\TilemapAssetRepository.cs" />
     <Compile Include="Repositories\TilemapRepository.cs" />
-    <Compile Include="Views\AssetCreationView.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Views\TilemapAssetDocumentView.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Views\ConsoleView.cs">
       <SubType>Component</SubType>
@@ -143,6 +148,7 @@
     <Compile Include="Views\EntitiesView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Views\ITilemapAssetDocumentView.cs" />
     <Compile Include="Views\IConsoleView.cs" />
     <Compile Include="Views\IEntitiesView.cs" />
     <Compile Include="Views\IMainView.cs" />
@@ -185,8 +191,14 @@
     <Compile Include="Views\ThemeView.Designer.cs">
       <DependentUpon>ThemeView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\TilemapDocumentView.cs">
+    <Compile Include="Views\TilemapAssetPropertiesView.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\TilemapAssetPropertiesView.Designer.cs">
+      <DependentUpon>TilemapAssetPropertiesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TilemapDocumentView.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Views\TilemapPropertiesView.cs">
       <SubType>Form</SubType>
@@ -219,8 +231,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Views\AssetCreationView.resx">
-      <DependentUpon>AssetCreationView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\TilemapAssetDocumentView.resx">
+      <DependentUpon>TilemapAssetDocumentView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ConsoleView.resx">
       <DependentUpon>ConsoleView.cs</DependentUpon>
@@ -245,6 +257,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ThemeView.resx">
       <DependentUpon>ThemeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TilemapAssetPropertiesView.resx">
+      <DependentUpon>TilemapAssetPropertiesView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TilemapDocumentView.resx">
       <DependentUpon>TilemapDocumentView.cs</DependentUpon>
@@ -441,7 +456,9 @@
   <ItemGroup>
     <None Include="Resources\recurring-appointment-32.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\FrameSelected.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

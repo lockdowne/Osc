@@ -50,6 +50,7 @@
             this.radLabel1.Size = new System.Drawing.Size(39, 18);
             this.radLabel1.TabIndex = 0;
             this.radLabel1.Text = "Name:";
+            this.radLabel1.Click += new System.EventHandler(this.radLabel1_Click);
             // 
             // txtTilemapName
             // 
@@ -58,6 +59,7 @@
             this.txtTilemapName.Name = "txtTilemapName";
             this.txtTilemapName.Size = new System.Drawing.Size(226, 20);
             this.txtTilemapName.TabIndex = 1;
+            this.txtTilemapName.TextChanged += new System.EventHandler(this.txtTilemapName_TextChanged);
             // 
             // txtTilemapDescription
             // 
@@ -68,6 +70,7 @@
             this.txtTilemapDescription.Name = "txtTilemapDescription";
             this.txtTilemapDescription.Size = new System.Drawing.Size(226, 145);
             this.txtTilemapDescription.TabIndex = 3;
+            this.txtTilemapDescription.TextChanged += new System.EventHandler(this.txtTilemapDescription_TextChanged);
             // 
             // radLabel2
             // 
@@ -76,6 +79,7 @@
             this.radLabel2.Size = new System.Drawing.Size(66, 18);
             this.radLabel2.TabIndex = 2;
             this.radLabel2.Text = "Description:";
+            this.radLabel2.Click += new System.EventHandler(this.radLabel2_Click);
             // 
             // btnOK
             // 
@@ -109,6 +113,7 @@
             this.Controls.Add(this.txtTilemapName);
             this.Controls.Add(this.radLabel2);
             this.Controls.Add(this.radLabel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "TilemapPropertiesView";
             // 
             // 

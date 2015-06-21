@@ -203,10 +203,10 @@ namespace Osc.Rotch.Editor.Controllers
             int startX = coordinates.X;
             int startY = coordinates.Y;
 
-            int width = this.view.TilePattern.Pattern.GetLength(0);
-            int height = this.view.TilePattern.Pattern.GetLength(1);
+            //int width = this.view.TilePattern.Pattern.GetLength(0);
+            //int height = this.view.TilePattern.Pattern.GetLength(1);
 
-            TileVisual[,] oldSection = layer.FindSection(startX, startY, width, height);
+            //TileVisual[,] oldSection = layer.FindSection(startX, startY, width, height);
             
             commandManager.ExecuteCommand(new Command()
             {
@@ -214,38 +214,30 @@ namespace Osc.Rotch.Editor.Controllers
                 CanExecute = () => { return item != null && this.view.TilePattern != null && layer != null; },
                 Execute = () =>
                 {  
-                    for(int x = 0; x < width; x++)
-                    {
-                        for(int y = 0; y < height; y++)
-                        {
-                            //layer.Columns[x + startX].Rows[y + startY].TilesetIndex = pattern.Pattern[x, y];
-                            //layer.Columns[x + startX].Rows[y + startY].TilesetName = pattern.Tileset.TextureName;
+                    //for(int x = 0; x < width; x++)
+                    //{
+                    //    for(int y = 0; y < height; y++)
+                    //    {
+                    //        //layer.Columns[x + startX].Rows[y + startY].TilesetIndex = pattern.Pattern[x, y];
+                    //        //layer.Columns[x + startX].Rows[y + startY].TilesetName = pattern.Tileset.TextureName;
 
-                            //TileVisual tile = layer.GetTile(x + startX, y + startY);
+                    //        //TileVisual tile = layer.GetTile(x + startX, y + startY);
 
-                            Point isoCoordinate = MathExtension.OrthogonalToIsoCoordinate(x + startX, y + startY, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight);
+                    //        //Point isoCoordinate = MathExtension.OrthogonalToIsoCoordinate(x + startX, y + startY, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight);
 
-                            TileVisual tile = layer.GetTile(isoCoordinate.X, isoCoordinate.Y);
+                    //        //TileVisual tile = layer.GetTile(isoCoordinate.X, isoCoordinate.Y);
 
-                            if (tile != null)
-                            {
-                                tile.TilesetIndex = pattern.Pattern[x, y];
-                                tile.TilesetName = pattern.Tileset.TextureName;
-                            }
-                        }
-                    }
+                    //        //if (tile != null)
+                    //        //{
+                    //        //    tile.TilesetIndex = pattern.Pattern[x, y];
+                    //        //    tile.TilesetName = pattern.Tileset.TextureName;
+                    //        //}
+                    //    }
+                    //}
                 },
                 UnExecute = () =>
                 {
-                    for (int x = 0; x < width; x++)
-                    {
-                        for (int y = 0; y < height; y++)
-                        {
-                            TileVisual tile = layer.GetTile(x + startX, y + startY);
-                            tile.TilesetIndex = oldSection[x, y].TilesetIndex;
-                            tile.TilesetName = oldSection[x, y].TilesetName;
-                        }
-                    }
+                    
                 }
             }, true, item.ClassName());
         }

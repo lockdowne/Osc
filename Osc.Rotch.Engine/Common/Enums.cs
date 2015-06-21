@@ -43,6 +43,7 @@ namespace Osc.Rotch.Engine.Common
             Characters,
             Items,
             Quests,
+            TilemapAssets,
             Tilemaps,
             Nodes,
             BattleScenes,

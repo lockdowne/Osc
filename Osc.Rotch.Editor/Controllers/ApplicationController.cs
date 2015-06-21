@@ -33,12 +33,13 @@ namespace Osc.Rotch.Editor.Controllers
 
             // Repositories
             IRepository<Tilemap> tilemapRepository = new TilemapRepository();
+            IRepository<TilemapAsset> tilemapAssetRepository = new TilemapAssetRepository();
 
             IEventAggregator eventAggregator = new EventAggregator();
 
             // Entities
             IEntitiesView entitiesView = new EntitiesView(eventAggregator);
-            IEntitiesController entitiesController = new EntitiesController(entitiesView, new CommandManager(logger), tilemapRepository, eventAggregator);
+            IEntitiesController entitiesController = new EntitiesController(entitiesView, new CommandManager(logger), eventAggregator, tilemapRepository, tilemapAssetRepository);
 
             IProjectView projectView = new ProjectView(eventAggregator);
             IProjectController projectController = new ProjectController(projectView);
@@ -49,7 +50,7 @@ namespace Osc.Rotch.Editor.Controllers
             
             // Create main view
             IMainView mainView = new MainView(eventAggregator);
-            MainController mainController = new MainController(mainView, new CommandManager(logger), logger, eventAggregator, tilemapRepository);
+            MainController mainController = new MainController(mainView, new CommandManager(logger), logger, eventAggregator, tilemapRepository, tilemapAssetRepository);
             mainController.DockWindow((DockWindow)consoleView, DockPosition.Bottom);
             mainController.DockWindow((DockWindow)projectView, DockPosition.Right);
             mainController.DockWindow((DockWindow)entitiesView, DockPosition.Right);

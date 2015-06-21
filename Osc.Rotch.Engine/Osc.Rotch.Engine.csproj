@@ -49,9 +49,11 @@
     <Compile Include="Aggregators\IEventAggregator.cs" />
     <Compile Include="Aggregators\IEventAggregatorAsync.cs" />
     <Compile Include="Aggregators\ISubscriber.cs" />
+    <Compile Include="Common\MathExtension.cs" />
     <Compile Include="Common\PerformanceCalculator.cs" />
     <Compile Include="DataStructures\CharacterCollection.cs" />
     <Compile Include="Entities\TilemapAsset.cs" />
+    <Compile Include="Entities\TilemapAssetEditor.cs" />
     <Compile Include="Entities\TilePlaceable.cs" />
     <Compile Include="Inputs\InputState.cs" />
     <Compile Include="Scenes\RandomBattleScene.cs" />
@@ -63,7 +65,6 @@
     <Compile Include="Common\ILogger.cs" />
     <Compile Include="Common\IOMethods.cs" />
     <Compile Include="Common\Logger.cs" />
-    <Compile Include="Common\MathExtensions.cs" />
     <Compile Include="Common\Serializer.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Entities\Animation.cs" />

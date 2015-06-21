@@ -10,27 +10,28 @@ using Telerik.WinControls;
 using Telerik.WinControls.UI;
 using Osc.Rotch.Editor.Events;
 
+
 namespace Osc.Rotch.Editor.Views
 {
-    public partial class TilemapPropertiesView : RadForm, ITilemapPropertiesView
+    public partial class TilemapAssetPropertiesView : RadForm
     {
         private readonly IEventAggregator eventAggregator;
 
         public Guid ID { get; set; }
 
-        public string TilemapName
+        public string TilemapAssetName
         {
             get { return txtTilemapName.Text; }
             set { txtTilemapName.Text = value; }
         }
 
-        public string TilemapDescription
+        public string TilemapAssetDescription
         {
             get { return txtTilemapDescription.Text; }
             set { txtTilemapDescription.Text = value; }
         }
-
-        public TilemapPropertiesView(IEventAggregator eventAggregator)
+        
+        public TilemapAssetPropertiesView(IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
 
@@ -39,42 +40,19 @@ namespace Osc.Rotch.Editor.Views
             this.StartPosition = FormStartPosition.CenterScreen;
 
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
-
-            
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
             DialogResult = System.Windows.Forms.DialogResult.OK;
 
-            eventAggregator.Publish(new OnTilemapPropertiesSaved() { ID = ID, TilemapDescription = TilemapDescription, TilemapName = TilemapName,  });
-       
+            eventAggregator.Publish(new OnTilemapAssetPropertiesSaved() { ID = ID, TilemapAssetDescription = TilemapAssetDescription, TilemapAssetName = TilemapAssetName });
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
             Close();
-        }
-
-        private void txtTilemapDescription_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtTilemapName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void radLabel2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void radLabel1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
