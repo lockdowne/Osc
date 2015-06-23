@@ -264,7 +264,7 @@ namespace Osc.Rotch.Engine.Entities
                                                 int width = tile.VisualLayers[tileZ].Width;
                                                 int height = tile.VisualLayers[tileZ].Height;
 
-                                                Vector2 position = MathExtension.IsoCoordinateToPixels(x + tileX - width, y + tileY - height, TileWidth, TileHeight);
+                                                Vector2 position = MathExtension.IsoCoordinateToPixels(x + tileX - width + 1, y + tileY - height + 1, TileWidth, TileHeight);
 
                                                 float zLayer = (1.0f / (Width + Height - 1)) * (x + y);
 

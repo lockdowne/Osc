@@ -246,68 +246,38 @@ namespace Osc.Rotch.Editor.Controllers
 
         public void OnEvent(OnEraseModeMouseClicked item)
         {
-            /*Layer<TileVisual> layer = this.view.Tilemap.FindLayerByIndex(this.view.TilemapLayersListBox.SelectedIndex);
-                       
-            if (layer == null)
-                return;
-                        
-            List<Tuple<Tuple<int, int>, TileVisual>> previousTiles = new List<Tuple<Tuple<int,int>,TileVisual>>();
-            item.Positions.ForEach(pos =>
-            {
-                Point coordinates = MathExtension.IsoPixelsToCoordinate(pos, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight);
-
-                TileVisual tile = layer.GetTile(coordinates.X, coordinates.Y);
-
-                if (tile != null)
-                {
-                    previousTiles.Add(new Tuple<Tuple<int, int>, TileVisual>(new Tuple<int, int>(coordinates.X, coordinates.Y), new TileVisual()
-                        {
-                            Description = tile.Description,
-                            Height = tile.Height,
-                            ID = tile.ID,
-                            Name = tile.Name,
-                            TilesetIndex = tile.TilesetIndex,
-                            TilesetName = tile.TilesetName,
-                        }));
-                }
-            });
+            var node = this.view.TilemapLayersListBox.SelectedItem;
 
             commandManager.ExecuteCommand(new Command()
             {
-                Name = "Erased Tiles",
-                CanExecute = () => { return item != null && layer != null && previousTiles.Count > 0; },
+                Name = "Erased Tilemap Asset",
+                CanExecute = () => { return item != null && node != null; },
                 Execute = () =>
                 {
                     item.Positions.ForEach(pos =>
                     {
+                        Layer<TilemapAsset> layer = null;
+
+                        if (this.view.Tilemap.GroundLayer.ID.ToString() == node.Tag.ToString())
+                        {
+                            layer = this.view.Tilemap.GroundLayer;
+                        }
+                        else if (this.view.Tilemap.ObjectLayer.ID.ToString() == node.Tag.ToString())
+                        {
+                            layer = this.view.Tilemap.ObjectLayer;
+                        }
+
                         Point coord = MathExtension.IsoPixelsToCoordinate(pos, Configuration.Settings.TileWidth, Configuration.Settings.TileHeight);
 
-                        TileVisual tile = layer.GetTile(coord.X, coord.Y);
-
-                        if (tile != null)
-                        {
-                            tile.TilesetIndex = -1;
-                            tile.TilesetName = string.Empty;
-                        }
+                        TilemapAsset tile = layer.GetTile(coord.X, coord.Y);
+                        tile.VisualLayers.Clear();
                     });
                 },
                 UnExecute = () =>
                 {
-                    previousTiles.ForEach(t =>
-                    {
-                        int x = t.Item1.Item1;
-                        int y = t.Item1.Item2;
-
-                        TileVisual tile = layer.GetTile(x, y);
-
-                        if(tile != null)
-                        {
-                            tile.TilesetIndex = t.Item2.TilesetIndex;
-                            tile.TilesetName = t.Item2.TilesetName;
-                        }
-                    });
+                  
                 }
-            }, true, item.ClassName());*/
+            }, true, item.ClassName());
         }
 
         public void OnEvent(OnTilePatternGenerated item)
